@@ -14,7 +14,7 @@ import javax.swing.JOptionPane;
 public class MateriaDAO {
     private Connection con;
 
-    public MateriaDAO(Connection con) {
+    public MateriaDAO() {
         
         try {
             con= Conexion.getConnection();
@@ -35,11 +35,11 @@ public class MateriaDAO {
             
             ps.executeUpdate();
             
-            ResultSet rs = ps.executeQuery();
+            ResultSet rs = ps.getGeneratedKeys();
             
             
             if (rs.next()) {
-                materia.setIdMateria(rs.getInt("idMateria"));
+                materia.setIdMateria(rs.getInt(1));
                 JOptionPane.showMessageDialog(null,"Materia añadida con exito");
             }
             ps.close();
@@ -52,7 +52,7 @@ public class MateriaDAO {
     
     public Materia BuscarMateria(int id){
         Materia materia=null;
-        String sql ="SELECT año,nombre FROM materia WHERE idMateria=? estado=1";
+        String sql ="SELECT año,nombre FROM materia WHERE idMateria=? AND estado=1";
         
         try {
             PreparedStatement ps = con.prepareStatement(sql);
@@ -86,6 +86,7 @@ public class MateriaDAO {
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setInt(1, materia.getAño());
             ps.setString(2, materia.getNombre());
+            ps.setInt(3, materia.getIdMateria());
             
             int fila=ps.executeUpdate();
             
