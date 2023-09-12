@@ -3,6 +3,7 @@ package Entidades;
 import java.time.LocalDate;
 
 public class Alumno {
+
     private int idAlumno;
     private int dni;
     private String nombre, apellido;
@@ -12,17 +13,17 @@ public class Alumno {
     public Alumno() {
     }
 
-    public Alumno(int dni,String nombre, String apellido, LocalDate fechaNacimiento, boolean estado) {
-        this.dni=dni;
+    public Alumno(int dni, String nombre, String apellido, LocalDate fechaNacimiento, boolean estado) {
+        this.dni = dni;
         this.nombre = nombre;
         this.apellido = apellido;
         this.fechaNacimiento = fechaNacimiento;
         this.estado = estado;
     }
 
-    public Alumno(int idAlumno,int dni, String nombre, String apellido, LocalDate fechaNacimiento, boolean estado) {
+    public Alumno(int idAlumno, int dni, String nombre, String apellido, LocalDate fechaNacimiento, boolean estado) {
         this.idAlumno = idAlumno;
-        this.dni=dni;
+        this.dni = dni;
         this.nombre = nombre;
         this.apellido = apellido;
         this.fechaNacimiento = fechaNacimiento;
@@ -44,7 +45,6 @@ public class Alumno {
     public void setDni(int dni) {
         this.dni = dni;
     }
-    
 
     public String getNombre() {
         return nombre;
@@ -80,7 +80,7 @@ public class Alumno {
 
     @Override
     public String toString() {
-        return "Alumno{" + "idAlumno=" + idAlumno + ", nombre=" + nombre + ", apellido=" + apellido + ", fechaNacimiento=" + fechaNacimiento + '}';
+        return dni + " " + nombre + " " + apellido;
     }
-    
+
 }
