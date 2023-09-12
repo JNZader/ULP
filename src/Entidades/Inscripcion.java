@@ -1,6 +1,7 @@
 package Entidades;
 
 public class Inscripcion {
+
     private int idInscripto, idAlumno, idMateria;
     private double nota;
 
@@ -51,5 +52,5 @@ public class Inscripcion {
     public void setNota(double nota) {
         this.nota = nota;
     }
-    
+
 }

@@ -7,17 +7,19 @@ public class Conexion {
     private static final String JDBC_URL = "jdbc:mariadb://localhost/uniulp";
     private static final String JDBC_USER = "root";
     private static final String JDBC_PASSWORD = "";
-    private static Connection connection;
-    
-    private Conexion(){}
-    
-    public static Connection getConnection() throws SQLException, ClassNotFoundException {
-        if(connection==null){
-            Class.forName("org.mariadb.jdbc.Driver");
-            connection=DriverManager.getConnection(JDBC_URL, JDBC_URL, JDBC_URL);
-        }
-        return connection;
+    private static Connection conex;
+
+    private Conexion() throws ClassNotFoundException{
+        Class.forName("org.mariadb.jdbc.Driver");
     }
+    
+    public static Connection getConnection() throws SQLException {
+        if(conex==null){
+        conex=DriverManager.getConnection(JDBC_URL, JDBC_URL, JDBC_URL);
+        }
+        return conex;
+    }
+    
 
     public static void close(ResultSet rs) throws SQLException {
         rs.close();
