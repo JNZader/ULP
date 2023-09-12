@@ -19,8 +19,9 @@ public class InscripcionDAO {
     private static final String SQL_SELECT_MATERIASNOCURSADAS = "SELECT * FROM materia WHERE idMateria NOT IN (SELECT DISTINCT idMateria FROM inscripcion)";
     private static final String SQL_SELECT_INSCRIPCIONESPORALUMNO = "SELECT * FROM inscripcion WHERE idAlumno = ?";
 
-    public InscripcionDAO() {}
-  
+    public InscripcionDAO() {
+    }
+
     public List<Inscripcion> seleccionar() {
         Connection con = null;
         PreparedStatement ps = null;

@@ -1,6 +1,7 @@
 package Entidades;
 
 public class Materia {
+
     private int idMateria, año;
     private String nombre;
     private boolean estado;
@@ -57,5 +58,5 @@ public class Materia {
     public String toString() {
         return "Materia{" + "idMateria=" + idMateria + ", a\u00f1o=" + año + ", nombre=" + nombre + ", estado=" + estado + '}';
     }
-    
+
 }
