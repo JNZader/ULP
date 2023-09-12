@@ -35,6 +35,8 @@ public class ConsultaAlumnosPorMateria extends javax.swing.JInternalFrame {
         jTable1 = new javax.swing.JTable();
         jButton3 = new javax.swing.JButton();
 
+        setToolTipText("");
+
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel1.setText("Listado de Alumnos por Materia");
 
