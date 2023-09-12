@@ -15,6 +15,9 @@ public class MateriaDAO {
 
     private Connection con;
 
+    public MateriaDAO() {
+    }
+
     public MateriaDAO(Connection con) {
 
         try {
