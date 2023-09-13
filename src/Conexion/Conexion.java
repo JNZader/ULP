@@ -1,23 +1,30 @@
 package Conexion;
 
 import java.sql.*;
+import javax.swing.JOptionPane;
 
 public class Conexion {
 
     private static final String JDBC_URL = "jdbc:mariadb://localhost/uniulp";
     private static final String JDBC_USER = "root";
     private static final String JDBC_PASSWORD = "";
-    private static Connection conex;
-
-    private Conexion() throws ClassNotFoundException{
-        Class.forName("org.mariadb.jdbc.Driver");
-    }
+   private static  Connection conexion;
     
+    private Conexion(){}
+
     public static Connection getConnection() throws SQLException {
-        if(conex==null){
-        conex=DriverManager.getConnection(JDBC_URL, JDBC_URL, JDBC_URL);
+        
+        if (conexion == null) {
+
+            try {
+                Class.forName("org.mariadb.jdbc.Driver");
+                conexion = DriverManager.getConnection(JDBC_URL, JDBC_USER, JDBC_PASSWORD);
+            } catch (ClassNotFoundException ex) {
+                JOptionPane.showMessageDialog(null, "error de driver");
+            }
+
         }
-        return conex;
+        return conexion;
     }
     
 

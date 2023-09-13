@@ -39,7 +39,7 @@ public class formularioDeInscripcion extends javax.swing.JInternalFrame {
         jTable2 = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        jButtonSalir = new javax.swing.JButton();
 
         jLabel1.setText("Formulario de Inscripcion");
 
@@ -85,7 +85,12 @@ public class formularioDeInscripcion extends javax.swing.JInternalFrame {
 
         jButton2.setText("Anular Inscripcion");
 
-        jButton3.setText("Salir");
+        jButtonSalir.setText("Salir");
+        jButtonSalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonSalirActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -124,7 +129,7 @@ public class formularioDeInscripcion extends javax.swing.JInternalFrame {
                 .addGap(41, 41, 41)
                 .addComponent(jButton2)
                 .addGap(55, 55, 55)
-                .addComponent(jButton3)
+                .addComponent(jButtonSalir)
                 .addGap(34, 34, 34))
         );
         layout.setVerticalGroup(
@@ -152,7 +157,7 @@ public class formularioDeInscripcion extends javax.swing.JInternalFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton2)
-                    .addComponent(jButton3)
+                    .addComponent(jButtonSalir)
                     .addComponent(jButton1))
                 .addGap(30, 30, 30))
         );
@@ -168,11 +173,16 @@ public class formularioDeInscripcion extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void jButtonSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSalirActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+    }//GEN-LAST:event_jButtonSalirActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButtonSalir;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

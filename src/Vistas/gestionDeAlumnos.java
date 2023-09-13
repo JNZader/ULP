@@ -11,6 +11,7 @@ import java.awt.Color;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -223,12 +224,16 @@ public class gestionDeAlumnos extends javax.swing.JInternalFrame {
 
     private void jBbuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBbuscarActionPerformed
         // TODO add your handling code here:
-        int doc = Integer.parseInt(jTDoc.getText());
-        Alumno alEcontrado = aluData.buscarAlumnoPorDni(doc);
-        jTnombre.setText(alEcontrado.getNombre());
-        jTapellido.setText(alEcontrado.getApellido());
-        jREstado.setSelected(alEcontrado.isEstado());
-        jDFecha.setDate(Date.valueOf(alEcontrado.getFechaNacimiento()));
+        if (!(jTDoc.getText().isEmpty())) {
+            int doc = Integer.parseInt(jTDoc.getText());
+            Alumno alEcontrado = aluData.buscarAlumnoPorDni(doc);
+            if (alEcontrado != null) {
+                jTnombre.setText(alEcontrado.getNombre());
+                jTapellido.setText(alEcontrado.getApellido());
+                jREstado.setSelected(alEcontrado.isEstado());
+                jDFecha.setDate(Date.valueOf(alEcontrado.getFechaNacimiento()));
+            }
+        }
     }//GEN-LAST:event_jBbuscarActionPerformed
 
     private void jBNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBNuevoActionPerformed
@@ -244,27 +249,40 @@ public class gestionDeAlumnos extends javax.swing.JInternalFrame {
     private void jBGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBGuardarActionPerformed
         // TODO add your handling code here:
 
-        int doc = Integer.parseInt(jTDoc.getText());
-        String ap = jTapellido.getText();
-        String nombre = jTnombre.getText();
-        boolean estado = jREstado.getVerifyInputWhenFocusTarget();
-        LocalDate fecha = jDFecha.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        try {
+            int doc = Integer.parseInt(jTDoc.getText());
+            String ap = jTapellido.getText();
+            String nombre = jTnombre.getText();
+            boolean estado = jREstado.getVerifyInputWhenFocusTarget();
+            LocalDate fecha = jDFecha.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            Alumno alumno = new Alumno(doc, ap, nombre, fecha, estado);
+            aluData.guardarAlumno(alumno);
+        } catch (NumberFormatException e) {
+            e.printStackTrace(System.out);
+            //JOptionPane.showMessageDialog(this, "Complete la informacion con datos validos");
+            JOptionPane.showMessageDialog(null, "Complete la informacion con datos validos",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
 
-        Alumno alumno = new Alumno(doc, ap, nombre, fecha, estado);
-        aluData.guardarAlumno(alumno);
+
     }//GEN-LAST:event_jBGuardarActionPerformed
 
     private void jBEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBEliminarActionPerformed
         // TODO add your handling code here:
         Alumno alu = new Alumno();
-        int doc = Integer.parseInt(jTDoc.getText());
-        alu = aluData.buscarAlumnoPorDni(doc);
-        aluData.eliminarAlumno(alu.getIdAlumno());
-        jTDoc.setText("");
-        jTnombre.setText("");
-        jTapellido.setText("");
-        jREstado.setSelected(false);
-        jDFecha.setDate(null);
+
+        if (!(jTDoc.getText().isEmpty())) {
+            int doc = Integer.parseInt(jTDoc.getText());
+            alu = aluData.buscarAlumnoPorDni(doc);
+        }
+        if (aluData != null) {
+            aluData.eliminarAlumno(alu.getIdAlumno());
+            jTDoc.setText("");
+            jTnombre.setText("");
+            jTapellido.setText("");
+            jREstado.setSelected(false);
+            jDFecha.setDate(null);
+        }
     }//GEN-LAST:event_jBEliminarActionPerformed
 
     private void jBSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBSalirActionPerformed

@@ -12,7 +12,7 @@ public class InscripcionDAO {
 
     private static final String SQL_SELECT = "SELECT idInscripto, nota, idAlumno, idMateria FROM inscripcion";
     private static final String SQL_INSERT = "INSERT INTO inscripcion(nota, idAlumno, idMateria) VALUES (?,?,?)";
-    private static final String SQL_UPDATE = "UPDATE inscripcion SET nota = ? WHERE idInscripto = ?";
+    private static final String SQL_UPDATE = "UPDATE inscripcion SET nota = ? WHERE idAlumno = ? AND idMateria = ?";
     private static final String SQL_DELETE = "DELETE FROM inscripcion WHERE idAlumno = ? AND idMateria = ?";
     private static final String SQL_SELECT_ALUMNOXMATERIA = "SELECT a.* FROM alumno a INNER JOIN inscripcion i ON a.idAlumno = i.idAlumno WHERE i.idMateria = ?";
     private static final String SQL_SELECT_MATERIASCURSADAS = "SELECT DISTINCT m.* FROM materia m INNER JOIN inscripcion i ON m.idMateria = i.idMateria";
@@ -62,6 +62,7 @@ public class InscripcionDAO {
     public void insertar(Inscripcion insc) {
         Connection con = null;
         PreparedStatement ps = null;
+        ResultSet rs = null;
         try {
             con = getConnection();
             ps = con.prepareStatement(SQL_INSERT);
@@ -69,8 +70,10 @@ public class InscripcionDAO {
             ps.setDouble(1, insc.getNota());
             ps.setInt(2, insc.getIdAlumno());
             ps.setInt(3, insc.getIdMateria());
-            int on = ps.executeUpdate();
-            if (on > 0) {
+            ps.executeUpdate();
+            rs=ps.getGeneratedKeys();
+            if (rs.next()) {
+                insc.setIdAlumno(rs.getInt(1));
                 JOptionPane.showMessageDialog(null, "Inscripcion realizada");
             } else {
                 JOptionPane.showMessageDialog(null, "Inscripcion fallida");
@@ -81,6 +84,7 @@ public class InscripcionDAO {
             JOptionPane.showMessageDialog(null, "Error al insertar inscripciones" + ex.getMessage());
         } finally {
             try {
+                close(rs);
                 close(ps);
                 close(con);
             } catch (SQLException ex) {
@@ -120,6 +124,37 @@ public class InscripcionDAO {
         }
     }
 
+        public void actualizarNota(double nota,int idAlumno, int idMateria) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        try {
+            con = getConnection();
+            ps = con.prepareStatement(SQL_UPDATE);
+
+            ps.setDouble(1,nota);
+            ps.setInt(2,idAlumno);
+            ps.setInt(3,idMateria);
+            int on = ps.executeUpdate();
+            if (on > 0) {
+                JOptionPane.showMessageDialog(null, "Actualizacion realizada");
+            } else {
+                JOptionPane.showMessageDialog(null, "Actualizacion fallida");
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace(System.out);
+            JOptionPane.showMessageDialog(null, "Error al actualizar inscripciones" + ex.getMessage());
+        } finally {
+            try {
+                close(ps);
+                close(con);
+            } catch (SQLException ex) {
+                ex.printStackTrace(System.out);
+                JOptionPane.showMessageDialog(null, "Error al cerrar conexiones en metodo actualizar" + ex.getMessage());
+            }
+        }
+    }
+    
     public void borrarInscripcionMateriaAlumno(int idAlumno, int idMateria) {
         Connection con = null;
         PreparedStatement ps = null;

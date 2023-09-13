@@ -15,10 +15,8 @@ public class MateriaDAO {
 
     private Connection con;
 
-    public MateriaDAO() {
-    }
 
-    public MateriaDAO(Connection con) {
+    public MateriaDAO() {
 
         try {
             con = Conexion.getConnection();
@@ -31,21 +29,20 @@ public class MateriaDAO {
         String sql = "INSERT INTO materia(año,nombre,estado)VALUES(?,?,?)";
 
         try {
-            PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-
-            ps.setInt(1, materia.getAño());
-            ps.setString(2, materia.getNombre());
-            ps.setBoolean(3, materia.isEstado());
-
-            ps.executeUpdate();
-
-            ResultSet rs = ps.executeQuery();
-
-            if (rs.next()) {
-                materia.setIdMateria(rs.getInt("idMateria"));
-                JOptionPane.showMessageDialog(null, "Materia añadida con exito");
+            try (PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+                ps.setInt(1, materia.getAño());
+                ps.setString(2, materia.getNombre());
+                ps.setBoolean(3, materia.isEstado());
+                
+                ps.executeUpdate();
+                
+                ResultSet rs = ps.getGeneratedKeys();
+                
+                if (rs.next()) {
+                    materia.setIdMateria(rs.getInt(1));
+                    JOptionPane.showMessageDialog(null, "Materia añadida con exito");
+                }
             }
-            ps.close();
 
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Error al acceder a la tabla materia" + ex.getMessage());
@@ -55,7 +52,7 @@ public class MateriaDAO {
 
     public Materia BuscarMateria(int id) {
         Materia materia = null;
-        String sql = "SELECT año,nombre FROM materia WHERE idMateria=? estado=1";
+        String sql = "SELECT año,nombre FROM materia WHERE idMateria=? AND estado=1";
 
         try {
             PreparedStatement ps = con.prepareStatement(sql);

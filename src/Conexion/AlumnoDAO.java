@@ -1,12 +1,8 @@
 package Conexion;
 
 import Entidades.Alumno;
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +10,7 @@ import javax.swing.JOptionPane;
 
 public class AlumnoDAO {
 
-    private Connection con = null;
+    private Connection con;
 
     public AlumnoDAO() {
         try {
@@ -27,9 +23,9 @@ public class AlumnoDAO {
     public void guardarAlumno(Alumno alumno) {
 
         try {
-            String sql = "INSERT INTO alumno (dni,apellido,nombre,fechaNacimiento,estado VALUES(?,?,?,?,?)";
+            String sql = "INSERT INTO alumno (dni,apellido,nombre,fechaNacimiento,estado) VALUES(?,?,?,?,?)";
 
-            PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement ps = con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
             ps.setInt(1, alumno.getDni());
             ps.setString(2, alumno.getApellido());
             ps.setString(3, alumno.getNombre());
@@ -38,10 +34,10 @@ public class AlumnoDAO {
 
             ps.executeUpdate();
 
-            ResultSet rs = ps.executeQuery();
+            ResultSet rs = ps.getGeneratedKeys();
 
             if (rs.next()) {
-                alumno.setIdAlumno(rs.getInt("idAlumno"));
+                alumno.setIdAlumno(rs.getInt(1));
                 JOptionPane.showMessageDialog(null, "Alumno añadido con exito");
             }
             ps.close();
@@ -96,7 +92,7 @@ public class AlumnoDAO {
 
             if (rs.next()) {
                 alumno = new Alumno();
-                alumno.setIdAlumno(rs.getInt("idAlumno"));
+                alumno.setIdAlumno(rs.getInt(1));
                 alumno.setDni(rs.getInt("dni"));
                 alumno.setApellido(rs.getString("apellido"));
                 alumno.setNombre(rs.getString("nombre"));

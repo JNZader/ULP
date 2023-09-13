@@ -30,6 +30,12 @@ public class Alumno {
         this.estado = estado;
     }
 
+
+    @Override
+    public String toString() {
+        return dni + " " + nombre + " " + apellido;
+    }
+
     public int getIdAlumno() {
         return idAlumno;
     }
@@ -76,11 +82,6 @@ public class Alumno {
 
     public void setEstado(boolean estado) {
         this.estado = estado;
-    }
-
-    @Override
-    public String toString() {
-        return dni + " " + nombre + " " + apellido;
     }
 
 }
