@@ -15,12 +15,12 @@ public class InscripcionDAO {
     private static final String SQL_UPDATE = "UPDATE inscripcion SET nota = ? WHERE idAlumno = ? AND idMateria = ?";
     private static final String SQL_DELETE = "DELETE FROM inscripcion WHERE idAlumno = ? AND idMateria = ?";
     private static final String SQL_SELECT_ALUMNOXMATERIA = "SELECT a.* FROM alumno a INNER JOIN inscripcion i ON a.idAlumno = i.idAlumno WHERE i.idMateria = ?";
-    private static final String SQL_SELECT_MATERIASCURSADAS = "SELECT DISTINCT m.* FROM materia m INNER JOIN inscripcion i ON m.idMateria = i.idMateria";
-    private static final String SQL_SELECT_MATERIASNOCURSADAS = "SELECT * FROM materia WHERE idMateria NOT IN (SELECT DISTINCT idMateria FROM inscripcion)";
+    private static final String SQL_SELECT_MATERIASCURSADAS = "SELECT inscripcion.idMateria, nombre, año FROM inscripcion, materia WHERE inscripcion.idMateria = materia.idMateria AND inscripcion.idAlumno = ?";
+    private static final String SQL_SELECT_MATERIASNOCURSADAS = "SELECT iidInscripto, nota, idAlumno, idMateria WHERE estado=1 AND idMateria NOT IN SELECT idMateria FROM inscripcion WHERE idAlumno=?";
     private static final String SQL_SELECT_INSCRIPCIONESPORALUMNO = "SELECT * FROM inscripcion WHERE idAlumno = ?";
-    private MateriaDAO md=new MateriaDAO();
-    private AlumnoDAO ad=new AlumnoDAO();
-    
+    private MateriaDAO md = new MateriaDAO();
+    private AlumnoDAO ad = new AlumnoDAO();
+
     public InscripcionDAO() {
 
     }
@@ -38,11 +38,11 @@ public class InscripcionDAO {
 
             while (rs.next()) {
                 insc = new Inscripcion();
-                
+
                 insc.setIdInscripto(rs.getInt("idInscripto"));
                 insc.setNota(rs.getInt("nota"));
-                Alumno alu =ad.buscarAlumno(rs.getInt("idAlumno"));
-                Materia mat= md.BuscarMateria(rs.getInt("idMateria"));
+                Alumno alu = ad.buscarAlumno(rs.getInt("idAlumno"));
+                Materia mat = md.BuscarMateria(rs.getInt("idMateria"));
                 insc.setAlumno(alu);
                 insc.setMateria(mat);
 
@@ -195,7 +195,6 @@ public class InscripcionDAO {
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
-        Inscripcion insc = null;
         List<Alumno> alumnosXMateria = new ArrayList<>();
         try {
             con = getConnection();
@@ -228,23 +227,19 @@ public class InscripcionDAO {
         return alumnosXMateria;
     }
 
-    public List<Materia> obtenerMateriasCursadas() {
+    public List<Materia> obtenerMateriasCursadas(int idAlumno) {
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
-        Inscripcion insc = null;
         List<Materia> materias = new ArrayList<>();
         try {
             con = getConnection();
             ps = con.prepareStatement(SQL_SELECT_MATERIASCURSADAS);
+            ps.setInt(1, idAlumno);
             rs = ps.executeQuery();
 
             while (rs.next()) {
-                int idMateria = rs.getInt("idMateria");
-                String nombre = rs.getString("nombre");
-                int año = rs.getInt("año");
-                boolean estado = rs.getBoolean("estado");
-                materias.add(new Materia(idMateria, año, nombre, estado));
+                materias.add(new Materia(rs.getInt("idMateria"), rs.getInt("año"), rs.getString("nombre"), rs.getBoolean("estado")));
             }
         } catch (SQLException ex) {
             ex.printStackTrace(System.out);
@@ -270,16 +265,17 @@ public class InscripcionDAO {
         List<Inscripcion> inscripciones = new ArrayList<>();
         try {
             con = getConnection();
-            ps = con.prepareStatement(SQL_SELECT_MATERIASCURSADAS);
+            ps = con.prepareStatement(SQL_SELECT_INSCRIPCIONESPORALUMNO);
+            ps.setInt(1, idAlumno);
             rs = ps.executeQuery();
 
             while (rs.next()) {
-                 insc = new Inscripcion();
-                
+                insc = new Inscripcion();
+
                 insc.setIdInscripto(rs.getInt("idInscripto"));
                 insc.setNota(rs.getInt("nota"));
-                Alumno alu =ad.buscarAlumno(rs.getInt("idAlumno"));
-                Materia mat= md.BuscarMateria(rs.getInt("idMateria"));
+                Alumno alu = ad.buscarAlumno(rs.getInt("idAlumno"));
+                Materia mat = md.BuscarMateria(rs.getInt("idMateria"));
                 insc.setAlumno(alu);
                 insc.setMateria(mat);
 
@@ -301,23 +297,19 @@ public class InscripcionDAO {
         return inscripciones;
     }
 
-    public List<Materia> obtenerMateriasNoCursadas() {
+    public List<Materia> obtenerMateriasNoCursadas(int idAlumno) {
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
-        Inscripcion insc = null;
         List<Materia> materias = new ArrayList<>();
         try {
             con = getConnection();
             ps = con.prepareStatement(SQL_SELECT_MATERIASNOCURSADAS);
+            ps.setInt(1, idAlumno);
             rs = ps.executeQuery();
 
             while (rs.next()) {
-                int idMateria = rs.getInt("idMateria");
-                String nombre = rs.getString("nombre");
-                int año = rs.getInt("año");
-                boolean estado = rs.getBoolean("estado");
-                materias.add(new Materia(idMateria, año, nombre, estado));
+                materias.add(new Materia(rs.getInt("idMateria"), rs.getInt("año"), rs.getString("nombre"), rs.getBoolean("estado")));
             }
         } catch (SQLException ex) {
             ex.printStackTrace(System.out);
