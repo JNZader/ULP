@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JComboBox;
 
 import javax.swing.JOptionPane;
 
@@ -189,5 +190,17 @@ public class AlumnoDAO {
             JOptionPane.showMessageDialog(null, " Error al acceder a la tabla Alumno");
         }
 
+    }
+
+    public void rellenarCombos(JComboBox comboBox) {
+        try {
+            comboBox.removeAllItems();
+            List<Alumno> alumnos = listarAlumnos();
+            for (Alumno alumno : alumnos) {
+                comboBox.addItem(alumno.toString());
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Error al rellenar el combo: " + ex.getMessage());
+        }
     }
 }
