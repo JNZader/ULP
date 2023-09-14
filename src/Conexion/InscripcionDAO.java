@@ -15,11 +15,14 @@ public class InscripcionDAO {
     private static final String SQL_UPDATE = "UPDATE inscripcion SET nota = ? WHERE idAlumno = ? AND idMateria = ?";
     private static final String SQL_DELETE = "DELETE FROM inscripcion WHERE idAlumno = ? AND idMateria = ?";
     private static final String SQL_SELECT_ALUMNOXMATERIA = "SELECT a.* FROM alumno a INNER JOIN inscripcion i ON a.idAlumno = i.idAlumno WHERE i.idMateria = ?";
-    private static final String SQL_SELECT_MATERIASCURSADAS = "SELECT DISTINCT m.* FROM materia m INNER JOIN inscripcion i ON m.idMateria = i.idMateria";
-    private static final String SQL_SELECT_MATERIASNOCURSADAS = "SELECT * FROM materia WHERE idMateria NOT IN (SELECT DISTINCT idMateria FROM inscripcion)";
+    private static final String SQL_SELECT_MATERIASCURSADAS = "SELECT inscripcion.idMateria, nombre, año FROM inscripcion, materia WHERE inscripcion.idMateria = materia.idMateria AND inscripcion.idAlumno = ?";
+    private static final String SQL_SELECT_MATERIASNOCURSADAS = "SELECT iidInscripto, nota, idAlumno, idMateria WHERE estado=1 AND idMateria NOT IN SELECT idMateria FROM inscripcion WHERE idAlumno=?";
     private static final String SQL_SELECT_INSCRIPCIONESPORALUMNO = "SELECT * FROM inscripcion WHERE idAlumno = ?";
+    private MateriaDAO md = new MateriaDAO();
+    private AlumnoDAO ad = new AlumnoDAO();
 
     public InscripcionDAO() {
+
     }
 
     public List<Inscripcion> seleccionar() {
@@ -34,12 +37,14 @@ public class InscripcionDAO {
             rs = ps.executeQuery();
 
             while (rs.next()) {
-                int idInscripto = rs.getInt("idInscripto");
-                int nota = rs.getInt("nota");
-                int idAlumno = rs.getInt("idAlumno");
-                int idMateria = rs.getInt("idMateria");
+                insc = new Inscripcion();
 
-                insc = new Inscripcion(idInscripto, nota, idAlumno, idMateria);
+                insc.setIdInscripto(rs.getInt("idInscripto"));
+                insc.setNota(rs.getInt("nota"));
+                Alumno alu = ad.buscarAlumno(rs.getInt("idAlumno"));
+                Materia mat = md.BuscarMateria(rs.getInt("idMateria"));
+                insc.setAlumno(alu);
+                insc.setMateria(mat);
 
                 inscripciones.add(insc);
             }
@@ -68,12 +73,12 @@ public class InscripcionDAO {
             ps = con.prepareStatement(SQL_INSERT);
 
             ps.setDouble(1, insc.getNota());
-            ps.setInt(2, insc.getIdAlumno());
-            ps.setInt(3, insc.getIdMateria());
+            ps.setInt(2, insc.getAlumno().getIdAlumno());
+            ps.setInt(3, insc.getMateria().getIdMateria());
             ps.executeUpdate();
-            rs=ps.getGeneratedKeys();
+            rs = ps.getGeneratedKeys();
             if (rs.next()) {
-                insc.setIdAlumno(rs.getInt(1));
+                insc.setIdInscripto(rs.getInt(1));
                 JOptionPane.showMessageDialog(null, "Inscripcion realizada");
             } else {
                 JOptionPane.showMessageDialog(null, "Inscripcion fallida");
@@ -124,16 +129,16 @@ public class InscripcionDAO {
         }
     }
 
-        public void actualizarNota(double nota,int idAlumno, int idMateria) {
+    public void actualizarNota(double nota, int idAlumno, int idMateria) {
         Connection con = null;
         PreparedStatement ps = null;
         try {
             con = getConnection();
             ps = con.prepareStatement(SQL_UPDATE);
 
-            ps.setDouble(1,nota);
-            ps.setInt(2,idAlumno);
-            ps.setInt(3,idMateria);
+            ps.setDouble(1, nota);
+            ps.setInt(2, idAlumno);
+            ps.setInt(3, idMateria);
             int on = ps.executeUpdate();
             if (on > 0) {
                 JOptionPane.showMessageDialog(null, "Actualizacion realizada");
@@ -154,7 +159,7 @@ public class InscripcionDAO {
             }
         }
     }
-    
+
     public void borrarInscripcionMateriaAlumno(int idAlumno, int idMateria) {
         Connection con = null;
         PreparedStatement ps = null;
@@ -164,6 +169,7 @@ public class InscripcionDAO {
 
             ps.setDouble(1, idAlumno);
             ps.setInt(2, idMateria);
+
             int on = ps.executeUpdate();
             if (on > 0) {
                 JOptionPane.showMessageDialog(null, "Inscripcion eliminada");
@@ -189,7 +195,6 @@ public class InscripcionDAO {
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
-        Inscripcion insc = null;
         List<Alumno> alumnosXMateria = new ArrayList<>();
         try {
             con = getConnection();
@@ -222,23 +227,19 @@ public class InscripcionDAO {
         return alumnosXMateria;
     }
 
-    public List<Materia> obtenerMateriasCursadas() {
+    public List<Materia> obtenerMateriasCursadas(int idAlumno) {
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
-        Inscripcion insc = null;
         List<Materia> materias = new ArrayList<>();
         try {
             con = getConnection();
             ps = con.prepareStatement(SQL_SELECT_MATERIASCURSADAS);
+            ps.setInt(1, idAlumno);
             rs = ps.executeQuery();
 
             while (rs.next()) {
-                int idMateria = rs.getInt("idMateria");
-                String nombre = rs.getString("nombre");
-                int año = rs.getInt("año");
-                boolean estado = rs.getBoolean("estado");
-                materias.add(new Materia(idMateria, año, nombre, estado));
+                materias.add(new Materia(rs.getInt("idMateria"), rs.getInt("año"), rs.getString("nombre"), rs.getBoolean("estado")));
             }
         } catch (SQLException ex) {
             ex.printStackTrace(System.out);
@@ -264,14 +265,21 @@ public class InscripcionDAO {
         List<Inscripcion> inscripciones = new ArrayList<>();
         try {
             con = getConnection();
-            ps = con.prepareStatement(SQL_SELECT_MATERIASCURSADAS);
+            ps = con.prepareStatement(SQL_SELECT_INSCRIPCIONESPORALUMNO);
+            ps.setInt(1, idAlumno);
             rs = ps.executeQuery();
 
             while (rs.next()) {
-                int idInscripto = rs.getInt("idInscripto");
-                double nota = rs.getDouble("nota");
-                int idMateria = rs.getInt("idMateria");
-                inscripciones.add(new Inscripcion(idInscripto, idAlumno, idMateria, nota));
+                insc = new Inscripcion();
+
+                insc.setIdInscripto(rs.getInt("idInscripto"));
+                insc.setNota(rs.getInt("nota"));
+                Alumno alu = ad.buscarAlumno(rs.getInt("idAlumno"));
+                Materia mat = md.BuscarMateria(rs.getInt("idMateria"));
+                insc.setAlumno(alu);
+                insc.setMateria(mat);
+
+                inscripciones.add(insc);
             }
         } catch (SQLException ex) {
             ex.printStackTrace(System.out);
@@ -289,23 +297,19 @@ public class InscripcionDAO {
         return inscripciones;
     }
 
-    public List<Materia> obtenerMateriasNoCursadas() {
+    public List<Materia> obtenerMateriasNoCursadas(int idAlumno) {
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
-        Inscripcion insc = null;
         List<Materia> materias = new ArrayList<>();
         try {
             con = getConnection();
             ps = con.prepareStatement(SQL_SELECT_MATERIASNOCURSADAS);
+            ps.setInt(1, idAlumno);
             rs = ps.executeQuery();
 
             while (rs.next()) {
-                int idMateria = rs.getInt("idMateria");
-                String nombre = rs.getString("nombre");
-                int año = rs.getInt("año");
-                boolean estado = rs.getBoolean("estado");
-                materias.add(new Materia(idMateria, año, nombre, estado));
+                materias.add(new Materia(rs.getInt("idMateria"), rs.getInt("año"), rs.getString("nombre"), rs.getBoolean("estado")));
             }
         } catch (SQLException ex) {
             ex.printStackTrace(System.out);

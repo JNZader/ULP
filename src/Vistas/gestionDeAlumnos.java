@@ -275,7 +275,7 @@ public class gestionDeAlumnos extends javax.swing.JInternalFrame {
             int doc = Integer.parseInt(jTDoc.getText());
             alu = aluData.buscarAlumnoPorDni(doc);
         }
-        if (aluData != null) {
+        if (alu != null) {
             aluData.eliminarAlumno(alu.getIdAlumno());
             jTDoc.setText("");
             jTnombre.setText("");
