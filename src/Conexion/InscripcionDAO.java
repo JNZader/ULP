@@ -18,8 +18,11 @@ public class InscripcionDAO {
     private static final String SQL_SELECT_MATERIASCURSADAS = "SELECT DISTINCT m.* FROM materia m INNER JOIN inscripcion i ON m.idMateria = i.idMateria";
     private static final String SQL_SELECT_MATERIASNOCURSADAS = "SELECT * FROM materia WHERE idMateria NOT IN (SELECT DISTINCT idMateria FROM inscripcion)";
     private static final String SQL_SELECT_INSCRIPCIONESPORALUMNO = "SELECT * FROM inscripcion WHERE idAlumno = ?";
-
+    private MateriaDAO md=new MateriaDAO();
+    private AlumnoDAO ad=new AlumnoDAO();
+    
     public InscripcionDAO() {
+
     }
 
     public List<Inscripcion> seleccionar() {
@@ -34,12 +37,14 @@ public class InscripcionDAO {
             rs = ps.executeQuery();
 
             while (rs.next()) {
-                int idInscripto = rs.getInt("idInscripto");
-                int nota = rs.getInt("nota");
-                int idAlumno = rs.getInt("idAlumno");
-                int idMateria = rs.getInt("idMateria");
-
-                insc = new Inscripcion(idInscripto, nota, idAlumno, idMateria);
+                insc = new Inscripcion();
+                
+                insc.setIdInscripto(rs.getInt("idInscripto"));
+                insc.setNota(rs.getInt("nota"));
+                Alumno alu =ad.buscarAlumno(rs.getInt("idAlumno"));
+                Materia mat= md.BuscarMateria(rs.getInt("idMateria"));
+                insc.setAlumno(alu);
+                insc.setMateria(mat);
 
                 inscripciones.add(insc);
             }
@@ -68,12 +73,12 @@ public class InscripcionDAO {
             ps = con.prepareStatement(SQL_INSERT);
 
             ps.setDouble(1, insc.getNota());
-            ps.setInt(2, insc.getIdAlumno());
-            ps.setInt(3, insc.getIdMateria());
+            ps.setInt(2, insc.getAlumno().getIdAlumno());
+            ps.setInt(3, insc.getMateria().getIdMateria());
             ps.executeUpdate();
-            rs=ps.getGeneratedKeys();
+            rs = ps.getGeneratedKeys();
             if (rs.next()) {
-                insc.setIdAlumno(rs.getInt(1));
+                insc.setIdInscripto(rs.getInt(1));
                 JOptionPane.showMessageDialog(null, "Inscripcion realizada");
             } else {
                 JOptionPane.showMessageDialog(null, "Inscripcion fallida");
@@ -124,16 +129,16 @@ public class InscripcionDAO {
         }
     }
 
-        public void actualizarNota(double nota,int idAlumno, int idMateria) {
+    public void actualizarNota(double nota, int idAlumno, int idMateria) {
         Connection con = null;
         PreparedStatement ps = null;
         try {
             con = getConnection();
             ps = con.prepareStatement(SQL_UPDATE);
 
-            ps.setDouble(1,nota);
-            ps.setInt(2,idAlumno);
-            ps.setInt(3,idMateria);
+            ps.setDouble(1, nota);
+            ps.setInt(2, idAlumno);
+            ps.setInt(3, idMateria);
             int on = ps.executeUpdate();
             if (on > 0) {
                 JOptionPane.showMessageDialog(null, "Actualizacion realizada");
@@ -154,7 +159,7 @@ public class InscripcionDAO {
             }
         }
     }
-    
+
     public void borrarInscripcionMateriaAlumno(int idAlumno, int idMateria) {
         Connection con = null;
         PreparedStatement ps = null;
@@ -164,6 +169,7 @@ public class InscripcionDAO {
 
             ps.setDouble(1, idAlumno);
             ps.setInt(2, idMateria);
+
             int on = ps.executeUpdate();
             if (on > 0) {
                 JOptionPane.showMessageDialog(null, "Inscripcion eliminada");
@@ -268,10 +274,16 @@ public class InscripcionDAO {
             rs = ps.executeQuery();
 
             while (rs.next()) {
-                int idInscripto = rs.getInt("idInscripto");
-                double nota = rs.getDouble("nota");
-                int idMateria = rs.getInt("idMateria");
-                inscripciones.add(new Inscripcion(idInscripto, idAlumno, idMateria, nota));
+                 insc = new Inscripcion();
+                
+                insc.setIdInscripto(rs.getInt("idInscripto"));
+                insc.setNota(rs.getInt("nota"));
+                Alumno alu =ad.buscarAlumno(rs.getInt("idAlumno"));
+                Materia mat= md.BuscarMateria(rs.getInt("idMateria"));
+                insc.setAlumno(alu);
+                insc.setMateria(mat);
+
+                inscripciones.add(insc);
             }
         } catch (SQLException ex) {
             ex.printStackTrace(System.out);
