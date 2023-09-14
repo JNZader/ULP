@@ -41,20 +41,37 @@ public class ConsultDeAlumnosPorMateria extends javax.swing.JInternalFrame {
 
     private void llenarTabla() {
         InscripcionDAO ins = new InscripcionDAO();
-        DefaultTableModel mod = null;
+        DefaultTableModel mod = new DefaultTableModel();
         String[] columnas = {"ID", "DNI", "Apellido", "Nombre"};
 
-        Materia selectedItem = (Materia) jComboBoxMaterias.getSelectedItem();
-        ArrayList<Alumno> alumnosXMateria = ins.obtenerAlumnosXMateria(selectedItem.getIdMateria());
-        String[] filas = new String[4];
+        String materiaSeleccionada = (String) jComboBoxMaterias.getSelectedItem();
 
-        for (Alumno aux : alumnosXMateria) {
-            filas[0] = aux.getIdAlumno() + "";
-            filas[1] = aux.getDni() + "";
-            filas[2] = aux.getApellido() + "";
-            filas[3] = aux.getNombre() + "";
-            mod.addRow(filas);
+        MateriaDAO matDAO = new MateriaDAO();
+        ArrayList<Materia> materias = matDAO.listarMaterias();
+
+        Materia materia = null;
+        for (Materia aux : materias) {
+            if (aux.toString().equals(materiaSeleccionada)) {
+                materia = aux;
+                break;
+            }
         }
+
+        if (materia != null) {
+            ArrayList<Alumno> alumnosXMateria = ins.obtenerAlumnosXMateria(materia.getIdMateria());
+
+            mod.setColumnIdentifiers(columnas);
+            String[] filas = new String[4];
+
+            for (Alumno aux : alumnosXMateria) {
+                filas[0] = aux.getIdAlumno() + "";
+                filas[1] = aux.getDni() + "";
+                filas[2] = aux.getApellido() + "";
+                filas[3] = aux.getNombre() + "";
+                mod.addRow(filas);
+            }
+        }
+
         tabla.setModel(mod);
     }
 
@@ -98,7 +115,15 @@ public class ConsultDeAlumnosPorMateria extends javax.swing.JInternalFrame {
             new String [] {
                 "ID", "DNI", "Apellido", "Nombre"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(tabla);
 
         salir.setText("Salir");
@@ -155,6 +180,7 @@ public class ConsultDeAlumnosPorMateria extends javax.swing.JInternalFrame {
 
     private void jComboBoxMateriasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxMateriasActionPerformed
         // TODO add your handling code here:
+        llenarTabla();
     }//GEN-LAST:event_jComboBoxMateriasActionPerformed
 
 

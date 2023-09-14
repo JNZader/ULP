@@ -123,7 +123,7 @@ public class menuPrincipal extends javax.swing.JFrame {
 
         jMenu4.setText("Consultas");
 
-        jMenuItemAlumnosMateria.setText("Alumnos de Materia");
+        jMenuItemAlumnosMateria.setText("Alumnos por Materia");
         jMenuItemAlumnosMateria.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItemAlumnosMateriaActionPerformed(evt);
@@ -219,6 +219,7 @@ public class menuPrincipal extends javax.swing.JFrame {
 
     private void jMenuSalirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuSalirMouseClicked
         // TODO add your handling code here:
+        
         System.exit(0);
     }//GEN-LAST:event_jMenuSalirMouseClicked
 

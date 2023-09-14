@@ -218,7 +218,7 @@ public class InscripcionDAO {
             try {
                 close(rs);
                 close(ps);
-                close(con);
+//                close(con);
             } catch (SQLException ex) {
                 ex.printStackTrace(System.out);
                 JOptionPane.showMessageDialog(null, "Error al cerrar conexiones en metodo obtenerAlumnosXMateria" + ex.getMessage());

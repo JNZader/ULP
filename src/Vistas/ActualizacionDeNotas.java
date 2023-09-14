@@ -6,6 +6,9 @@
 package Vistas;
 
 import Conexion.*;
+import Entidades.Alumno;
+import Entidades.Materia;
+import java.util.ArrayList;
 
 /**
  *
@@ -15,17 +18,25 @@ public class ActualizacionDeNotas extends javax.swing.JInternalFrame {
 
     /**
      * Creates new form ActualizacionDeNotas
-     * 
+     *
      */
-    
     public ActualizacionDeNotas() {
         initComponents();
+        llenarComboBox();
     }
-//    private void cargarListaAlumnos(){
-//        AlumnoDAO alumnodao=new AlumnoDAO();
-//        List<Alumno> listaAlumnos=alumnodao.listarAlumnos();
-//        
-//    }
+
+    private void llenarComboBox() {
+        AlumnoDAO alum = new AlumnoDAO();
+        ArrayList<Alumno> materias = alum.listarAlumnos();
+
+        jComboBoxAlumno.removeAllItems();
+
+        for (Alumno aux : materias) {
+            jComboBoxAlumno.addItem(aux.toString());
+
+        }
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -37,7 +48,7 @@ public class ActualizacionDeNotas extends javax.swing.JInternalFrame {
 
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        jComboBoxAlumno = new javax.swing.JComboBox<>();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTAlumnos = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
@@ -50,10 +61,10 @@ public class ActualizacionDeNotas extends javax.swing.JInternalFrame {
 
         jLabel2.setText("Seleccione un alumno");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+        jComboBoxAlumno.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBoxAlumno.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox1ActionPerformed(evt);
+                jComboBoxAlumnoActionPerformed(evt);
             }
         });
 
@@ -67,7 +78,15 @@ public class ActualizacionDeNotas extends javax.swing.JInternalFrame {
             new String [] {
                 "Codigo", "Nombre", "Nota"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, true
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(jTAlumnos);
 
         jButton1.setText("Guardar");
@@ -89,7 +108,7 @@ public class ActualizacionDeNotas extends javax.swing.JInternalFrame {
                         .addGap(64, 64, 64)
                         .addComponent(jLabel2)
                         .addGap(55, 55, 55)
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jComboBoxAlumno, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(206, 206, 206)
                         .addComponent(jLabel1))
@@ -110,7 +129,7 @@ public class ActualizacionDeNotas extends javax.swing.JInternalFrame {
                 .addComponent(jLabel1)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jComboBoxAlumno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2))
                 .addGap(43, 43, 43)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -129,20 +148,19 @@ public class ActualizacionDeNotas extends javax.swing.JInternalFrame {
         this.dispose();
     }//GEN-LAST:event_jBSalirActionPerformed
 
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+    private void jComboBoxAlumnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxAlumnoActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox1ActionPerformed
+    }//GEN-LAST:event_jComboBoxAlumnoActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jBSalir;
     private javax.swing.JButton jButton1;
-    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JComboBox<String> jComboBoxAlumno;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTAlumnos;
     // End of variables declaration//GEN-END:variables
-
 
 }
