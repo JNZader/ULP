@@ -111,7 +111,7 @@ public class AlumnoDAO {
 
     }
 
-    public List<Alumno> listarAlumnos() {
+    public ArrayList<Alumno> listarAlumnos() {
         ArrayList<Alumno> alumnos = new ArrayList<>();
 
         try {

@@ -5,6 +5,14 @@
  */
 package Vistas;
 
+import Conexion.AlumnoDAO;
+import Conexion.InscripcionDAO;
+import Conexion.MateriaDAO;
+import Entidades.Alumno;
+import Entidades.Materia;
+import java.util.ArrayList;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Usuario
@@ -16,6 +24,38 @@ public class ConsultDeAlumnosPorMateria extends javax.swing.JInternalFrame {
      */
     public ConsultDeAlumnosPorMateria() {
         initComponents();
+        llenarComboBox();
+    }
+
+    private void llenarComboBox() {
+        MateriaDAO mat = new MateriaDAO();
+        ArrayList<Materia> materias = mat.listarMaterias();
+
+        jComboBoxMaterias.removeAllItems();
+
+        for (Materia aux : materias) {
+            jComboBoxMaterias.addItem(aux.toString());
+
+        }
+    }
+
+    private void llenarTabla() {
+        InscripcionDAO ins = new InscripcionDAO();
+        DefaultTableModel mod = null;
+        String[] columnas = {"ID", "DNI", "Apellido", "Nombre"};
+
+        Materia selectedItem = (Materia) jComboBoxMaterias.getSelectedItem();
+        ArrayList<Alumno> alumnosXMateria = ins.obtenerAlumnosXMateria(selectedItem.getIdMateria());
+        String[] filas = new String[4];
+
+        for (Alumno aux : alumnosXMateria) {
+            filas[0] = aux.getIdAlumno() + "";
+            filas[1] = aux.getDni() + "";
+            filas[2] = aux.getApellido() + "";
+            filas[3] = aux.getNombre() + "";
+            mod.addRow(filas);
+        }
+        tabla.setModel(mod);
     }
 
     /**
@@ -29,7 +69,7 @@ public class ConsultDeAlumnosPorMateria extends javax.swing.JInternalFrame {
 
         titulo = new javax.swing.JLabel();
         seleccione = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        jComboBoxMaterias = new javax.swing.JComboBox<>();
         jScrollPane1 = new javax.swing.JScrollPane();
         tabla = new javax.swing.JTable();
         salir = new javax.swing.JButton();
@@ -41,7 +81,12 @@ public class ConsultDeAlumnosPorMateria extends javax.swing.JInternalFrame {
 
         seleccione.setText("Seleccione una materia");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBoxMaterias.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBoxMaterias.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBoxMateriasActionPerformed(evt);
+            }
+        });
 
         tabla.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -67,24 +112,22 @@ public class ConsultDeAlumnosPorMateria extends javax.swing.JInternalFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(salir)
-                .addGap(83, 83, 83))
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(91, 91, 91)
-                        .addComponent(titulo))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(52, 52, 52)
-                        .addComponent(seleccione)
-                        .addGap(56, 56, 56)
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(34, 34, 34)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 407, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(92, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(salir)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                            .addGap(91, 91, 91)
+                            .addComponent(titulo))
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                            .addGap(52, 52, 52)
+                            .addComponent(seleccione)
+                            .addGap(56, 56, 56)
+                            .addComponent(jComboBoxMaterias, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createSequentialGroup()
+                            .addGap(34, 34, 34)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 407, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(30, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -93,13 +136,13 @@ public class ConsultDeAlumnosPorMateria extends javax.swing.JInternalFrame {
                 .addComponent(titulo)
                 .addGap(36, 36, 36)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jComboBoxMaterias, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(seleccione))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 46, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(39, 39, 39)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 63, Short.MAX_VALUE)
                 .addComponent(salir)
-                .addGap(25, 25, 25))
+                .addGap(23, 23, 23))
         );
 
         pack();
@@ -110,9 +153,13 @@ public class ConsultDeAlumnosPorMateria extends javax.swing.JInternalFrame {
         this.dispose();
     }//GEN-LAST:event_salirActionPerformed
 
+    private void jComboBoxMateriasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxMateriasActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBoxMateriasActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JComboBox<String> jComboBoxMaterias;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton salir;
     private javax.swing.JLabel seleccione;
