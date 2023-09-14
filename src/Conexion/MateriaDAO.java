@@ -121,7 +121,7 @@ public class MateriaDAO {
 
     }
 
-    public List<Materia> listarMaterias() {
+    public ArrayList<Materia> listarMaterias() {
         ArrayList<Materia> materias = new ArrayList<>();
         String sql = "SELECT * FROM materia WHERE estado=1";
 

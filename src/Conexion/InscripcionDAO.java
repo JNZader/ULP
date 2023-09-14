@@ -191,11 +191,11 @@ public class InscripcionDAO {
         }
     }
 
-    public List<Alumno> obtenerAlumnosXMateria(int idMateria) {
+    public ArrayList<Alumno> obtenerAlumnosXMateria(int idMateria) {
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
-        List<Alumno> alumnosXMateria = new ArrayList<>();
+        ArrayList<Alumno> alumnosXMateria = new ArrayList<>();
         try {
             con = getConnection();
             ps = con.prepareStatement(SQL_SELECT_ALUMNOXMATERIA);
