@@ -7,9 +7,14 @@ package Vistas;
 
 import Conexion.AlumnoDAO;
 import Conexion.InscripcionDAO;
+import Conexion.MateriaDAO;
 import Entidades.Alumno;
+import Entidades.Materia;
+import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -27,12 +32,10 @@ public class formularioDeInscripcion extends javax.swing.JInternalFrame {
         llenarComboBox();
         inscripcionDAO = new InscripcionDAO();
 
-
     }
 
     private void llenarTabla(JTable jt) {
-        
-        
+
     }
 
     private void llenarComboBox() {
@@ -42,7 +45,7 @@ public class formularioDeInscripcion extends javax.swing.JInternalFrame {
         jComboBoxAlumno.removeAllItems();
 
         for (Alumno aux : alumnos) {
-            jComboBoxAlumno.addItem(aux.toString());
+            jComboBoxAlumno.addItem(aux);
 
         }
     }
@@ -73,7 +76,11 @@ public class formularioDeInscripcion extends javax.swing.JInternalFrame {
 
         jLabel2.setText("Selecciona un Alumno :");
 
-        jComboBoxAlumno.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBoxAlumno.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBoxAlumnoActionPerformed(evt);
+            }
+        });
 
         jLabel3.setText("Listado de Materias");
 
@@ -120,9 +127,19 @@ public class formularioDeInscripcion extends javax.swing.JInternalFrame {
 
         buttonGroup1.add(jRadioButtonMateriasNoInscriptas);
         jRadioButtonMateriasNoInscriptas.setText("Materias no Inscriptas");
+        jRadioButtonMateriasNoInscriptas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButtonMateriasNoInscriptasActionPerformed(evt);
+            }
+        });
 
         buttonGroup1.add(jRadioButtonMateriasInscriptas);
         jRadioButtonMateriasInscriptas.setText("Materias Inscriptas");
+        jRadioButtonMateriasInscriptas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButtonMateriasInscriptasActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -195,13 +212,55 @@ public class formularioDeInscripcion extends javax.swing.JInternalFrame {
         this.dispose();
     }//GEN-LAST:event_jButtonSalirActionPerformed
 
+    private void jRadioButtonMateriasNoInscriptasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonMateriasNoInscriptasActionPerformed
+        // TODO add your handling code here:
+        DefaultTableModel modelo = new DefaultTableModel();
+        String[] cabecera = {"id", "nombre", "año"};
+        Alumno alumno = (Alumno) jComboBoxAlumno.getSelectedItem();
+        //Alumno alu = (Alumno) alumno;
+        int idAlu = alumno.getIdAlumno();
+        modelo.setColumnIdentifiers(cabecera);
+        //List<Materia> materias = new ArrayList<>();
+        List<Materia> obtenerMateriasNoCursadas = inscripcionDAO.obtenerMateriasNoCursadas(idAlu);
+
+        for (Materia materia : obtenerMateriasNoCursadas) {
+            modelo.addRow(new Object[]{materia.getIdMateria(), materia.getNombre(), materia.getAño()});
+
+        }
+        jTable2.setModel(modelo);
+
+
+    }//GEN-LAST:event_jRadioButtonMateriasNoInscriptasActionPerformed
+
+    private void jComboBoxAlumnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxAlumnoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBoxAlumnoActionPerformed
+
+    private void jRadioButtonMateriasInscriptasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonMateriasInscriptasActionPerformed
+        // TODO add your handling code here:
+        DefaultTableModel modelo = new DefaultTableModel();
+        String[] cabecera = {"id", "nombre", "año"};
+        Alumno alumno = (Alumno) jComboBoxAlumno.getSelectedItem();
+        //Alumno alu = (Alumno) alumno;
+        int idAlu = alumno.getIdAlumno();
+        modelo.setColumnIdentifiers(cabecera);
+        //List<Materia> materias = new ArrayList<>();
+        List<Materia> obtenerMateriaCursadas = inscripcionDAO.obtenerMateriasCursadas(idAlu);
+
+        for (Materia materia : obtenerMateriaCursadas) {
+            modelo.addRow(new Object[]{materia.getIdMateria(), materia.getNombre(), materia.getAño()});
+
+        }
+        jTable2.setModel(modelo);
+    }//GEN-LAST:event_jRadioButtonMateriasInscriptasActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JButton jButtonAnularInscripcion;
     private javax.swing.JButton jButtonInscribir;
     private javax.swing.JButton jButtonSalir;
-    private javax.swing.JComboBox<String> jComboBoxAlumno;
+    private javax.swing.JComboBox<Alumno> jComboBoxAlumno;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

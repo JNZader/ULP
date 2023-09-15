@@ -16,8 +16,8 @@ public class InscripcionDAO {
     private final String SQL_UPDATE = "UPDATE inscripcion SET nota = ? WHERE idAlumno = ? AND idMateria = ?";
     private final String SQL_DELETE = "DELETE FROM inscripcion WHERE idAlumno = ? AND idMateria = ?";
     private final String SQL_SELECT_ALUMNOXMATERIA = "SELECT a.* FROM alumno a INNER JOIN inscripcion i ON a.idAlumno = i.idAlumno WHERE i.idMateria = ?";
-    private final String SQL_SELECT_MATERIASCURSADAS = "SELECT inscripcion.idMateria, nombre, año FROM inscripcion, materia WHERE inscripcion.idMateria = materia.idMateria AND inscripcion.idAlumno = ?";
-    private final String SQL_SELECT_MATERIASNOCURSADAS = "SELECT idInscripto, nota, idAlumno, idMateria FROM inscripcion WHERE estado=1 AND idMateria NOT IN (SELECT idMateria FROM inscripcion WHERE idAlumno=?)";
+    private final String SQL_SELECT_MATERIASCURSADAS = "SELECT * FROM inscripcion, materia WHERE inscripcion.idMateria = materia.idMateria AND inscripcion.idAlumno = ?";
+    private final String SQL_SELECT_MATERIASNOCURSADAS = "SELECT * FROM inscripcion, materia WHERE inscripcion.idMateria = materia.idMateria NOT IN (SELECT idMateria FROM inscripcion WHERE idAlumno=?)";
     private final String SQL_SELECT_INSCRIPCIONESPORALUMNO = "SELECT * FROM inscripcion WHERE idAlumno = ?";
     private MateriaDAO md = new MateriaDAO();
     private AlumnoDAO ad = new AlumnoDAO();
