@@ -5,7 +5,6 @@
  */
 package Vistas;
 
-import Conexion.AlumnoDAO;
 import Conexion.InscripcionDAO;
 import Conexion.MateriaDAO;
 import Entidades.Alumno;
@@ -19,6 +18,13 @@ import javax.swing.table.DefaultTableModel;
  */
 public class ConsultDeAlumnosPorMateria extends javax.swing.JInternalFrame {
 
+    DefaultTableModel mod = new DefaultTableModel() {
+        @Override
+        public boolean isCellEditable(int i, int i1) {
+            return false;
+        }
+    };
+
     /**
      * Creates new form ConsultDeAlumnosPorMateria
      */
@@ -31,45 +37,30 @@ public class ConsultDeAlumnosPorMateria extends javax.swing.JInternalFrame {
         MateriaDAO mat = new MateriaDAO();
         ArrayList<Materia> materias = mat.listarMaterias();
 
-        jComboBoxMaterias.removeAllItems();
-
         for (Materia aux : materias) {
-            jComboBoxMaterias.addItem(aux.toString());
+            jComboBoxMaterias.addItem(aux);
 
         }
     }
 
     private void llenarTabla() {
         InscripcionDAO ins = new InscripcionDAO();
-        DefaultTableModel mod = new DefaultTableModel();
+
         String[] columnas = {"ID", "DNI", "Apellido", "Nombre"};
 
-        String materiaSeleccionada = (String) jComboBoxMaterias.getSelectedItem();
+        Materia materiaSeleccionada = (Materia) jComboBoxMaterias.getSelectedItem();
 
-        MateriaDAO matDAO = new MateriaDAO();
-        ArrayList<Materia> materias = matDAO.listarMaterias();
+        ArrayList<Alumno> alumnosXMateria = ins.obtenerAlumnosXMateria(materiaSeleccionada.getIdMateria());
 
-        Materia materia = null;
-        for (Materia aux : materias) {
-            if (aux.toString().equals(materiaSeleccionada)) {
-                materia = aux;
-                break;
-            }
-        }
+        mod.setColumnIdentifiers(columnas);
+        String[] filas = new String[4];
 
-        if (materia != null) {
-            ArrayList<Alumno> alumnosXMateria = ins.obtenerAlumnosXMateria(materia.getIdMateria());
-
-            mod.setColumnIdentifiers(columnas);
-            String[] filas = new String[4];
-
-            for (Alumno aux : alumnosXMateria) {
-                filas[0] = aux.getIdAlumno() + "";
-                filas[1] = aux.getDni() + "";
-                filas[2] = aux.getApellido() + "";
-                filas[3] = aux.getNombre() + "";
-                mod.addRow(filas);
-            }
+        for (Alumno aux : alumnosXMateria) {
+            filas[0] = aux.getIdAlumno() + "";
+            filas[1] = aux.getDni() + "";
+            filas[2] = aux.getApellido() + "";
+            filas[3] = aux.getNombre() + "";
+            mod.addRow(filas);
         }
 
         tabla.setModel(mod);
@@ -98,7 +89,6 @@ public class ConsultDeAlumnosPorMateria extends javax.swing.JInternalFrame {
 
         seleccione.setText("Seleccione una materia");
 
-        jComboBoxMaterias.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         jComboBoxMaterias.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBoxMateriasActionPerformed(evt);
@@ -185,7 +175,7 @@ public class ConsultDeAlumnosPorMateria extends javax.swing.JInternalFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> jComboBoxMaterias;
+    private javax.swing.JComboBox<Materia> jComboBoxMaterias;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton salir;
     private javax.swing.JLabel seleccione;
