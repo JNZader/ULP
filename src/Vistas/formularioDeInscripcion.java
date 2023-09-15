@@ -22,6 +22,14 @@ import javax.swing.table.DefaultTableModel;
  */
 public class formularioDeInscripcion extends javax.swing.JInternalFrame {
 
+    DefaultTableModel modelo = new DefaultTableModel() {
+        @Override
+        public boolean isCellEditable(int i, int i1) {
+            return false;
+        }
+
+    };
+
     private InscripcionDAO inscripcionDAO;
 
     /**
@@ -33,8 +41,27 @@ public class formularioDeInscripcion extends javax.swing.JInternalFrame {
         inscripcionDAO = new InscripcionDAO();
 
     }
+private void actualizarTabla(){
+    while (modelo.getRowCount()>0) {        
+        modelo.removeRow(0);
+    }
+    
+    jTable2.setModel(modelo);
+}
+    private void llenarTablaMateriasNoInscriptas() {
+        String[] cabecera = {"id", "nombre", "año"};
+        Alumno alumno = (Alumno) jComboBoxAlumno.getSelectedItem();
+        //Alumno alu = (Alumno) alumno;
+        int idAlu = alumno.getIdAlumno();
+        modelo.setColumnIdentifiers(cabecera);
+        //List<Materia> materias = new ArrayList<>();
+        List<Materia> obtenerMateriasNoCursadas = inscripcionDAO.obtenerMateriasNoCursadas(idAlu);
 
-    private void llenarTabla(JTable jt) {
+        for (Materia materia : obtenerMateriasNoCursadas) {
+            modelo.addRow(new Object[]{materia.getIdMateria(), materia.getNombre(), materia.getAño()});
+
+        }
+        jTable2.setModel(modelo);
 
     }
 
@@ -49,7 +76,21 @@ public class formularioDeInscripcion extends javax.swing.JInternalFrame {
 
         }
     }
+private void llenarTablaMateriaCursadas(){
+    String[] cabecera = {"id", "nombre", "año"};
+        Alumno alumno = (Alumno) jComboBoxAlumno.getSelectedItem();
+        //Alumno alu = (Alumno) alumno;
+        int idAlu = alumno.getIdAlumno();
+        modelo.setColumnIdentifiers(cabecera);
+        //List<Materia> materias = new ArrayList<>();
+        List<Materia> obtenerMateriaCursadas = inscripcionDAO.obtenerMateriasCursadas(idAlu);
 
+        for (Materia materia : obtenerMateriaCursadas) {
+            modelo.addRow(new Object[]{materia.getIdMateria(), materia.getNombre(), materia.getAño()});
+
+        }
+        jTable2.setModel(modelo);
+}
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -98,9 +139,16 @@ public class formularioDeInscripcion extends javax.swing.JInternalFrame {
                 "ID", "Nombre", "Año"
             }
         ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class
+            };
             boolean[] canEdit = new boolean [] {
                 false, false, false
             };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
@@ -214,44 +262,19 @@ public class formularioDeInscripcion extends javax.swing.JInternalFrame {
 
     private void jRadioButtonMateriasNoInscriptasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonMateriasNoInscriptasActionPerformed
         // TODO add your handling code here:
-        DefaultTableModel modelo = new DefaultTableModel();
-        String[] cabecera = {"id", "nombre", "año"};
-        Alumno alumno = (Alumno) jComboBoxAlumno.getSelectedItem();
-        //Alumno alu = (Alumno) alumno;
-        int idAlu = alumno.getIdAlumno();
-        modelo.setColumnIdentifiers(cabecera);
-        //List<Materia> materias = new ArrayList<>();
-        List<Materia> obtenerMateriasNoCursadas = inscripcionDAO.obtenerMateriasNoCursadas(idAlu);
-
-        for (Materia materia : obtenerMateriasNoCursadas) {
-            modelo.addRow(new Object[]{materia.getIdMateria(), materia.getNombre(), materia.getAño()});
-
-        }
-        jTable2.setModel(modelo);
-
-
+        actualizarTabla();
+        llenarTablaMateriasNoInscriptas();
     }//GEN-LAST:event_jRadioButtonMateriasNoInscriptasActionPerformed
 
     private void jComboBoxAlumnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxAlumnoActionPerformed
         // TODO add your handling code here:
+        
     }//GEN-LAST:event_jComboBoxAlumnoActionPerformed
 
     private void jRadioButtonMateriasInscriptasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonMateriasInscriptasActionPerformed
         // TODO add your handling code here:
-        DefaultTableModel modelo = new DefaultTableModel();
-        String[] cabecera = {"id", "nombre", "año"};
-        Alumno alumno = (Alumno) jComboBoxAlumno.getSelectedItem();
-        //Alumno alu = (Alumno) alumno;
-        int idAlu = alumno.getIdAlumno();
-        modelo.setColumnIdentifiers(cabecera);
-        //List<Materia> materias = new ArrayList<>();
-        List<Materia> obtenerMateriaCursadas = inscripcionDAO.obtenerMateriasCursadas(idAlu);
-
-        for (Materia materia : obtenerMateriaCursadas) {
-            modelo.addRow(new Object[]{materia.getIdMateria(), materia.getNombre(), materia.getAño()});
-
-        }
-        jTable2.setModel(modelo);
+        actualizarTabla();
+        llenarTablaMateriaCursadas();
     }//GEN-LAST:event_jRadioButtonMateriasInscriptasActionPerformed
 
 

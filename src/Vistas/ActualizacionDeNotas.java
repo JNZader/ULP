@@ -67,6 +67,10 @@ public class ActualizacionDeNotas extends javax.swing.JInternalFrame {
         jTAlumnos.setModel(mod);
     }
 private void actualizarTabla(){
+    while (mod.getRowCount()>0) {        
+        mod.removeRow(0);
+    }
+    
     jTAlumnos.setModel(mod);
 }
     /**
@@ -245,6 +249,7 @@ private void actualizarTabla(){
 
     private void jComboBoxAlumnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxAlumnoActionPerformed
         // TODO add your handling code here:
+        actualizarTabla();
         llenarTabla();
     }//GEN-LAST:event_jComboBoxAlumnoActionPerformed
 
