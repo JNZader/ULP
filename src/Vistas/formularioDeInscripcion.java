@@ -7,13 +7,18 @@ package Vistas;
 
 import Conexion.AlumnoDAO;
 import Conexion.InscripcionDAO;
+import Conexion.MateriaDAO;
 import Entidades.Alumno;
 import Entidades.Materia;
+import Entidades.Inscripcion;
+import java.awt.Color;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+
 
 /**
  *
@@ -37,6 +42,7 @@ public class formularioDeInscripcion extends javax.swing.JInternalFrame implemen
     public formularioDeInscripcion() {
         initComponents();
         llenarComboBox();
+        getContentPane().setBackground(new Color(75,141,88));
         inscripcionDAO = new InscripcionDAO();
         jRadioButtonMateriasInscriptas.setSelected(true);
         jComboBoxAlumno.addItemListener(this);
@@ -167,6 +173,11 @@ public class formularioDeInscripcion extends javax.swing.JInternalFrame implemen
         });
 
         jButtonAnularInscripcion.setText("Anular Inscripcion");
+        jButtonAnularInscripcion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAnularInscripcionActionPerformed(evt);
+            }
+        });
 
         jButtonSalir.setText("Salir");
         jButtonSalir.addActionListener(new java.awt.event.ActionListener() {
@@ -255,6 +266,28 @@ public class formularioDeInscripcion extends javax.swing.JInternalFrame implemen
 
     private void jButtonInscribirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonInscribirActionPerformed
         // TODO add your handling code here:
+        Inscripcion insc;
+         Alumno alumno =(Alumno) jComboBoxAlumno.getSelectedItem();//obtengo el alumno
+        int idAlumno = alumno.getIdAlumno();
+        
+        int selectedRow = jTable2.getSelectedRow();//obtengo la fila seleccionada
+        
+        if (selectedRow>=0) {
+            Object columna =  jTable2.getValueAt(selectedRow, 0);//obtengo el objeto seleccionado
+            if (columna!=null) {
+                int idMateria = (int) columna;//uso el objeto para obtener el id
+                MateriaDAO mat = new MateriaDAO();
+                Materia materia=mat.BuscarMateria(idMateria);
+                insc = new Inscripcion(alumno, materia, 0);
+                inscripcionDAO.insertar(insc);
+                modelo.removeRow(selectedRow);
+                jTable2.setModel(modelo);
+                
+                
+            }
+        }else{
+            JOptionPane.showMessageDialog(this, "seleccione una fila");
+        }
     }//GEN-LAST:event_jButtonInscribirActionPerformed
 
     private void jButtonSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSalirActionPerformed
@@ -281,6 +314,31 @@ public class formularioDeInscripcion extends javax.swing.JInternalFrame implemen
         jButtonAnularInscripcion.setEnabled(true);
         jButtonInscribir.setEnabled(false);
     }//GEN-LAST:event_jRadioButtonMateriasInscriptasActionPerformed
+
+    private void jButtonAnularInscripcionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAnularInscripcionActionPerformed
+        // TODO add your handling code here:
+        Alumno alumno =(Alumno) jComboBoxAlumno.getSelectedItem();//obtengo el alumno
+        int idAlumno = alumno.getIdAlumno();
+        
+        int selectedRow = jTable2.getSelectedRow();//obtengo la fila seleccionada
+        
+        if (selectedRow>=0) {
+            Object materia =  jTable2.getValueAt(selectedRow, 0);//obtengo el objeto seleccionado
+            if (materia!=null) {
+                int idMateria = (int) materia;//uso el objeto para obtener el id
+                inscripcionDAO.borrarInscripcionMateriaAlumno(idAlumno,idMateria );
+                modelo.removeRow(selectedRow);
+                jTable2.setModel(modelo);
+            }
+        }else{
+            JOptionPane.showMessageDialog(this, "seleccione una fila");
+        }
+        
+        
+        
+        
+        
+    }//GEN-LAST:event_jButtonAnularInscripcionActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
