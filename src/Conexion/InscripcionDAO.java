@@ -136,10 +136,9 @@ public class InscripcionDAO {
 // Método para actualizar la nota de una inscripción por ID de alumno y ID de materia
     public boolean actualizarNota(double nota, int idAlumno, int idMateria) {
         PreparedStatement ps = null;
-        boolean boo=false;
+        boolean boo = false;
         try {
             ps = con.prepareStatement(SQL_UPDATE);
-            
 
             // Establece la nueva nota en la inscripción identificada por el ID del alumno y la ID de la materia
             ps.setDouble(1, nota);
@@ -148,7 +147,7 @@ public class InscripcionDAO {
             int on = ps.executeUpdate(); // Ejecuta la actualización en la base de datos
             if (on > 0) {
                 JOptionPane.showMessageDialog(null, "Actualizacion realizada");
-                boo=true;
+                boo = true;
             } else {
                 JOptionPane.showMessageDialog(null, "Actualizacion fallida");
             }
