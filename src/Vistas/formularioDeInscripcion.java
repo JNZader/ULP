@@ -10,6 +10,7 @@ import Conexion.InscripcionDAO;
 import Conexion.MateriaDAO;
 import Entidades.Alumno;
 import Entidades.Materia;
+import java.awt.event.ActionEvent;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,15 +40,18 @@ public class formularioDeInscripcion extends javax.swing.JInternalFrame {
         initComponents();
         llenarComboBox();
         inscripcionDAO = new InscripcionDAO();
+        jRadioButtonMateriasInscriptas.setSelected(true);
 
     }
-private void actualizarTabla(){
-    while (modelo.getRowCount()>0) {        
-        modelo.removeRow(0);
+
+    private void actualizarTabla() {
+        while (modelo.getRowCount() > 0) {
+            modelo.removeRow(0);
+        }
+
+        jTable2.setModel(modelo);
     }
-    
-    jTable2.setModel(modelo);
-}
+
     private void llenarTablaMateriasNoInscriptas() {
         String[] cabecera = {"id", "nombre", "año"};
         Alumno alumno = (Alumno) jComboBoxAlumno.getSelectedItem();
@@ -76,13 +80,12 @@ private void actualizarTabla(){
 
         }
     }
-private void llenarTablaMateriaCursadas(){
-    String[] cabecera = {"id", "nombre", "año"};
+
+    private void llenarTablaMateriaCursadas() {
+        String[] cabecera = {"id", "nombre", "año"};
         Alumno alumno = (Alumno) jComboBoxAlumno.getSelectedItem();
-        //Alumno alu = (Alumno) alumno;
         int idAlu = alumno.getIdAlumno();
         modelo.setColumnIdentifiers(cabecera);
-        //List<Materia> materias = new ArrayList<>();
         List<Materia> obtenerMateriaCursadas = inscripcionDAO.obtenerMateriasCursadas(idAlu);
 
         for (Materia materia : obtenerMateriaCursadas) {
@@ -90,7 +93,20 @@ private void llenarTablaMateriaCursadas(){
 
         }
         jTable2.setModel(modelo);
-}
+    }
+
+    public void actionPerformed(ActionEvent e) {
+        // Verifica qué RadioButton está seleccionado y actúa en consecuencia
+        if (jRadioButtonMateriasInscriptas.isSelected()) {
+            // Realiza acciones para RadioButton 1
+            actualizarTabla();
+            llenarTablaMateriaCursadas();
+        } else if (jRadioButtonMateriasNoInscriptas.isSelected()) {
+            // Realiza acciones para RadioButton 2
+            actualizarTabla();
+            llenarTablaMateriasNoInscriptas();
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -262,19 +278,16 @@ private void llenarTablaMateriaCursadas(){
 
     private void jRadioButtonMateriasNoInscriptasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonMateriasNoInscriptasActionPerformed
         // TODO add your handling code here:
-        actualizarTabla();
-        llenarTablaMateriasNoInscriptas();
+
     }//GEN-LAST:event_jRadioButtonMateriasNoInscriptasActionPerformed
 
     private void jComboBoxAlumnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxAlumnoActionPerformed
         // TODO add your handling code here:
-        
     }//GEN-LAST:event_jComboBoxAlumnoActionPerformed
 
     private void jRadioButtonMateriasInscriptasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonMateriasInscriptasActionPerformed
         // TODO add your handling code here:
-        actualizarTabla();
-        llenarTablaMateriaCursadas();
+
     }//GEN-LAST:event_jRadioButtonMateriasInscriptasActionPerformed
 
 

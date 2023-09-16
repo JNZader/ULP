@@ -105,221 +105,224 @@ public class InscripcionDAO {
     }
 
 // Método para actualizar una inscripción existente
-public void actualizar(Inscripcion insc) {
-    PreparedStatement ps = null;
-    try {
-        ps = con.prepareStatement(SQL_UPDATE);
-
-        // Establece la nueva nota en la inscripción identificada por el ID del alumno y la ID de la materia
-        ps.setDouble(1, insc.getNota());
-        ps.setInt(2, insc.getIdInscripto());
-        int on = ps.executeUpdate(); // Ejecuta la actualización en la base de datos
-        if (on > 0) {
-            JOptionPane.showMessageDialog(null, "Actualizacion realizada");
-        } else {
-            JOptionPane.showMessageDialog(null, "Actualizacion fallida");
-        }
-
-    } catch (SQLException ex) {
-        ex.printStackTrace();
-        JOptionPane.showMessageDialog(null, "Error al actualizar inscripciones" + ex.getMessage());
-    } finally {
+    public void actualizar(Inscripcion insc) {
+        PreparedStatement ps = null;
         try {
-            close(ps); // Cierra la sentencia SQL
+            ps = con.prepareStatement(SQL_UPDATE);
+
+            // Establece la nueva nota en la inscripción identificada por el ID del alumno y la ID de la materia
+            ps.setDouble(1, insc.getNota());
+            ps.setInt(2, insc.getIdInscripto());
+            int on = ps.executeUpdate(); // Ejecuta la actualización en la base de datos
+            if (on > 0) {
+                JOptionPane.showMessageDialog(null, "Actualizacion realizada");
+            } else {
+                JOptionPane.showMessageDialog(null, "Actualizacion fallida");
+            }
+
         } catch (SQLException ex) {
             ex.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Error al cerrar conexiones en metodo actualizar" + ex.getMessage());
+            JOptionPane.showMessageDialog(null, "Error al actualizar inscripciones" + ex.getMessage());
+        } finally {
+            try {
+                close(ps); // Cierra la sentencia SQL
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(null, "Error al cerrar conexiones en metodo actualizar" + ex.getMessage());
+            }
         }
     }
-}
 
 // Método para actualizar la nota de una inscripción por ID de alumno y ID de materia
-public void actualizarNota(double nota, int idAlumno, int idMateria) {
-    PreparedStatement ps = null;
-    try {
-        ps = con.prepareStatement(SQL_UPDATE);
-    //private static final String SQL_UPDATE = "UPDATE inscripcion SET nota = ? WHERE idAlumno = ? AND idMateria = ?";
-
-        // Establece la nueva nota en la inscripción identificada por el ID del alumno y la ID de la materia
-        ps.setDouble(1, nota);
-        ps.setInt(2, idAlumno);
-        ps.setInt(3, idMateria);
-        int on = ps.executeUpdate(); // Ejecuta la actualización en la base de datos
-        if (on > 0) {
-            JOptionPane.showMessageDialog(null, "Actualizacion realizada");
-        } else {
-            JOptionPane.showMessageDialog(null, "Actualizacion fallida");
-        }
-
-    } catch (SQLException ex) {
-        ex.printStackTrace();
-        JOptionPane.showMessageDialog(null, "Error al actualizar inscripciones" + ex.getMessage());
-    } finally {
+    public boolean actualizarNota(double nota, int idAlumno, int idMateria) {
+        PreparedStatement ps = null;
+        boolean boo=false;
         try {
-            close(ps); // Cierra la sentencia SQL
+            ps = con.prepareStatement(SQL_UPDATE);
+            
+
+            // Establece la nueva nota en la inscripción identificada por el ID del alumno y la ID de la materia
+            ps.setDouble(1, nota);
+            ps.setInt(2, idAlumno);
+            ps.setInt(3, idMateria);
+            int on = ps.executeUpdate(); // Ejecuta la actualización en la base de datos
+            if (on > 0) {
+                JOptionPane.showMessageDialog(null, "Actualizacion realizada");
+                boo=true;
+            } else {
+                JOptionPane.showMessageDialog(null, "Actualizacion fallida");
+            }
+
         } catch (SQLException ex) {
             ex.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Error al cerrar conexiones en metodo actualizar" + ex.getMessage());
+            JOptionPane.showMessageDialog(null, "Error al actualizar inscripciones" + ex.getMessage());
+        } finally {
+            try {
+                close(ps); // Cierra la sentencia SQL
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(null, "Error al cerrar conexiones en metodo actualizar" + ex.getMessage());
+            }
         }
+        return boo;
     }
-}
 
 // Método para borrar una inscripción por ID de alumno y ID de materia
-public void borrarInscripcionMateriaAlumno(int idAlumno, int idMateria) {
-    PreparedStatement ps = null;
-    try {
-        ps = con.prepareStatement(SQL_DELETE);
-
-        // Establece los parámetros en la sentencia SQL para borrar la inscripción
-        ps.setInt(1, idAlumno);
-        ps.setInt(2, idMateria);
-
-        int on = ps.executeUpdate(); // Ejecuta la eliminación en la base de datos
-        if (on > 0) {
-            JOptionPane.showMessageDialog(null, "Inscripcion eliminada");
-        } else {
-            JOptionPane.showMessageDialog(null, "Eliminacion fallida");
-        }
-
-    } catch (SQLException ex) {
-        ex.printStackTrace();
-        JOptionPane.showMessageDialog(null, "Error al borrar inscripciones" + ex.getMessage());
-    } finally {
+    public void borrarInscripcionMateriaAlumno(int idAlumno, int idMateria) {
+        PreparedStatement ps = null;
         try {
-            close(ps); // Cierra la sentencia SQL
+            ps = con.prepareStatement(SQL_DELETE);
+
+            // Establece los parámetros en la sentencia SQL para borrar la inscripción
+            ps.setInt(1, idAlumno);
+            ps.setInt(2, idMateria);
+
+            int on = ps.executeUpdate(); // Ejecuta la eliminación en la base de datos
+            if (on > 0) {
+                JOptionPane.showMessageDialog(null, "Inscripcion eliminada");
+            } else {
+                JOptionPane.showMessageDialog(null, "Eliminacion fallida");
+            }
+
         } catch (SQLException ex) {
             ex.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Error al cerrar conexiones" + ex.getMessage());
+            JOptionPane.showMessageDialog(null, "Error al borrar inscripciones" + ex.getMessage());
+        } finally {
+            try {
+                close(ps); // Cierra la sentencia SQL
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(null, "Error al cerrar conexiones" + ex.getMessage());
+            }
         }
     }
-}
 
 // Método para obtener una lista de alumnos inscritos en una materia específica
-public ArrayList<Alumno> obtenerAlumnosXMateria(int idMateria) {
-    PreparedStatement ps = null;
-    ResultSet rs = null;
-    ArrayList<Alumno> alumnosXMateria = new ArrayList<>();
-    try {
-        ps = con.prepareStatement(SQL_SELECT_ALUMNOXMATERIA);
-        ps.setInt(1, idMateria);
-        rs = ps.executeQuery();
-
-        while (rs.next()) {
-            int idAlumno = rs.getInt("idAlumno");
-            int dni = rs.getInt("dni");
-            String apellido = rs.getString("apellido");
-            String nombre = rs.getString("nombre");
-            LocalDate fechaNacimiento = rs.getDate("fechaNacimiento").toLocalDate();
-            boolean estado = rs.getBoolean("estado");
-            alumnosXMateria.add(new Alumno(idAlumno, dni, apellido, nombre, fechaNacimiento, estado));
-        }
-    } catch (SQLException ex) {
-        ex.printStackTrace();
-        JOptionPane.showMessageDialog(null, "Error al obtener Alumnos por Materia" + ex.getMessage());
-    } finally {
+    public ArrayList<Alumno> obtenerAlumnosXMateria(int idMateria) {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        ArrayList<Alumno> alumnosXMateria = new ArrayList<>();
         try {
-            close(rs); // Cierra el conjunto de resultados
-            close(ps); // Cierra la sentencia SQL
+            ps = con.prepareStatement(SQL_SELECT_ALUMNOXMATERIA);
+            ps.setInt(1, idMateria);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                int idAlumno = rs.getInt("idAlumno");
+                int dni = rs.getInt("dni");
+                String apellido = rs.getString("apellido");
+                String nombre = rs.getString("nombre");
+                LocalDate fechaNacimiento = rs.getDate("fechaNacimiento").toLocalDate();
+                boolean estado = rs.getBoolean("estado");
+                alumnosXMateria.add(new Alumno(idAlumno, dni, apellido, nombre, fechaNacimiento, estado));
+            }
         } catch (SQLException ex) {
             ex.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Error al cerrar conexiones en metodo obtenerAlumnosXMateria" + ex.getMessage());
+            JOptionPane.showMessageDialog(null, "Error al obtener Alumnos por Materia" + ex.getMessage());
+        } finally {
+            try {
+                close(rs); // Cierra el conjunto de resultados
+                close(ps); // Cierra la sentencia SQL
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(null, "Error al cerrar conexiones en metodo obtenerAlumnosXMateria" + ex.getMessage());
+            }
         }
+        return alumnosXMateria;
     }
-    return alumnosXMateria;
-}
 
 // Método para obtener una lista de materias cursadas por un alumno específico
-public ArrayList<Materia> obtenerMateriasCursadas(int idAlumno) {
-    PreparedStatement ps = null;
-    ResultSet rs = null;
-    ArrayList<Materia> materias = new ArrayList<>();
-    try {
-        ps = con.prepareStatement(SQL_SELECT_MATERIASCURSADAS);
-        ps.setInt(1, idAlumno);
-        rs = ps.executeQuery();
-
-        while (rs.next()) {
-            materias.add(new Materia(rs.getInt("idMateria"), rs.getInt("año"), rs.getString("nombre"), rs.getBoolean("estado")));
-        }
-    } catch (SQLException ex) {
-        ex.printStackTrace();
-        JOptionPane.showMessageDialog(null, "Error al obtener Materias cursadas" + ex.getMessage());
-    } finally {
+    public ArrayList<Materia> obtenerMateriasCursadas(int idAlumno) {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        ArrayList<Materia> materias = new ArrayList<>();
         try {
-            close(rs); // Cierra el conjunto de resultados
-            close(ps); // Cierra la sentencia SQL
+            ps = con.prepareStatement(SQL_SELECT_MATERIASCURSADAS);
+            ps.setInt(1, idAlumno);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                materias.add(new Materia(rs.getInt("idMateria"), rs.getInt("año"), rs.getString("nombre"), rs.getBoolean("estado")));
+            }
         } catch (SQLException ex) {
             ex.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Error al cerrar conexiones en metodo obtenerMateriasCursadas" + ex.getMessage());
+            JOptionPane.showMessageDialog(null, "Error al obtener Materias cursadas" + ex.getMessage());
+        } finally {
+            try {
+                close(rs); // Cierra el conjunto de resultados
+                close(ps); // Cierra la sentencia SQL
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(null, "Error al cerrar conexiones en metodo obtenerMateriasCursadas" + ex.getMessage());
+            }
         }
+        return materias;
     }
-    return materias;
-}
 
 // Método para obtener una lista de inscripciones por ID de alumno
-public ArrayList<Inscripcion> obtenerInscripcionesPorAlumno(int idAlumno) {
-    PreparedStatement ps = null;
-    ResultSet rs = null;
-    Inscripcion insc = null;
-    ArrayList<Inscripcion> inscripciones = new ArrayList<>();
-    try {
-        ps = con.prepareStatement(SQL_SELECT_INSCRIPCIONESPORALUMNO);
-        ps.setInt(1, idAlumno);
-        rs = ps.executeQuery();
-
-        while (rs.next()) {
-            insc = new Inscripcion();
-
-            insc.setIdInscripto(rs.getInt("idInscripto"));
-            insc.setNota(rs.getInt("nota"));
-            Alumno alu = ad.buscarAlumno(idAlumno);
-            Materia mat = md.BuscarMateria(rs.getInt("idMateria"));
-            insc.setAlumno(alu);
-            insc.setMateria(mat);
-
-            inscripciones.add(insc);
-        }
-    } catch (SQLException ex) {
-        ex.printStackTrace(System.out);
-        JOptionPane.showMessageDialog(null, "Error al obtener Materias cursadas" + ex.getMessage());
-    } finally {
+    public ArrayList<Inscripcion> obtenerInscripcionesPorAlumno(int idAlumno) {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Inscripcion insc = null;
+        ArrayList<Inscripcion> inscripciones = new ArrayList<>();
         try {
-            close(rs); // Cierra el conjunto de resultados
-            close(ps); // Cierra la sentencia SQL
+            ps = con.prepareStatement(SQL_SELECT_INSCRIPCIONESPORALUMNO);
+            ps.setInt(1, idAlumno);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                insc = new Inscripcion();
+
+                insc.setIdInscripto(rs.getInt("idInscripto"));
+                insc.setNota(rs.getInt("nota"));
+                Alumno alu = ad.buscarAlumno(idAlumno);
+                Materia mat = md.BuscarMateria(rs.getInt("idMateria"));
+                insc.setAlumno(alu);
+                insc.setMateria(mat);
+
+                inscripciones.add(insc);
+            }
         } catch (SQLException ex) {
             ex.printStackTrace(System.out);
-            JOptionPane.showMessageDialog(null, "Error al cerrar conexiones en metodo obtenerMateriasCursadas" + ex.getMessage());
+            JOptionPane.showMessageDialog(null, "Error al obtener Materias cursadas" + ex.getMessage());
+        } finally {
+            try {
+                close(rs); // Cierra el conjunto de resultados
+                close(ps); // Cierra la sentencia SQL
+            } catch (SQLException ex) {
+                ex.printStackTrace(System.out);
+                JOptionPane.showMessageDialog(null, "Error al cerrar conexiones en metodo obtenerMateriasCursadas" + ex.getMessage());
+            }
         }
+        return inscripciones;
     }
-    return inscripciones;
-}
 
 // Método para obtener una lista de materias no cursadas por un alumno específico
-public ArrayList<Materia> obtenerMateriasNoCursadas(int idAlumno) {
-    PreparedStatement ps = null;
-    ResultSet rs = null;
-    ArrayList<Materia> materias = new ArrayList<>();
-    try {
-        ps = con.prepareStatement(SQL_SELECT_MATERIASNOCURSADAS);
-        ps.setInt(1, idAlumno);
-        rs = ps.executeQuery();
-
-        while (rs.next()) {
-            materias.add(new Materia(rs.getInt("idMateria"), rs.getInt("año"), rs.getString("nombre"), rs.getBoolean("estado")));
-        }
-    } catch (SQLException ex) {
-        ex.printStackTrace(System.out);
-        JOptionPane.showMessageDialog(null, "Error al obtener Materias no cursadas" + ex.getMessage());
-    } finally {
+    public ArrayList<Materia> obtenerMateriasNoCursadas(int idAlumno) {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        ArrayList<Materia> materias = new ArrayList<>();
         try {
-            close(rs); // Cierra el conjunto de resultados
-            close(ps); // Cierra la sentencia SQL
+            ps = con.prepareStatement(SQL_SELECT_MATERIASNOCURSADAS);
+            ps.setInt(1, idAlumno);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                materias.add(new Materia(rs.getInt("idMateria"), rs.getInt("año"), rs.getString("nombre"), rs.getBoolean("estado")));
+            }
         } catch (SQLException ex) {
             ex.printStackTrace(System.out);
-            JOptionPane.showMessageDialog(null, "Error al cerrar conexiones en metodo obtenerMateriasNoCursadas" + ex.getMessage());
+            JOptionPane.showMessageDialog(null, "Error al obtener Materias no cursadas" + ex.getMessage());
+        } finally {
+            try {
+                close(rs); // Cierra el conjunto de resultados
+                close(ps); // Cierra la sentencia SQL
+            } catch (SQLException ex) {
+                ex.printStackTrace(System.out);
+                JOptionPane.showMessageDialog(null, "Error al cerrar conexiones en metodo obtenerMateriasNoCursadas" + ex.getMessage());
+            }
         }
+        return materias;
     }
-    return materias;
-}
 
 }

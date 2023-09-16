@@ -25,7 +25,7 @@ public class ActualizacionDeNotas extends javax.swing.JInternalFrame {
         }
     };
     private ArrayList<Inscripcion> inscripciones;
-
+    private int nRow;
     /**
      * Creates new form ActualizacionDeNotas
      *
@@ -95,7 +95,7 @@ private void actualizarTabla(){
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        jButtonEditar = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(0, 102, 0));
 
@@ -164,10 +164,10 @@ private void actualizarTabla(){
 
         jLabel5.setText("Nota");
 
-        jButton1.setText("Editar");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        jButtonEditar.setText("Editar");
+        jButtonEditar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                jButtonEditarActionPerformed(evt);
             }
         });
 
@@ -194,7 +194,7 @@ private void actualizarTabla(){
                         .addGap(53, 53, 53)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jButton1)
+                                .addComponent(jButtonEditar)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jButtonGuardar)
                                 .addGap(92, 92, 92)
@@ -235,7 +235,7 @@ private void actualizarTabla(){
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonGuardar)
                     .addComponent(jBSalir)
-                    .addComponent(jButton1))
+                    .addComponent(jButtonEditar))
                 .addGap(32, 32, 32))
         );
 
@@ -253,28 +253,36 @@ private void actualizarTabla(){
         llenarTabla();
     }//GEN-LAST:event_jComboBoxAlumnoActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void jButtonEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditarActionPerformed
         // TODO add your handling code here:
         if (jTAlumnos.getSelectedRow() == -1) {
             JOptionPane.showMessageDialog(null, "No ha seleccionado ningun registro de la tabla", "ERROR AL MODIFICAR REGISTRO", JOptionPane.WARNING_MESSAGE);
         } else {
+            nRow=jTAlumnos.getSelectedRow();
             jTextFieldCodigo.setText(mod.getValueAt(jTAlumnos.getSelectedRow(), 0).toString());
             jTextFieldNombre.setText(mod.getValueAt(jTAlumnos.getSelectedRow(), 1).toString());
             jTextFieldNota.setText(mod.getValueAt(jTAlumnos.getSelectedRow(), 2).toString());
         }
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_jButtonEditarActionPerformed
 
     private void jButtonGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonGuardarActionPerformed
         // TODO add your handling code here:
         InscripcionDAO act = new InscripcionDAO();
+        boolean aux;
         Alumno alumnoSeleccionado = (Alumno) jComboBoxAlumno.getSelectedItem();
-        act.actualizarNota(Double.parseDouble(jTextFieldNota.getText()), alumnoSeleccionado.getIdAlumno(), Integer.parseInt(jTextFieldCodigo.getText()));
+        aux=act.actualizarNota(Double.parseDouble(jTextFieldNota.getText()), alumnoSeleccionado.getIdAlumno(), Integer.parseInt(jTextFieldCodigo.getText()));
+        if(aux){
+            mod.setValueAt(jTextFieldCodigo.getText().trim(), nRow, 0);
+            mod.setValueAt(jTextFieldNombre.getText().trim(), nRow, 1);
+            mod.setValueAt(jTextFieldNota.getText().trim(), nRow, 2);
+        }
+        
     }//GEN-LAST:event_jButtonGuardarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jBSalir;
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButtonEditar;
     private javax.swing.JButton jButtonGuardar;
     private javax.swing.JComboBox<Alumno> jComboBoxAlumno;
     private javax.swing.JLabel jLabel1;
