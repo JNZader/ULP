@@ -7,21 +7,19 @@ package Vistas;
 
 import Conexion.AlumnoDAO;
 import Conexion.InscripcionDAO;
-import Conexion.MateriaDAO;
 import Entidades.Alumno;
 import Entidades.Materia;
-import java.awt.event.ActionEvent;
-import java.sql.ResultSet;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author IvanMoreno
  */
-public class formularioDeInscripcion extends javax.swing.JInternalFrame {
+public class formularioDeInscripcion extends javax.swing.JInternalFrame implements ItemListener {
 
     DefaultTableModel modelo = new DefaultTableModel() {
         @Override
@@ -41,7 +39,7 @@ public class formularioDeInscripcion extends javax.swing.JInternalFrame {
         llenarComboBox();
         inscripcionDAO = new InscripcionDAO();
         jRadioButtonMateriasInscriptas.setSelected(true);
-
+        jComboBoxAlumno.addItemListener(this);
     }
 
     private void actualizarTabla() {
@@ -95,18 +93,6 @@ public class formularioDeInscripcion extends javax.swing.JInternalFrame {
         jTable2.setModel(modelo);
     }
 
-    public void actionPerformed(ActionEvent e) {
-        // Verifica qué RadioButton está seleccionado y actúa en consecuencia
-        if (jRadioButtonMateriasInscriptas.isSelected()) {
-            // Realiza acciones para RadioButton 1
-            actualizarTabla();
-            llenarTablaMateriaCursadas();
-        } else if (jRadioButtonMateriasNoInscriptas.isSelected()) {
-            // Realiza acciones para RadioButton 2
-            actualizarTabla();
-            llenarTablaMateriasNoInscriptas();
-        }
-    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -278,7 +264,10 @@ public class formularioDeInscripcion extends javax.swing.JInternalFrame {
 
     private void jRadioButtonMateriasNoInscriptasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonMateriasNoInscriptasActionPerformed
         // TODO add your handling code here:
-
+        actualizarTabla();
+        llenarTablaMateriasNoInscriptas();
+        jButtonAnularInscripcion.setEnabled(false);
+        jButtonInscribir.setEnabled(true);
     }//GEN-LAST:event_jRadioButtonMateriasNoInscriptasActionPerformed
 
     private void jComboBoxAlumnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxAlumnoActionPerformed
@@ -287,7 +276,10 @@ public class formularioDeInscripcion extends javax.swing.JInternalFrame {
 
     private void jRadioButtonMateriasInscriptasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonMateriasInscriptasActionPerformed
         // TODO add your handling code here:
-
+        actualizarTabla();
+        llenarTablaMateriaCursadas();
+        jButtonAnularInscripcion.setEnabled(true);
+        jButtonInscribir.setEnabled(false);
     }//GEN-LAST:event_jRadioButtonMateriasInscriptasActionPerformed
 
 
@@ -305,5 +297,25 @@ public class formularioDeInscripcion extends javax.swing.JInternalFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable2;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void itemStateChanged(ItemEvent e) {
+        if (e.getStateChange() == ItemEvent.SELECTED) {
+            // Verifica cuál de los dos JRadioButton está seleccionado
+            if (jRadioButtonMateriasInscriptas.isSelected()) {
+                // Actualiza la tabla con materias inscriptas
+                actualizarTabla();
+                llenarTablaMateriaCursadas();
+                jButtonAnularInscripcion.setEnabled(true);
+                jButtonInscribir.setEnabled(false);
+            } else if (jRadioButtonMateriasNoInscriptas.isSelected()) {
+                // Actualiza la tabla con materias no inscriptas
+                actualizarTabla();
+                llenarTablaMateriasNoInscriptas();
+                jButtonAnularInscripcion.setEnabled(false);
+                jButtonInscribir.setEnabled(true);
+            }
+        }
+    }
 
 }

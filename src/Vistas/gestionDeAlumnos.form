@@ -133,15 +133,20 @@
   </Layout>
   <SubComponents>
     <Component class="javax.swing.JTextField" name="jTDoc">
+      <Events>
+        <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="jTDocKeyReleased"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JTextField" name="jTapellido">
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jTapellidoActionPerformed"/>
+        <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="jTapellidoKeyReleased"/>
       </Events>
     </Component>
     <Component class="javax.swing.JTextField" name="jTnombre">
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jTnombreActionPerformed"/>
+        <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="jTnombreKeyReleased"/>
       </Events>
     </Component>
     <Component class="java.awt.Label" name="label1">

@@ -66,6 +66,14 @@ public class ConsultDeAlumnosPorMateria extends javax.swing.JInternalFrame {
         tabla.setModel(mod);
     }
 
+    private void actualizarTabla(){
+    while (mod.getRowCount()>0) {        
+        mod.removeRow(0);
+    }
+    
+    tabla.setModel(mod);
+}
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -170,6 +178,7 @@ public class ConsultDeAlumnosPorMateria extends javax.swing.JInternalFrame {
 
     private void jComboBoxMateriasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxMateriasActionPerformed
         // TODO add your handling code here:
+        actualizarTabla();
         llenarTabla();
     }//GEN-LAST:event_jComboBoxMateriasActionPerformed
 

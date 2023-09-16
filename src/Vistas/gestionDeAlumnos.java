@@ -24,7 +24,16 @@ public class gestionDeAlumnos extends javax.swing.JInternalFrame {
     public gestionDeAlumnos() {
         initComponents();
         getContentPane().setBackground(new Color(75, 141, 88));
+        jBNuevo.setEnabled(false);
+    }
 
+    public void habilitarBoton() {
+        if (!jTDoc.getText().isEmpty() && !jTapellido.getText().isEmpty() && !jTnombre.getText().isEmpty()) {
+            jBNuevo.setEnabled(true);
+        } else {
+            jBNuevo.setEnabled(false);
+
+        }
     }
 
     /**
@@ -60,15 +69,31 @@ public class gestionDeAlumnos extends javax.swing.JInternalFrame {
         setMaximizable(true);
         setTitle("Gestion de Alumnos - ULP - G73");
 
+        jTDoc.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTDocKeyReleased(evt);
+            }
+        });
+
         jTapellido.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTapellidoActionPerformed(evt);
+            }
+        });
+        jTapellido.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTapellidoKeyReleased(evt);
             }
         });
 
         jTnombre.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTnombreActionPerformed(evt);
+            }
+        });
+        jTnombre.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTnombreKeyReleased(evt);
             }
         });
 
@@ -289,6 +314,21 @@ public class gestionDeAlumnos extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
         this.dispose();
     }//GEN-LAST:event_jBSalirActionPerformed
+
+    private void jTDocKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTDocKeyReleased
+        // TODO add your handling code here:
+        habilitarBoton();
+    }//GEN-LAST:event_jTDocKeyReleased
+
+    private void jTapellidoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTapellidoKeyReleased
+        // TODO add your handling code here:
+        habilitarBoton();
+    }//GEN-LAST:event_jTapellidoKeyReleased
+
+    private void jTnombreKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTnombreKeyReleased
+        // TODO add your handling code here:
+        habilitarBoton();
+    }//GEN-LAST:event_jTnombreKeyReleased
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
