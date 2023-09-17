@@ -109,6 +109,7 @@ public class InscripcionDAO {
         PreparedStatement ps = null;
         try {
             ps = con.prepareStatement(SQL_UPDATE);
+            ps = getConnection().prepareStatement(SQL_UPDATE);
 
             // Establece la nueva nota en la inscripción identificada por el ID del alumno y la ID de la materia
             ps.setDouble(1, insc.getNota());
@@ -273,7 +274,7 @@ public class InscripcionDAO {
                 insc = new Inscripcion();
 
                 insc.setIdInscripto(rs.getInt("idInscripto"));
-                insc.setNota(rs.getInt("nota"));
+                insc.setNota(rs.getDouble("nota"));
                 Alumno alu = ad.buscarAlumno(idAlumno);
                 Materia mat = md.BuscarMateria(rs.getInt("idMateria"));
                 insc.setAlumno(alu);
