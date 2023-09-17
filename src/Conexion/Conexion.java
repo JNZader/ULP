@@ -1,6 +1,8 @@
 package Conexion;
 
 import java.sql.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 // Clase que gestiona la conexión a la base de datos
@@ -14,13 +16,15 @@ public class Conexion {
     private Conexion() {}
 
     // Método estático para obtener una conexión a la base de datos
-    public static Connection getConnection() throws SQLException {
+    public static Connection getConnection() {
         if (conexion == null) {
             try {
                 Class.forName("org.mariadb.jdbc.Driver"); // Carga del controlador de la base de datos
                 conexion = DriverManager.getConnection(JDBC_URL, JDBC_USER, JDBC_PASSWORD); // Establece la conexión
             } catch (ClassNotFoundException ex) {
                 JOptionPane.showMessageDialog(null, "error de driver"); // Mensaje de error si no se encuentra el controlador
+            } catch (SQLException ex) {
+                Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         return conexion; // Devuelve la conexión

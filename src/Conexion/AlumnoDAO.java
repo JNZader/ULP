@@ -1,5 +1,6 @@
 package Conexion;
 
+import static Conexion.Conexion.getConnection;
 import Entidades.Alumno;
 import java.sql.*;
 import java.util.ArrayList;
@@ -11,11 +12,9 @@ public class AlumnoDAO {
     private Connection con;
 
     public AlumnoDAO() {
-        try {
-            con = Conexion.getConnection();
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, ex);
-        }
+
+            getConnection();
+    
     }
 
     public void guardarAlumno(Alumno alumno) {

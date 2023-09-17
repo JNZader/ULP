@@ -24,12 +24,9 @@ public class InscripcionDAO {
     private Connection con;
 
     public InscripcionDAO() {
-        try {
+      
             con = getConnection(); // Obtiene una conexión a la base de datos
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            JOptionPane.showMessageDialog(null, ex);
-        }
+     
     }
 
     // Método para obtener una lista de inscripciones
@@ -109,7 +106,6 @@ public class InscripcionDAO {
         PreparedStatement ps = null;
         try {
             ps = con.prepareStatement(SQL_UPDATE);
-            ps = getConnection().prepareStatement(SQL_UPDATE);
 
             // Establece la nueva nota en la inscripción identificada por el ID del alumno y la ID de la materia
             ps.setDouble(1, insc.getNota());
