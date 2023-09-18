@@ -273,7 +273,7 @@ public class InscripcionDAO {
                 insc = new Inscripcion();
 
                 insc.setIdInscripto(rs.getInt("idInscripto"));
-                insc.setNota(rs.getInt("nota"));
+                insc.setNota(rs.getDouble("nota"));
                 Alumno alu = ad.buscarAlumno(idAlumno);
                 Materia mat = md.BuscarMateria(rs.getInt("idMateria"));
                 insc.setAlumno(alu);
