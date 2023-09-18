@@ -47,7 +47,7 @@ public class InscripcionDAO {
 
                 // Obtiene los datos de la inscripción y crea objetos Alumno y Materia asociados
                 insc.setIdInscripto(rs.getInt("idInscripto"));
-                insc.setNota(rs.getInt("nota"));
+                insc.setNota(rs.getDouble("nota"));
                 Alumno alu = ad.buscarAlumno(rs.getInt("idAlumno"));
                 Materia mat = md.BuscarMateria(rs.getInt("idMateria"));
                 insc.setAlumno(alu);
