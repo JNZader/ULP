@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Vistas;
 
 import Conexion.AlumnoDAO;
@@ -13,18 +8,15 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import javax.swing.JOptionPane;
 
-/**
- *
- * @author IvanMoreno
- */
-public class gestionDeAlumnos extends javax.swing.JInternalFrame {
+public class ViewGestionDeAlumnos extends javax.swing.JInternalFrame {
 
-    AlumnoDAO aluData = new AlumnoDAO();
+    AlumnoDAO aluData;
 
-    public gestionDeAlumnos() {
+    public ViewGestionDeAlumnos() {
         initComponents();
         getContentPane().setBackground(new Color(75, 141, 88));
         jBNuevo.setEnabled(false);
+        aluData = new AlumnoDAO();
     }
 
     public void habilitarBoton() {
@@ -32,7 +24,6 @@ public class gestionDeAlumnos extends javax.swing.JInternalFrame {
             jBNuevo.setEnabled(true);
         } else {
             jBNuevo.setEnabled(false);
-
         }
     }
 
@@ -249,7 +240,8 @@ public class gestionDeAlumnos extends javax.swing.JInternalFrame {
 
     private void jBbuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBbuscarActionPerformed
         // TODO add your handling code here:
-        if (!(jTDoc.getText().isEmpty())) {
+        try {
+            if (!(jTDoc.getText().isEmpty())) {
             int doc = Integer.parseInt(jTDoc.getText());
             Alumno alEcontrado = aluData.buscarAlumnoPorDni(doc);
             if (alEcontrado != null) {
@@ -258,6 +250,12 @@ public class gestionDeAlumnos extends javax.swing.JInternalFrame {
                 jREstado.setSelected(alEcontrado.isEstado());
                 jDFecha.setDate(Date.valueOf(alEcontrado.getFechaNacimiento()));
             }
+        }else{
+            JOptionPane.showMessageDialog(this, "Debes llenar el campo documento");
+            }
+        } catch (NumberFormatException e) {
+             JOptionPane.showMessageDialog(this, "Ingresa un dato valido");
+             jTDoc.setText("");
         }
     }//GEN-LAST:event_jBbuscarActionPerformed
 
@@ -273,7 +271,6 @@ public class gestionDeAlumnos extends javax.swing.JInternalFrame {
 
     private void jBGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBGuardarActionPerformed
         // TODO add your handling code here:
-
         try {
             int doc = Integer.parseInt(jTDoc.getText());
             String ap = jTapellido.getText();
@@ -284,12 +281,9 @@ public class gestionDeAlumnos extends javax.swing.JInternalFrame {
             aluData.guardarAlumno(alumno);
         } catch (NumberFormatException e) {
             e.printStackTrace(System.out);
-            //JOptionPane.showMessageDialog(this, "Complete la informacion con datos validos");
             JOptionPane.showMessageDialog(null, "Complete la informacion con datos validos",
                     "Error", JOptionPane.ERROR_MESSAGE);
         }
-
-
     }//GEN-LAST:event_jBGuardarActionPerformed
 
     private void jBEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBEliminarActionPerformed

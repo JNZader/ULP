@@ -173,11 +173,13 @@
     </Component>
     <Component class="javax.swing.JTextField" name="jTextFieldCodigo">
       <Properties>
+        <Property name="editable" type="boolean" value="false"/>
         <Property name="text" type="java.lang.String" value=" "/>
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="jTextFieldNombre">
       <Properties>
+        <Property name="editable" type="boolean" value="false"/>
         <Property name="text" type="java.lang.String" value=" "/>
       </Properties>
     </Component>

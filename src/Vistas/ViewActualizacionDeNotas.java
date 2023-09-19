@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Vistas;
 
 import Conexion.*;
@@ -12,32 +7,27 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
-/**
- *
- * @author Usuario
- */
-public class ActualizacionDeNotas extends javax.swing.JInternalFrame {
+public class ViewActualizacionDeNotas extends javax.swing.JInternalFrame {
 
-    DefaultTableModel mod = new DefaultTableModel() {
-        @Override
-        public boolean isCellEditable(int i, int i1) {
-            return false;
-        }
-    };
+    DefaultTableModel mod;
     private ArrayList<Inscripcion> inscripciones;
     private int nRow;
-    /**
-     * Creates new form ActualizacionDeNotas
-     *
-     */
-    public ActualizacionDeNotas() {
+
+    public ViewActualizacionDeNotas() {
         initComponents();
         llenarComboBox();
+        mod = new DefaultTableModel() {
+            @Override
+            public boolean isCellEditable(int i, int i1) {
+                return false;
+            }
+        };
     }
 
     private void llenarComboBox() {
         AlumnoDAO alum = new AlumnoDAO();
         ArrayList<Alumno> materias = alum.listarAlumnos();
+        jComboBoxAlumno.addItem(null);//para que no llene la tabla al abrir la ventana
 
         for (Alumno aux : materias) {
             jComboBoxAlumno.addItem(aux);
@@ -51,28 +41,31 @@ public class ActualizacionDeNotas extends javax.swing.JInternalFrame {
         InscripcionDAO inscripcionDAO = new InscripcionDAO();
 
         Alumno alumnoSeleccionado = (Alumno) jComboBoxAlumno.getSelectedItem();
+        if (alumnoSeleccionado != null) {//para que si se selecciona el objeto null no intente llenar la tabla
+            inscripciones = inscripcionDAO.obtenerInscripcionesPorAlumno(alumnoSeleccionado.getIdAlumno());
 
-        inscripciones = inscripcionDAO.obtenerInscripcionesPorAlumno(alumnoSeleccionado.getIdAlumno());
+            String[] filas = new String[3];
+            if (inscripciones != null && !inscripciones.isEmpty()) {//para que si se selecciona el objeto null no intente llenar la tabla
+                for (Inscripcion inscripcion : inscripciones) {
+                    filas[0] = String.valueOf(inscripcion.getMateria().getIdMateria());
+                    filas[1] = inscripcion.getMateria().getNombre();
+                    filas[2] = String.valueOf(inscripcion.getNota());
 
-        String[] filas = new String[3];
+                    mod.addRow(filas);
+                }
+            }
+        }
+        jTAlumnos.setModel(mod);
+    }
 
-        for (Inscripcion inscripcion : inscripciones) {
-            filas[0] = String.valueOf(inscripcion.getMateria().getIdMateria());
-            filas[1] = inscripcion.getMateria().getNombre();
-            filas[2] = String.valueOf(inscripcion.getNota());
-
-            mod.addRow(filas);
+    private void actualizarTabla() {
+        while (mod.getRowCount() > 0) {
+            mod.removeRow(0);
         }
 
         jTAlumnos.setModel(mod);
     }
-private void actualizarTabla(){
-    while (mod.getRowCount()>0) {        
-        mod.removeRow(0);
-    }
-    
-    jTAlumnos.setModel(mod);
-}
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -152,8 +145,10 @@ private void actualizarTabla(){
             }
         });
 
+        jTextFieldCodigo.setEditable(false);
         jTextFieldCodigo.setText(" ");
 
+        jTextFieldNombre.setEditable(false);
         jTextFieldNombre.setText(" ");
 
         jTextFieldNota.setText(" ");
@@ -258,7 +253,7 @@ private void actualizarTabla(){
         if (jTAlumnos.getSelectedRow() == -1) {
             JOptionPane.showMessageDialog(null, "No ha seleccionado ningun registro de la tabla", "ERROR AL MODIFICAR REGISTRO", JOptionPane.WARNING_MESSAGE);
         } else {
-            nRow=jTAlumnos.getSelectedRow();
+            nRow = jTAlumnos.getSelectedRow();
             jTextFieldCodigo.setText(mod.getValueAt(jTAlumnos.getSelectedRow(), 0).toString());
             jTextFieldNombre.setText(mod.getValueAt(jTAlumnos.getSelectedRow(), 1).toString());
             jTextFieldNota.setText(mod.getValueAt(jTAlumnos.getSelectedRow(), 2).toString());
@@ -269,14 +264,18 @@ private void actualizarTabla(){
         // TODO add your handling code here:
         InscripcionDAO act = new InscripcionDAO();
         boolean aux;
-        Alumno alumnoSeleccionado = (Alumno) jComboBoxAlumno.getSelectedItem();
-        aux=act.actualizarNota(Double.parseDouble(jTextFieldNota.getText()), alumnoSeleccionado.getIdAlumno(), Integer.parseInt(jTextFieldCodigo.getText()));
-        if(aux){
-            mod.setValueAt(jTextFieldCodigo.getText().trim(), nRow, 0);
-            mod.setValueAt(jTextFieldNombre.getText().trim(), nRow, 1);
-            mod.setValueAt(jTextFieldNota.getText().trim(), nRow, 2);
+        try {
+            Alumno alumnoSeleccionado = (Alumno) jComboBoxAlumno.getSelectedItem();
+            aux = act.actualizarNota(Double.parseDouble(jTextFieldNota.getText()), alumnoSeleccionado.getIdAlumno(), Integer.parseInt(jTextFieldCodigo.getText()));
+            if (aux) {
+                mod.setValueAt(jTextFieldCodigo.getText().trim(), nRow, 0);
+                mod.setValueAt(jTextFieldNombre.getText().trim(), nRow, 1);
+                mod.setValueAt(jTextFieldNota.getText().trim(), nRow, 2);
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Debes ingresar datos validos");
         }
-        
+
     }//GEN-LAST:event_jButtonGuardarActionPerformed
 
 

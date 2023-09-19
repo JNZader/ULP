@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Vistas;
 
 import Conexion.AlumnoDAO;
@@ -19,58 +14,56 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
+public class ViewFormularioDeInscripcion extends javax.swing.JInternalFrame implements ItemListener {
 
-/**
- *
- * @author IvanMoreno
- */
-public class formularioDeInscripcion extends javax.swing.JInternalFrame implements ItemListener {
-
-    DefaultTableModel modelo = new DefaultTableModel() {
-        @Override
-        public boolean isCellEditable(int i, int i1) {
-            return false;
-        }
-
-    };
+    DefaultTableModel modelo;
 
     private InscripcionDAO inscripcionDAO;
 
     /**
      * Creates new form formularioDeInscripcion
      */
-    public formularioDeInscripcion() {
+    public ViewFormularioDeInscripcion() {
         initComponents();
         llenarComboBox();
-        getContentPane().setBackground(new Color(75,141,88));
+        getContentPane().setBackground(new Color(75, 141, 88));
         inscripcionDAO = new InscripcionDAO();
         jRadioButtonMateriasInscriptas.setSelected(true);
         jComboBoxAlumno.addItemListener(this);
+        modelo = new DefaultTableModel() {
+            @Override
+            public boolean isCellEditable(int i, int i1) {
+                return false;
+            }
+        };
     }
 
     private void actualizarTabla() {
         while (modelo.getRowCount() > 0) {
             modelo.removeRow(0);
         }
-
         jTable2.setModel(modelo);
     }
 
     private void llenarTablaMateriasNoInscriptas() {
         String[] cabecera = {"id", "nombre", "año"};
         Alumno alumno = (Alumno) jComboBoxAlumno.getSelectedItem();
-        //Alumno alu = (Alumno) alumno;
-        int idAlu = alumno.getIdAlumno();
-        modelo.setColumnIdentifiers(cabecera);
-        //List<Materia> materias = new ArrayList<>();
-        List<Materia> obtenerMateriasNoCursadas = inscripcionDAO.obtenerMateriasNoCursadas(idAlu);
+        if (alumno == null) {
+            JOptionPane.showMessageDialog(this, "Seleccione un alumno primero.");
+            return;
+        }
+        if (alumno != null) {
+            int idAlu = alumno.getIdAlumno();
 
-        for (Materia materia : obtenerMateriasNoCursadas) {
-            modelo.addRow(new Object[]{materia.getIdMateria(), materia.getNombre(), materia.getAño()});
-
+            modelo.setColumnIdentifiers(cabecera);
+            List<Materia> obtenerMateriasNoCursadas = inscripcionDAO.obtenerMateriasNoCursadas(idAlu);
+            if (!obtenerMateriasNoCursadas.isEmpty() && obtenerMateriasNoCursadas != null) {
+                for (Materia materia : obtenerMateriasNoCursadas) {
+                    modelo.addRow(new Object[]{materia.getIdMateria(), materia.getNombre(), materia.getAño()});
+                }
+            }
         }
         jTable2.setModel(modelo);
-
     }
 
     private void llenarComboBox() {
@@ -78,7 +71,7 @@ public class formularioDeInscripcion extends javax.swing.JInternalFrame implemen
         ArrayList<Alumno> alumnos = alum.listarAlumnos();
 
         jComboBoxAlumno.removeAllItems();
-
+        jComboBoxAlumno.addItem(null);
         for (Alumno aux : alumnos) {
             jComboBoxAlumno.addItem(aux);
 
@@ -88,13 +81,16 @@ public class formularioDeInscripcion extends javax.swing.JInternalFrame implemen
     private void llenarTablaMateriaCursadas() {
         String[] cabecera = {"id", "nombre", "año"};
         Alumno alumno = (Alumno) jComboBoxAlumno.getSelectedItem();
+        if (alumno == null) {
+            JOptionPane.showMessageDialog(this, "Seleccione un alumno primero.");
+            return;
+        }
         int idAlu = alumno.getIdAlumno();
         modelo.setColumnIdentifiers(cabecera);
         List<Materia> obtenerMateriaCursadas = inscripcionDAO.obtenerMateriasCursadas(idAlu);
 
         for (Materia materia : obtenerMateriaCursadas) {
             modelo.addRow(new Object[]{materia.getIdMateria(), materia.getNombre(), materia.getAño()});
-
         }
         jTable2.setModel(modelo);
     }
@@ -266,27 +262,36 @@ public class formularioDeInscripcion extends javax.swing.JInternalFrame implemen
 
     private void jButtonInscribirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonInscribirActionPerformed
         // TODO add your handling code here:
-        Inscripcion insc;
-         Alumno alumno =(Alumno) jComboBoxAlumno.getSelectedItem();//obtengo el alumno
-        int idAlumno = alumno.getIdAlumno();
-        
-        int selectedRow = jTable2.getSelectedRow();//obtengo la fila seleccionada
-        
-        if (selectedRow>=0) {
-            Object columna =  jTable2.getValueAt(selectedRow, 0);//obtengo el objeto seleccionado
-            if (columna!=null) {
-                int idMateria = (int) columna;//uso el objeto para obtener el id
-                MateriaDAO mat = new MateriaDAO();
-                Materia materia=mat.BuscarMateria(idMateria);
-                insc = new Inscripcion(alumno, materia, 0);
-                inscripcionDAO.insertar(insc);
-                modelo.removeRow(selectedRow);
-                jTable2.setModel(modelo);
-                
-                
+        try {
+            Inscripcion insc;
+            Alumno alumno = (Alumno) jComboBoxAlumno.getSelectedItem();//obtengo el alumno
+            if (alumno == null) {
+                JOptionPane.showMessageDialog(this, "Seleccione un alumno primero.");
+                return;// Salir del método si no hay un alumno seleccionado
             }
-        }else{
-            JOptionPane.showMessageDialog(this, "seleccione una fila");
+            if (alumno != null) {
+                int idAlumno = alumno.getIdAlumno();
+
+                int selectedRow = jTable2.getSelectedRow();//obtengo la fila seleccionada
+
+                if (selectedRow >= 0 && alumno != null) {
+                    Object columna = jTable2.getValueAt(selectedRow, 0);//obtengo el objeto seleccionado
+                    if (columna != null) {
+                        int idMateria = (int) columna;//uso el objeto para obtener el id
+                        MateriaDAO mat = new MateriaDAO();
+                        Materia materia = mat.BuscarMateria(idMateria);
+                        insc = new Inscripcion(alumno, materia, 0);
+                        inscripcionDAO.insertar(insc);
+                        modelo.removeRow(selectedRow);
+                        jTable2.setModel(modelo);
+
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(this, "seleccione una fila");
+                }
+            }
+        } catch (NullPointerException e) {
+            JOptionPane.showMessageDialog(this, "seleccione un alumno");
         }
     }//GEN-LAST:event_jButtonInscribirActionPerformed
 
@@ -317,27 +322,33 @@ public class formularioDeInscripcion extends javax.swing.JInternalFrame implemen
 
     private void jButtonAnularInscripcionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAnularInscripcionActionPerformed
         // TODO add your handling code here:
-        Alumno alumno =(Alumno) jComboBoxAlumno.getSelectedItem();//obtengo el alumno
-        int idAlumno = alumno.getIdAlumno();
-        
-        int selectedRow = jTable2.getSelectedRow();//obtengo la fila seleccionada
-        
-        if (selectedRow>=0) {
-            Object materia =  jTable2.getValueAt(selectedRow, 0);//obtengo el objeto seleccionado
-            if (materia!=null) {
-                int idMateria = (int) materia;//uso el objeto para obtener el id
-                inscripcionDAO.borrarInscripcionMateriaAlumno(idAlumno,idMateria );
-                modelo.removeRow(selectedRow);
-                jTable2.setModel(modelo);
-            }
-        }else{
-            JOptionPane.showMessageDialog(this, "seleccione una fila");
+        Alumno alumno = (Alumno) jComboBoxAlumno.getSelectedItem();//obtengo el alumno
+        if (alumno == null) {
+            JOptionPane.showMessageDialog(this, "Seleccione un alumno primero.");
+            return;// Salir del método si no hay un alumno seleccionado
         }
-        
-        
-        
-        
-        
+        try {
+            if (alumno != null) {
+                int idAlumno = alumno.getIdAlumno();
+
+                int selectedRow = jTable2.getSelectedRow();//obtengo la fila seleccionada
+
+                if (selectedRow >= 0 && alumno != null) {
+                    Object materia = jTable2.getValueAt(selectedRow, 0);//obtengo el objeto seleccionado
+                    if (materia != null) {
+                        int idMateria = (int) materia;//uso el objeto para obtener el id
+                        inscripcionDAO.borrarInscripcionMateriaAlumno(idAlumno, idMateria);
+                        modelo.removeRow(selectedRow);
+                        jTable2.setModel(modelo);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(this, "seleccione una fila");
+                }
+            }
+        } catch (NullPointerException e) {
+            JOptionPane.showMessageDialog(this, "seleccione un alumno");
+        }
+
     }//GEN-LAST:event_jButtonAnularInscripcionActionPerformed
 
 

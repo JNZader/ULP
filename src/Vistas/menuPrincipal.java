@@ -166,7 +166,7 @@ public class menuPrincipal extends javax.swing.JFrame {
         // TODO add your handling code here:
         escritorio.removeAll();
         escritorio.repaint();
-        gestionDeAlumnos ga = new gestionDeAlumnos();
+        ViewGestionDeAlumnos ga = new ViewGestionDeAlumnos();
         ga.setVisible(true);
         escritorio.add(ga);
         escritorio.moveToFront(ga);
@@ -181,7 +181,7 @@ public class menuPrincipal extends javax.swing.JFrame {
         // TODO add your handling code here:
         escritorio.removeAll();
         escritorio.repaint();
-        GestionMaterias ma = new GestionMaterias();
+        ViewGestionMaterias ma = new ViewGestionMaterias();
         ma.setVisible(true);
         escritorio.add(ma);
         escritorio.moveToFront(ma);
@@ -191,7 +191,7 @@ public class menuPrincipal extends javax.swing.JFrame {
         // TODO add your handling code here:
         escritorio.removeAll();
         escritorio.repaint();
-        formularioDeInscripcion insc = new formularioDeInscripcion();
+        ViewFormularioDeInscripcion insc = new ViewFormularioDeInscripcion();
         insc.setVisible(true);
         escritorio.add(insc);
         escritorio.moveToFront(insc);
@@ -201,7 +201,7 @@ public class menuPrincipal extends javax.swing.JFrame {
         // TODO add your handling code here:
         escritorio.removeAll();
         escritorio.repaint();
-        ConsultDeAlumnosPorMateria alum = new ConsultDeAlumnosPorMateria();
+        ViewConsultDeAlumnosPorMateria alum = new ViewConsultDeAlumnosPorMateria();
         alum.setVisible(true);
         escritorio.add(alum);
         escritorio.moveToFront(alum);
@@ -211,7 +211,7 @@ public class menuPrincipal extends javax.swing.JFrame {
         // TODO add your handling code here:
         escritorio.removeAll();
         escritorio.repaint();
-        ActualizacionDeNotas not = new ActualizacionDeNotas();
+        ViewActualizacionDeNotas not = new ViewActualizacionDeNotas();
         not.setVisible(true);
         escritorio.add(not);
         escritorio.moveToFront(not);

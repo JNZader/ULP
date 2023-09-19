@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Vistas;
 
 import Conexion.InscripcionDAO;
@@ -12,31 +7,25 @@ import Entidades.Materia;
 import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
 
-/**
- *
- * @author Usuario
- */
-public class ConsultDeAlumnosPorMateria extends javax.swing.JInternalFrame {
+public class ViewConsultDeAlumnosPorMateria extends javax.swing.JInternalFrame {
 
-    DefaultTableModel mod = new DefaultTableModel() {
-        @Override
-        public boolean isCellEditable(int i, int i1) {
-            return false;
-        }
-    };
+    DefaultTableModel mod;
 
-    /**
-     * Creates new form ConsultDeAlumnosPorMateria
-     */
-    public ConsultDeAlumnosPorMateria() {
+    public ViewConsultDeAlumnosPorMateria() {
         initComponents();
         llenarComboBox();
+        mod = new DefaultTableModel() {
+            @Override
+            public boolean isCellEditable(int i, int i1) {
+                return false;
+            }
+        };
     }
 
     private void llenarComboBox() {
         MateriaDAO mat = new MateriaDAO();
         ArrayList<Materia> materias = mat.listarMaterias();
-
+        jComboBoxMaterias.addItem(null);
         for (Materia aux : materias) {
             jComboBoxMaterias.addItem(aux);
 
@@ -50,30 +39,32 @@ public class ConsultDeAlumnosPorMateria extends javax.swing.JInternalFrame {
 
         Materia materiaSeleccionada = (Materia) jComboBoxMaterias.getSelectedItem();
 
-        ArrayList<Alumno> alumnosXMateria = ins.obtenerAlumnosXMateria(materiaSeleccionada.getIdMateria());
+        if (materiaSeleccionada != null) {
+            ArrayList<Alumno> alumnosXMateria = ins.obtenerAlumnosXMateria(materiaSeleccionada.getIdMateria());
 
-        mod.setColumnIdentifiers(columnas);
-        String[] filas = new String[4];
+            mod.setColumnIdentifiers(columnas);
+            String[] filas = new String[4];
+            if (alumnosXMateria.size() > 0) {
+                for (Alumno aux : alumnosXMateria) {
+                    filas[0] = aux.getIdAlumno() + "";
+                    filas[1] = aux.getDni() + "";
+                    filas[2] = aux.getApellido() + "";
+                    filas[3] = aux.getNombre() + "";
+                    mod.addRow(filas);
+                }
+            }
+        }
+        tabla.setModel(mod);
+    }
 
-        for (Alumno aux : alumnosXMateria) {
-            filas[0] = aux.getIdAlumno() + "";
-            filas[1] = aux.getDni() + "";
-            filas[2] = aux.getApellido() + "";
-            filas[3] = aux.getNombre() + "";
-            mod.addRow(filas);
+    private void actualizarTabla() {
+        while (mod.getRowCount() > 0) {
+            mod.removeRow(0);
         }
 
         tabla.setModel(mod);
     }
 
-    private void actualizarTabla(){
-    while (mod.getRowCount()>0) {        
-        mod.removeRow(0);
-    }
-    
-    tabla.setModel(mod);
-}
-    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
