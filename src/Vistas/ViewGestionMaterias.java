@@ -4,16 +4,28 @@ import Conexion.MateriaDAO;
 import Entidades.Materia;
 import java.awt.Color;
 import javax.swing.JOptionPane;
+import javax.swing.text.AbstractDocument;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
+import javax.swing.text.DocumentFilter;
 
 public class ViewGestionMaterias extends javax.swing.JInternalFrame {
 
     MateriaDAO matData;
+    DocumentFilter filtroNumeros;
+    DocumentFilter filtroLetras;
 
     public ViewGestionMaterias() {
         initComponents();
         getContentPane().setBackground(new Color(75, 141, 88));
         jBNuevo.setEnabled(false);
         matData = new MateriaDAO();
+        filtroNumeros = new FiltraEntrada(FiltraEntrada.SOLO_NUMEROS);
+        filtroLetras = new FiltraEntrada(FiltraEntrada.SOLO_LETRAS);
+
+        ((AbstractDocument) jTCodigo.getDocument()).setDocumentFilter(filtroNumeros);
+        ((AbstractDocument) jTanio.getDocument()).setDocumentFilter(filtroNumeros);
+        ((AbstractDocument) jTnombre.getDocument()).setDocumentFilter(filtroLetras);
     }
 
     public void habilitarBoton() {
@@ -61,6 +73,7 @@ public class ViewGestionMaterias extends javax.swing.JInternalFrame {
 
         jLabel5.setText("Estado");
 
+        jTCodigo.setToolTipText("Si desea buscar, ingrese el ID de la materia");
         jTCodigo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTCodigoActionPerformed(evt);
@@ -72,12 +85,14 @@ public class ViewGestionMaterias extends javax.swing.JInternalFrame {
             }
         });
 
+        jTnombre.setToolTipText("Ingrese el nombre de la materia");
         jTnombre.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTnombreKeyReleased(evt);
             }
         });
 
+        jTanio.setToolTipText("Ingrese el nombre de la materia");
         jTanio.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTanioKeyReleased(evt);
@@ -301,4 +316,88 @@ public class ViewGestionMaterias extends javax.swing.JInternalFrame {
     private javax.swing.JTextField jTanio;
     private javax.swing.JTextField jTnombre;
     // End of variables declaration//GEN-END:variables
+class FiltraEntrada extends DocumentFilter {
+
+        public static final char SOLO_NUMEROS = 'N';
+        public static final char SOLO_LETRAS = 'L';
+        public static final char NUM_LETRAS = 'M';
+        public static final char DEFAULT = '*';
+
+        private char tipoEntrada;
+        private int longitudCadena = 0;
+        private int longitudActual = 0;
+
+        public FiltraEntrada() {
+            tipoEntrada = DEFAULT;
+        }
+
+        public FiltraEntrada(char tipoEntrada) {
+            this.tipoEntrada = tipoEntrada;
+        }
+
+        public FiltraEntrada(char tipoEntrada, int longitudCadena) {
+            this.tipoEntrada = tipoEntrada;
+            this.longitudCadena = longitudCadena;
+        }
+
+        @Override
+        public void insertString(DocumentFilter.FilterBypass fb, int i, String string, javax.swing.text.AttributeSet as) throws BadLocationException {
+            if (string == null) {
+                return;
+            }
+            if (string.isEmpty()) {
+                return;
+            } else {
+                Document dc = fb.getDocument();
+                longitudActual = dc.getLength();
+                if (this.longitudCadena == 0 || longitudActual < longitudCadena) {
+                    fb.insertString(i, string, as);
+                }
+            }
+        }
+
+        @Override
+        public void remove(DocumentFilter.FilterBypass fb, int offset, int length) throws BadLocationException {
+            super.remove(fb, offset, length);
+        }
+
+        @Override
+        public void replace(DocumentFilter.FilterBypass fb, int i, int i1, String string, javax.swing.text.AttributeSet as) throws BadLocationException {
+            Document dc = fb.getDocument();
+            if (string == null) {
+                fb.replace(0, i1, "", as);
+                return;
+            }
+            if (string.isEmpty()) {
+                fb.replace(0, i1, "", as);
+                return;
+            }
+            longitudActual = dc.getLength();
+            if (esValido(string)) {
+                if (this.longitudCadena == 0 || longitudActual < longitudCadena) {
+                    fb.replace(i, i1, string, as);
+                }
+            }
+        }
+
+        private boolean esValido(String valor) {
+            char[] letras = valor.toCharArray();
+            boolean valido = false;
+            for (int i = 0; i < letras.length; i++) {
+
+                switch (tipoEntrada) {
+                    case SOLO_NUMEROS:
+                        return valor.matches("[0-9]+");
+                    case SOLO_LETRAS:
+                        return valor.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ ]+");
+                    case NUM_LETRAS:
+                        return valor.matches("[0-9a-zA-ZáéíóúÁÉÍÓÚñÑüÜ ]+");
+                    default:
+                        valido = true;
+                        return valido;
+                }
+            }
+            return valido;
+        }
+    }
 }

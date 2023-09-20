@@ -3,9 +3,14 @@ package Vistas;
 import Conexion.*;
 import Entidades.Alumno;
 import Entidades.Inscripcion;
+import java.awt.Toolkit;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.text.AbstractDocument;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DocumentFilter;
 
 public class ViewActualizacionDeNotas extends javax.swing.JInternalFrame {
 
@@ -22,6 +27,10 @@ public class ViewActualizacionDeNotas extends javax.swing.JInternalFrame {
                 return false;
             }
         };
+        NumericRangeFilter rangeFilter = new NumericRangeFilter();
+        AbstractDocument document = (AbstractDocument) jTextFieldNota.getDocument();
+        document.setDocumentFilter(rangeFilter);
+
     }
 
     private void llenarComboBox() {
@@ -152,6 +161,12 @@ public class ViewActualizacionDeNotas extends javax.swing.JInternalFrame {
         jTextFieldNombre.setText(" ");
 
         jTextFieldNota.setText(" ");
+        jTextFieldNota.setToolTipText("ingrese nota del 0 al 10");
+        jTextFieldNota.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextFieldNotaActionPerformed(evt);
+            }
+        });
 
         jLabel3.setText("Codigo");
 
@@ -202,7 +217,7 @@ public class ViewActualizacionDeNotas extends javax.swing.JInternalFrame {
                                 .addGap(30, 30, 30)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel4)
-                                    .addComponent(jTextFieldNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                                    .addComponent(jTextFieldNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE))))))
                 .addContainerGap(63, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -214,7 +229,7 @@ public class ViewActualizacionDeNotas extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jComboBoxAlumno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(jLabel4)
@@ -278,6 +293,10 @@ public class ViewActualizacionDeNotas extends javax.swing.JInternalFrame {
 
     }//GEN-LAST:event_jButtonGuardarActionPerformed
 
+    private void jTextFieldNotaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldNotaActionPerformed
+
+    }//GEN-LAST:event_jTextFieldNotaActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jBSalir;
@@ -296,4 +315,27 @@ public class ViewActualizacionDeNotas extends javax.swing.JInternalFrame {
     private javax.swing.JTextField jTextFieldNota;
     // End of variables declaration//GEN-END:variables
 
+}
+
+class NumericRangeFilter extends DocumentFilter {
+
+    @Override
+    public void replace(FilterBypass fb, int i, int i1, String string, AttributeSet as) throws BadLocationException {
+        String currentText = fb.getDocument().getText(0, fb.getDocument().getLength());//obtiene el texto actual del jtf
+
+        String nextText = currentText.substring(0, i) + string + currentText.substring(i + i1);//concatena el texto a insertar con el texto acutal
+
+        try {
+            double num = Double.parseDouble(nextText);//intenta convertir el texto en numero
+
+            if (num >= 0.0 && num <= 10.0) {//verifica si el numero esta en el rango de 0.0 a 10.0
+                super.replace(fb, i, i1, string, as);
+            } else {
+                //fuera de rango
+                Toolkit.getDefaultToolkit().beep();//sonido de error
+            }
+        } catch (NumberFormatException e) {
+            Toolkit.getDefaultToolkit().beep(); //El texto no es un número válido...Emite un sonido de error.
+        }
+    }
 }

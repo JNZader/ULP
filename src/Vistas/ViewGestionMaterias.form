@@ -136,17 +136,26 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="jTCodigo">
+      <Properties>
+        <Property name="toolTipText" type="java.lang.String" value="Si desea buscar, ingrese el ID de la materia"/>
+      </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jTCodigoActionPerformed"/>
         <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="jTCodigoKeyReleased"/>
       </Events>
     </Component>
     <Component class="javax.swing.JTextField" name="jTnombre">
+      <Properties>
+        <Property name="toolTipText" type="java.lang.String" value="Ingrese el nombre de la materia"/>
+      </Properties>
       <Events>
         <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="jTnombreKeyReleased"/>
       </Events>
     </Component>
     <Component class="javax.swing.JTextField" name="jTanio">
+      <Properties>
+        <Property name="toolTipText" type="java.lang.String" value="Ingrese el nombre de la materia"/>
+      </Properties>
       <Events>
         <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="jTanioKeyReleased"/>
       </Events>

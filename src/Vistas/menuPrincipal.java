@@ -5,9 +5,6 @@
  */
 package Vistas;
 
-import Entidades.Materia;
-import java.awt.Color;
-
 /**
  *
  * @author IvanMoreno

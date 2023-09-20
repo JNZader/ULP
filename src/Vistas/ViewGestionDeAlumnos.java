@@ -7,20 +7,36 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+import javax.swing.text.AbstractDocument;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
+import javax.swing.text.DocumentFilter;
+import javax.swing.text.PlainDocument;
 
 public class ViewGestionDeAlumnos extends javax.swing.JInternalFrame {
 
     AlumnoDAO aluData;
+    DocumentFilter filtroNumeros;
+    DocumentFilter filtroLetras;
 
     public ViewGestionDeAlumnos() {
         initComponents();
         getContentPane().setBackground(new Color(75, 141, 88));
         jBNuevo.setEnabled(false);
         aluData = new AlumnoDAO();
+
+        filtroNumeros = new FiltraEntrada(FiltraEntrada.SOLO_NUMEROS);
+        filtroLetras = new FiltraEntrada(FiltraEntrada.SOLO_LETRAS);
+
+        ((AbstractDocument) jTDoc.getDocument()).setDocumentFilter(filtroNumeros);
+        ((AbstractDocument) jTapellido.getDocument()).setDocumentFilter(filtroLetras);
+        ((AbstractDocument) jTnombre.getDocument()).setDocumentFilter(filtroLetras);
     }
 
     public void habilitarBoton() {
-        if (!jTDoc.getText().isEmpty() && !jTapellido.getText().isEmpty() && !jTnombre.getText().isEmpty()) {
+        if (!jTapellido.getText().isEmpty() && !jTnombre.getText().isEmpty()) {
             jBNuevo.setEnabled(true);
         } else {
             jBNuevo.setEnabled(false);
@@ -60,12 +76,19 @@ public class ViewGestionDeAlumnos extends javax.swing.JInternalFrame {
         setMaximizable(true);
         setTitle("Gestion de Alumnos - ULP - G73");
 
+        jTDoc.setToolTipText("Ingrese el documento del alumno");
+        jTDoc.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTDocActionPerformed(evt);
+            }
+        });
         jTDoc.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTDocKeyReleased(evt);
             }
         });
 
+        jTapellido.setToolTipText("Ingrese el apellido del alumno");
         jTapellido.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTapellidoActionPerformed(evt);
@@ -77,6 +100,7 @@ public class ViewGestionDeAlumnos extends javax.swing.JInternalFrame {
             }
         });
 
+        jTnombre.setToolTipText("Ingrese el nombre del alumno");
         jTnombre.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTnombreActionPerformed(evt);
@@ -242,20 +266,20 @@ public class ViewGestionDeAlumnos extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
         try {
             if (!(jTDoc.getText().isEmpty())) {
-            int doc = Integer.parseInt(jTDoc.getText());
-            Alumno alEcontrado = aluData.buscarAlumnoPorDni(doc);
-            if (alEcontrado != null) {
-                jTnombre.setText(alEcontrado.getNombre());
-                jTapellido.setText(alEcontrado.getApellido());
-                jREstado.setSelected(alEcontrado.isEstado());
-                jDFecha.setDate(Date.valueOf(alEcontrado.getFechaNacimiento()));
-            }
-        }else{
-            JOptionPane.showMessageDialog(this, "Debes llenar el campo documento");
+                int doc = Integer.parseInt(jTDoc.getText());
+                Alumno alEcontrado = aluData.buscarAlumnoPorDni(doc);
+                if (alEcontrado != null) {
+                    jTnombre.setText(alEcontrado.getNombre());
+                    jTapellido.setText(alEcontrado.getApellido());
+                    jREstado.setSelected(alEcontrado.isEstado());
+                    jDFecha.setDate(Date.valueOf(alEcontrado.getFechaNacimiento()));
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Debes llenar el campo documento");
             }
         } catch (NumberFormatException e) {
-             JOptionPane.showMessageDialog(this, "Ingresa un dato valido");
-             jTDoc.setText("");
+            JOptionPane.showMessageDialog(this, "Ingresa un dato valido");
+            jTDoc.setText("");
         }
     }//GEN-LAST:event_jBbuscarActionPerformed
 
@@ -312,17 +336,26 @@ public class ViewGestionDeAlumnos extends javax.swing.JInternalFrame {
     private void jTDocKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTDocKeyReleased
         // TODO add your handling code here:
         habilitarBoton();
+        //  tipoCaracteres(jTDoc, FiltraEntrada.SOLO_NUMEROS);
+
     }//GEN-LAST:event_jTDocKeyReleased
 
     private void jTapellidoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTapellidoKeyReleased
         // TODO add your handling code here:
         habilitarBoton();
+        //  tipoCaracteres(jTapellido, FiltraEntrada.SOLO_LETRAS);
     }//GEN-LAST:event_jTapellidoKeyReleased
 
     private void jTnombreKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTnombreKeyReleased
         // TODO add your handling code here:
         habilitarBoton();
+        //  tipoCaracteres(jTnombre, FiltraEntrada.SOLO_LETRAS);
     }//GEN-LAST:event_jTnombreKeyReleased
+
+    private void jTDocActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTDocActionPerformed
+        // TODO add your handling code here:
+
+    }//GEN-LAST:event_jTDocActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -344,4 +377,91 @@ public class ViewGestionDeAlumnos extends javax.swing.JInternalFrame {
     private java.awt.Label label4;
     private java.awt.Label label5;
     // End of variables declaration//GEN-END:variables
+class FiltraEntrada extends DocumentFilter {
+
+        public static final char SOLO_NUMEROS = 'N';
+        public static final char SOLO_LETRAS = 'L';
+        public static final char NUM_LETRAS = 'M';
+        public static final char DEFAULT = '*';
+
+        private char tipoEntrada;
+        private int longitudCadena = 0;
+        private int longitudActual = 0;
+
+        public FiltraEntrada() {
+            tipoEntrada = DEFAULT;
+        }
+
+        public FiltraEntrada(char tipoEntrada) {
+            this.tipoEntrada = tipoEntrada;
+        }
+
+        public FiltraEntrada(char tipoEntrada, int longitudCadena) {
+            this.tipoEntrada = tipoEntrada;
+            this.longitudCadena = longitudCadena;
+        }
+
+        @Override
+        public void insertString(DocumentFilter.FilterBypass fb, int i, String string, javax.swing.text.AttributeSet as) throws BadLocationException {
+            if (string == null) {
+                return;
+            }
+            if (string.isEmpty()) {
+                return;
+            } else {
+                Document dc = fb.getDocument();
+                longitudActual = dc.getLength();
+                if (this.longitudCadena == 0 || longitudActual < longitudCadena) {
+                    fb.insertString(i, string, as);
+                }
+            }
+        }
+
+        @Override
+        public void remove(DocumentFilter.FilterBypass fb, int offset, int length) throws BadLocationException {
+            super.remove(fb, offset, length);
+        }
+
+        @Override
+        public void replace(DocumentFilter.FilterBypass fb, int i, int i1, String string, javax.swing.text.AttributeSet as) throws BadLocationException {
+            Document dc = fb.getDocument();
+            if (string == null) {
+                fb.replace(0, i1, "", as);
+                return;
+            }
+            if (string.isEmpty()) {
+                fb.replace(0, i1, "", as);
+                return;
+            }
+            longitudActual = dc.getLength();
+            if (esValido(string)) {
+                if (this.longitudCadena == 0 || longitudActual < longitudCadena) {
+                    fb.replace(i, i1, string, as);
+                }
+            }
+        }
+
+        private boolean esValido(String valor) {
+            char[] letras = valor.toCharArray();
+            boolean valido = false;
+            for (int i = 0; i < letras.length; i++) {
+
+                switch (tipoEntrada) {
+                    case SOLO_NUMEROS:
+                        valido = valor.matches("[0-9]+");
+                        return valido;
+                    case SOLO_LETRAS:
+                        valido = valor.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ ]+");
+                        return valido;
+                    case NUM_LETRAS:
+                        valido = valor.matches("[0-9a-zA-ZáéíóúÁÉÍÓÚñÑüÜ ]+");
+                        return valido;
+                    default:
+                        valido = true;
+                        return valido;
+                }
+            }
+            return valido;
+        }
+    }
 }
