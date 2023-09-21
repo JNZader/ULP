@@ -24,12 +24,7 @@ public class InscripcionDAO {
     private Connection con;
 
     public InscripcionDAO() {
-        try {
-            con = getConnection(); // Obtiene una conexión a la base de datos
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            JOptionPane.showMessageDialog(null, ex);
-        }
+        con = getConnection();
     }
 
     // Método para obtener una lista de inscripciones

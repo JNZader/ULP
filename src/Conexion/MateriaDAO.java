@@ -15,12 +15,7 @@ public class MateriaDAO {
     private Connection con;
 
     public MateriaDAO() {
-
-        try {
-            con = Conexion.getConnection();
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, ex);
-        }
+        con = Conexion.getConnection();
     }
 
     public void guardarMateria(Materia materia) {

@@ -14,13 +14,15 @@ public class Conexion {
     private Conexion() {}
 
     // Método estático para obtener una conexión a la base de datos
-    public static Connection getConnection() throws SQLException {
+    public static Connection getConnection(){
         if (conexion == null) {
             try {
                 Class.forName("org.mariadb.jdbc.Driver"); // Carga del controlador de la base de datos
                 conexion = DriverManager.getConnection(JDBC_URL, JDBC_USER, JDBC_PASSWORD); // Establece la conexión
             } catch (ClassNotFoundException ex) {
                 JOptionPane.showMessageDialog(null, "error de driver"); // Mensaje de error si no se encuentra el controlador
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "error de conexion en la sentencia sql"); // Mensaje de error si no se encuentra el controlador
             }
         }
         return conexion; // Devuelve la conexión
