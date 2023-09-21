@@ -33,10 +33,10 @@ public class ViewGestionDeAlumnos extends javax.swing.JInternalFrame {
     }
 
     public void habilitarBoton() {
-        if (!jTapellido.getText().isEmpty() && !jTnombre.getText().isEmpty()) {
-            jBNuevo.setEnabled(true);
+        if (!jTapellido.getText().isEmpty() && !jTnombre.getText().isEmpty()) {// verifica que jTapellido y jTnombre no esten vacios
+            jBNuevo.setEnabled(true);//si ambos campos tienen contenido habilita el boton Nuevo
         } else {
-            jBNuevo.setEnabled(false);
+            jBNuevo.setEnabled(false);// si alguno de los campos esta vacio deshabilita el boton Nuevo
         }
     }
 
@@ -74,11 +74,6 @@ public class ViewGestionDeAlumnos extends javax.swing.JInternalFrame {
         setTitle("Gestion de Alumnos - ULP - G73");
 
         jTDoc.setToolTipText("Ingrese el documento del alumno");
-        jTDoc.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTDocActionPerformed(evt);
-            }
-        });
         jTDoc.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTDocKeyReleased(evt);
@@ -86,11 +81,6 @@ public class ViewGestionDeAlumnos extends javax.swing.JInternalFrame {
         });
 
         jTapellido.setToolTipText("Ingrese el apellido del alumno");
-        jTapellido.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTapellidoActionPerformed(evt);
-            }
-        });
         jTapellido.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTapellidoKeyReleased(evt);
@@ -98,11 +88,6 @@ public class ViewGestionDeAlumnos extends javax.swing.JInternalFrame {
         });
 
         jTnombre.setToolTipText("Ingrese el nombre del alumno");
-        jTnombre.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTnombreActionPerformed(evt);
-            }
-        });
         jTnombre.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTnombreKeyReleased(evt);
@@ -254,21 +239,14 @@ public class ViewGestionDeAlumnos extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTnombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTnombreActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTnombreActionPerformed
-
-    private void jTapellidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTapellidoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTapellidoActionPerformed
-
     private void jBbuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBbuscarActionPerformed
-        // TODO add your handling code here:
         try {
-            if (!(jTDoc.getText().isEmpty())) {
+            if (!(jTDoc.getText().isEmpty())) {//comprueba que jTDoc no está vacío
                 int doc = Integer.parseInt(jTDoc.getText());
-                Alumno alEcontrado = aluData.buscarAlumnoPorDni(doc);
-                if (alEcontrado != null) {
+                Alumno alEcontrado = aluData.buscarAlumnoPorDni(doc);// llama al método 'buscarAlumnoPorDni' del objeto 'aluData' para buscar un alumno por su documento (dni)
+
+                if (alEcontrado != null) {// si se encuentra un alumno con el documento especificado
+                    //actualiza los textfield y el radiobutton con los datos obtenidos
                     jTnombre.setText(alEcontrado.getNombre());
                     jTapellido.setText(alEcontrado.getApellido());
                     jREstado.setSelected(alEcontrado.isEstado());
@@ -282,9 +260,8 @@ public class ViewGestionDeAlumnos extends javax.swing.JInternalFrame {
             jTDoc.setText("");
         }
     }//GEN-LAST:event_jBbuscarActionPerformed
-
     private void jBNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBNuevoActionPerformed
-        // TODO add your handling code here:
+        // limpia los campos de texto y desmarca el boton de estado(mas que boton nuevo seria boton limpiar...)
         jTDoc.setText("");
         jTnombre.setText("");
         jTapellido.setText("");
@@ -294,15 +271,15 @@ public class ViewGestionDeAlumnos extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jBNuevoActionPerformed
 
     private void jBGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBGuardarActionPerformed
-        // TODO add your handling code here:
-        try {
+        try {//recopila los datos de los textfield, radio button y jdatechosser y los guarda en diferentes variables
             int doc = Integer.parseInt(jTDoc.getText());
             String ap = jTapellido.getText();
             String nombre = jTnombre.getText();
             boolean estado = jREstado.getVerifyInputWhenFocusTarget();
-            LocalDate fecha = jDFecha.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-            Alumno alumno = new Alumno(doc, ap, nombre, fecha, estado);
-            aluData.guardarAlumno(alumno);
+            LocalDate fecha = jDFecha.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();// obtiene la fecha de nacimiento del alumno de jDFecha y la convierte a un objeto LocalDate
+            Alumno alumno = new Alumno(doc, ap, nombre, fecha, estado);// crea un nuevo objeto Alumno con la información recopilada
+            aluData.guardarAlumno(alumno);//llama a guardarAlumno para guardar el alumno en la base de datos
+
         } catch (NumberFormatException e) {
             e.printStackTrace(System.out);
             JOptionPane.showMessageDialog(null, "Complete la informacion con datos validos",
@@ -311,15 +288,17 @@ public class ViewGestionDeAlumnos extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jBGuardarActionPerformed
 
     private void jBEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBEliminarActionPerformed
-        // TODO add your handling code here:
         Alumno alu = new Alumno();
 
-        if (!(jTDoc.getText().isEmpty())) {
-            int doc = Integer.parseInt(jTDoc.getText());
+        if (!(jTDoc.getText().isEmpty())) {// si jTDoc no está vacío
+            int doc = Integer.parseInt(jTDoc.getText());// intenta convertir el valor como un entero
+
             alu = aluData.buscarAlumnoPorDni(doc);
         }
-        if (alu != null) {
+        if (alu != null) {// Si encontro un alumno usa el metodo eliminar de aluData para eliminarlo de la base de datos
+
             aluData.eliminarAlumno(alu.getIdAlumno());
+            // Limpia los campos de texto y demas componentes
             jTDoc.setText("");
             jTnombre.setText("");
             jTapellido.setText("");
@@ -334,29 +313,16 @@ public class ViewGestionDeAlumnos extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jBSalirActionPerformed
 
     private void jTDocKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTDocKeyReleased
-        // TODO add your handling code here:
         habilitarBoton();
-        //  tipoCaracteres(jTDoc, FiltraEntrada.SOLO_NUMEROS);
-
     }//GEN-LAST:event_jTDocKeyReleased
 
     private void jTapellidoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTapellidoKeyReleased
-        // TODO add your handling code here:
         habilitarBoton();
-        //  tipoCaracteres(jTapellido, FiltraEntrada.SOLO_LETRAS);
     }//GEN-LAST:event_jTapellidoKeyReleased
 
     private void jTnombreKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTnombreKeyReleased
-        // TODO add your handling code here:
         habilitarBoton();
-        //  tipoCaracteres(jTnombre, FiltraEntrada.SOLO_LETRAS);
     }//GEN-LAST:event_jTnombreKeyReleased
-
-    private void jTDocActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTDocActionPerformed
-        // TODO add your handling code here:
-
-    }//GEN-LAST:event_jTDocActionPerformed
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jBEliminar;
@@ -403,16 +369,11 @@ class FiltraEntrada extends DocumentFilter {
 
         @Override
         public void insertString(DocumentFilter.FilterBypass fb, int i, String string, javax.swing.text.AttributeSet as) throws BadLocationException {
-            if (string == null) {
-                return;
-            }
-            if (string.isEmpty()) {
-                return;
-            } else {
+            if (string != null && !string.isEmpty()) { // verifica que el texto no sea nulo ni este vacio
                 Document dc = fb.getDocument();
                 longitudActual = dc.getLength();
-                if (this.longitudCadena == 0 || longitudActual < longitudCadena) {
-                    fb.insertString(i, string, as);
+                if (longitudCadena == 0 || longitudActual < longitudCadena) {
+                    fb.insertString(i, string, as); // Inserta el texto si no se supera la longitud máxima
                 }
             }
         }
@@ -422,6 +383,18 @@ class FiltraEntrada extends DocumentFilter {
             super.remove(fb, offset, length);
         }
 
+        /*
+        En este método:
+        /// @Override: Indica que estás anulando el método remove de la superclase DocumentFilter.
+
+        /// public void remove(DocumentFilter.FilterBypass fb, int offset, int length) throws BadLocationException:
+        Esto es la declaración del método, que acepta tres parámetros: fb (un objeto FilterBypass que permite realizar la eliminación),
+        offset (la posición desde la cual se eliminará el texto) y length (la cantidad de caracteres a eliminar).  
+        
+        ///super.remove(fb, offset, length);: Este es el llamado al método remove de la superclase DocumentFilter, 
+        que se encarga de realizar la eliminación del texto en el documento. 
+        No se requiere ninguna lógica adicional en este método, ya que simplemente delega la operación de eliminación a la implementación predeterminada de la superclase.
+         */
         @Override
         public void replace(DocumentFilter.FilterBypass fb, int i, int i1, String string, javax.swing.text.AttributeSet as) throws BadLocationException {
             Document dc = fb.getDocument();
@@ -448,14 +421,11 @@ class FiltraEntrada extends DocumentFilter {
 
                 switch (tipoEntrada) {
                     case SOLO_NUMEROS:
-                        valido = valor.matches("[0-9]+");
-                        return valido;
+                        return valor.matches("[0-9]+");// verifica si solo contiene numeros
                     case SOLO_LETRAS:
-                        valido = valor.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ ]+");
-                        return valido;
+                        return valor.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ ]+");// verifica si solo contiene letras y espacios
                     case NUM_LETRAS:
-                        valido = valor.matches("[0-9a-zA-ZáéíóúÁÉÍÓÚñÑüÜ ]+");
-                        return valido;
+                        return valor.matches("[0-9a-zA-ZáéíóúÁÉÍÓÚñÑüÜ ]+");// verifica si contiene números, letras y espacios
                     default:
                         valido = true;
                         return valido;

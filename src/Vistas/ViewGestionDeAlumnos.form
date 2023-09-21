@@ -137,7 +137,6 @@
         <Property name="toolTipText" type="java.lang.String" value="Ingrese el documento del alumno"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jTDocActionPerformed"/>
         <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="jTDocKeyReleased"/>
       </Events>
     </Component>
@@ -146,7 +145,6 @@
         <Property name="toolTipText" type="java.lang.String" value="Ingrese el apellido del alumno"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jTapellidoActionPerformed"/>
         <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="jTapellidoKeyReleased"/>
       </Events>
     </Component>
@@ -155,7 +153,6 @@
         <Property name="toolTipText" type="java.lang.String" value="Ingrese el nombre del alumno"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jTnombreActionPerformed"/>
         <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="jTnombreKeyReleased"/>
       </Events>
     </Component>
