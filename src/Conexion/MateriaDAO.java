@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
@@ -19,14 +20,15 @@ public class MateriaDAO {
     }
 
     public void guardarMateria(Materia materia) {
-        String sql = "INSERT INTO materia (año, nombre, estado) VALUES (?, ?, ?)";
+        //Se agrego la sentencia where not exists para que no intente guardar dos materias con el mismo nombre
+        String sql = "INSERT INTO materia (año, nombre, estado) SELECT ?, ?, ? WHERE NOT EXISTS (SELECT 2 FROM materia WHERE nombre = ?)";
 
         try (PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             // Establece los valores de los parámetros en la consulta sql
             ps.setInt(1, materia.getAño());
             ps.setString(2, materia.getNombre());
             ps.setBoolean(3, materia.isEstado());
-
+            ps.setString(4, materia.getNombre());
             int filasAfectadas = ps.executeUpdate();// Ejecuta la consulta y almacena el número de filas afectadas
 
             if (filasAfectadas == 1) {
@@ -39,8 +41,8 @@ public class MateriaDAO {
             } else {
                 JOptionPane.showMessageDialog(null, "Error al añadir la materia. No se realizaron cambios en la base de datos");
             }
-        } catch (SQLException ex) {
-            ex.printStackTrace(System.err);
+        } catch (SQLException d) {
+            d.printStackTrace(System.out);
             JOptionPane.showMessageDialog(null, "Error al acceder a la tabla materia");
         }
     }
@@ -48,7 +50,7 @@ public class MateriaDAO {
     public Materia BuscarMateria(int id) {
         Materia materia = null;
         String sql = "SELECT año,nombre FROM materia WHERE idMateria=? AND estado=1";
-        
+
         try (PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, id);// establece el valor del parametro ID en la consulta sql
 
@@ -117,7 +119,7 @@ public class MateriaDAO {
     public ArrayList<Materia> listarMaterias() {
         ArrayList<Materia> materias = new ArrayList<>();
         String sql = "SELECT * FROM materia WHERE estado=1";
-        
+
         try (PreparedStatement ps = con.prepareStatement(sql);
                 ResultSet rs = ps.executeQuery()) {
 
