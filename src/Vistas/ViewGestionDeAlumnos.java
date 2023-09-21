@@ -166,6 +166,9 @@ public class ViewGestionDeAlumnos extends javax.swing.JInternalFrame {
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         jLabel1.setText("Alumno");
 
+        jDFecha.setMaxSelectableDate(new java.util.Date(1420084906000L));
+        jDFecha.setMinSelectableDate(new java.util.Date(-1483210694000L));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(

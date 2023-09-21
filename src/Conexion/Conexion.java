@@ -27,21 +27,4 @@ public class Conexion {
         }
         return conexion; // Devuelve la conexión
     }
-
-    // Métodos estáticos para cerrar objetos de base de datos
-    public static void close(ResultSet rs) throws SQLException {
-        rs.close();
-    }
-
-    public static void close(Statement sttm) throws SQLException {
-        sttm.close();
-    }
-
-    public static void close(PreparedStatement ps) throws SQLException {
-        ps.close();
-    }
-
-    public static void close(Connection conn) throws SQLException {
-        conn.close();
-    }
 }

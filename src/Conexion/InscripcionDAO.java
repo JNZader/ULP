@@ -1,6 +1,5 @@
 package Conexion;
 
-import static Conexion.Conexion.close;
 import static Conexion.Conexion.getConnection;
 import Entidades.*;
 import java.sql.*;
