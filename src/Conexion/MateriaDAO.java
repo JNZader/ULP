@@ -48,6 +48,7 @@ public class MateriaDAO {
     public Materia BuscarMateria(int id) {
         Materia materia = null;
         String sql = "SELECT año,nombre FROM materia WHERE idMateria=? AND estado=1";
+        
         try (PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, id);// establece el valor del parametro ID en la consulta sql
 
@@ -116,6 +117,7 @@ public class MateriaDAO {
     public ArrayList<Materia> listarMaterias() {
         ArrayList<Materia> materias = new ArrayList<>();
         String sql = "SELECT * FROM materia WHERE estado=1";
+        
         try (PreparedStatement ps = con.prepareStatement(sql);
                 ResultSet rs = ps.executeQuery()) {
 
