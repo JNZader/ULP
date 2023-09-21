@@ -29,10 +29,10 @@ public class ViewGestionMaterias extends javax.swing.JInternalFrame {
     }
 
     public void habilitarBoton() {
-        if (jTanio.getText().isEmpty() || jTnombre.getText().isEmpty()) {
-            jBNuevo.setEnabled(false);
+        if (jTanio.getText().isEmpty() || jTnombre.getText().isEmpty()) {// verifica que los campos año y nombre esten vacios
+            jBNuevo.setEnabled(false); // si alguno de los campos esta vacio deshabilita el boton Nuevo
         } else {
-            jBNuevo.setEnabled(true);
+            jBNuevo.setEnabled(true);//si ambos campos tienen contenido habilita el boton Nuevo
         }
     }
 
@@ -74,11 +74,6 @@ public class ViewGestionMaterias extends javax.swing.JInternalFrame {
         jLabel5.setText("Estado");
 
         jTCodigo.setToolTipText("Si desea buscar, ingrese el ID de la materia");
-        jTCodigo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTCodigoActionPerformed(evt);
-            }
-        });
         jTCodigo.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTCodigoKeyReleased(evt);
@@ -212,17 +207,13 @@ public class ViewGestionMaterias extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTCodigoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTCodigoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTCodigoActionPerformed
-
     private void jBbuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBbuscarActionPerformed
-        // TODO add your handling code here:
         try {
-            if (!jTCodigo.getText().isEmpty()) {
-                int codigo = Integer.parseInt(jTCodigo.getText());
-                Materia matEncontrada = matData.BuscarMateria(codigo);
-                if (matEncontrada != null) {
+            if (!jTCodigo.getText().isEmpty()) {// verifica q el campo de texto no está vacio
+                int codigo = Integer.parseInt(jTCodigo.getText());//convierte el texto a entero
+                Materia matEncontrada = matData.BuscarMateria(codigo);//usa ese id para buscar la materia
+                if (matEncontrada != null) {//si encuentra una materia con ese id
+                    //actualiza los textfield y el radiobutton con los datos obtenidos
                     jTnombre.setText(matEncontrada.getNombre());
                     jTanio.setText(matEncontrada.getAño() + "");
                     jREstado.setSelected(matEncontrada.isEstado());
@@ -236,7 +227,7 @@ public class ViewGestionMaterias extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jBbuscarActionPerformed
 
     private void jBNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBNuevoActionPerformed
-        // TODO add your handling code here:
+        // limpia los campos de texto y desmarca el boton de estado(mas que boton nuevo seria boton limpiar...)
         jTCodigo.setText("");
         jTnombre.setText("");
         jTanio.setText("");
@@ -244,30 +235,29 @@ public class ViewGestionMaterias extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jBNuevoActionPerformed
 
     private void jBGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBGuardarActionPerformed
-        // TODO add your handling code here:
-        //int cod = Integer.parseInt(jTCodigo.getText());
         try {
+            //obtiene los datos de los textfield y radiobutton
             String nombre = jTnombre.getText();
             int anio = Integer.parseInt(jTanio.getText());
-            boolean estado = jREstado.getVerifyInputWhenFocusTarget();
+            boolean estado = jREstado.isSelected();
 
-            Materia mat = new Materia(anio, nombre, estado);
-            matData.guardarMateria(mat);
+            Materia mat = new Materia(anio, nombre, estado); //crea un nuevo objeto Materia con los datos obtenidos
+            matData.guardarMateria(mat);//llama al metodo guardarMateria para guardar la materia en la base de datos
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "Debes ingresar datos validos");
         }
     }//GEN-LAST:event_jBGuardarActionPerformed
 
     private void jBEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBEliminarActionPerformed
-        // TODO add your handling code here:
-        Materia mat = new Materia();
+        Materia mat = null;
 
         try {
-            int cod = Integer.parseInt(jTCodigo.getText());
-            mat = matData.BuscarMateria(cod);
+            int cod = Integer.parseInt(jTCodigo.getText());// intenta convertir el contenido de jTCodigo a un número entero
+            mat = matData.BuscarMateria(cod);// busca la materia correspondiente al código ingresado
 
-            if (mat != null) {
-                matData.eliminarMateria(mat.getIdMateria());
+            if (mat != null) {// si encuentra una materia
+                matData.eliminarMateria(mat.getIdMateria());// elimina la materia utilizando su id
+                // limpia los campos de texto y desmarca el boton de estado
                 jTCodigo.setText("");
                 jTnombre.setText("");
                 jTanio.setText("");
@@ -279,7 +269,7 @@ public class ViewGestionMaterias extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jBEliminarActionPerformed
 
     private void jBSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBSalirActionPerformed
-        // TODO add your handling code here:
+//cierra la ventana actual
         this.dispose();
     }//GEN-LAST:event_jBSalirActionPerformed
 
@@ -342,16 +332,11 @@ class FiltraEntrada extends DocumentFilter {
 
         @Override
         public void insertString(DocumentFilter.FilterBypass fb, int i, String string, javax.swing.text.AttributeSet as) throws BadLocationException {
-            if (string == null) {
-                return;
-            }
-            if (string.isEmpty()) {
-                return;
-            } else {
+            if (string != null && !string.isEmpty()) { // verifica que el texto no sea nulo ni este vacio
                 Document dc = fb.getDocument();
                 longitudActual = dc.getLength();
-                if (this.longitudCadena == 0 || longitudActual < longitudCadena) {
-                    fb.insertString(i, string, as);
+                if (longitudCadena == 0 || longitudActual < longitudCadena) {
+                    fb.insertString(i, string, as); // Inserta el texto si no se supera la longitud máxima
                 }
             }
         }
@@ -361,6 +346,18 @@ class FiltraEntrada extends DocumentFilter {
             super.remove(fb, offset, length);
         }
 
+        /*
+        En este método:
+        /// @Override: Indica que estás anulando el método remove de la superclase DocumentFilter.
+
+        /// public void remove(DocumentFilter.FilterBypass fb, int offset, int length) throws BadLocationException:
+        Esto es la declaración del método, que acepta tres parámetros: fb (un objeto FilterBypass que permite realizar la eliminación),
+        offset (la posición desde la cual se eliminará el texto) y length (la cantidad de caracteres a eliminar).  
+        
+        ///super.remove(fb, offset, length);: Este es el llamado al método remove de la superclase DocumentFilter, 
+        que se encarga de realizar la eliminación del texto en el documento. 
+        No se requiere ninguna lógica adicional en este método, ya que simplemente delega la operación de eliminación a la implementación predeterminada de la superclase.
+         */
         @Override
         public void replace(DocumentFilter.FilterBypass fb, int i, int i1, String string, javax.swing.text.AttributeSet as) throws BadLocationException {
             Document dc = fb.getDocument();
@@ -387,11 +384,11 @@ class FiltraEntrada extends DocumentFilter {
 
                 switch (tipoEntrada) {
                     case SOLO_NUMEROS:
-                        return valor.matches("[0-9]+");
+                        return valor.matches("[0-9]+");// verifica si solo contiene numeros
                     case SOLO_LETRAS:
-                        return valor.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ ]+");
+                        return valor.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ ]+");// verifica si solo contiene letras y espacios
                     case NUM_LETRAS:
-                        return valor.matches("[0-9a-zA-ZáéíóúÁÉÍÓÚñÑüÜ ]+");
+                        return valor.matches("[0-9a-zA-ZáéíóúÁÉÍÓÚñÑüÜ ]+");// verifica si contiene números, letras y espacios
                     default:
                         valido = true;
                         return valido;

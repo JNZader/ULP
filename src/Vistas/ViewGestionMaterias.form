@@ -140,7 +140,6 @@
         <Property name="toolTipText" type="java.lang.String" value="Si desea buscar, ingrese el ID de la materia"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jTCodigoActionPerformed"/>
         <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="jTCodigoKeyReleased"/>
       </Events>
     </Component>
