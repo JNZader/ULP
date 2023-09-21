@@ -19,56 +19,53 @@ public class MateriaDAO {
     }
 
     public void guardarMateria(Materia materia) {
-        String sql = "INSERT INTO materia(año,nombre,estado)VALUES(?,?,?)";
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        try {
-            ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+        String sql = "INSERT INTO materia (año, nombre, estado) VALUES (?, ?, ?)";
+
+        try (PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            // Establece los valores de los parámetros en la consulta sql
             ps.setInt(1, materia.getAño());
             ps.setString(2, materia.getNombre());
             ps.setBoolean(3, materia.isEstado());
 
-            ps.executeUpdate();
-            rs = ps.getGeneratedKeys();
+            int filasAfectadas = ps.executeUpdate();// Ejecuta la consulta y almacena el número de filas afectadas
 
-            if (rs.next()) {
-                materia.setIdMateria(rs.getInt(1));
-                JOptionPane.showMessageDialog(null, "Materia añadida con exito");
+            if (filasAfectadas == 1) {
+                try (ResultSet rs = ps.getGeneratedKeys()) {//si se inserta la materia correctamente obtenemos la clave generada (id) de la materia
+                    if (rs.next()) {
+                        materia.setIdMateria(rs.getInt(1));
+                        JOptionPane.showMessageDialog(null, "Materia añadida con éxito");
+                    }
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Error al añadir la materia. No se realizaron cambios en la base de datos");
             }
-            rs.close();
-            ps.close();
-
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Error al acceder a la tabla materia" + ex.getMessage());
+            ex.printStackTrace(System.err);
+            JOptionPane.showMessageDialog(null, "Error al acceder a la tabla materia");
         }
-
     }
 
     public Materia BuscarMateria(int id) {
         Materia materia = null;
         String sql = "SELECT año,nombre FROM materia WHERE idMateria=? AND estado=1";
-        PreparedStatement ps = null;
-        ResultSet rs = null;
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, id);// establece el valor del parametro ID en la consulta sql
 
-        try {
-            ps = con.prepareStatement(sql);
-            ps.setInt(1, id);
-            rs = ps.executeQuery();
-            if (rs.next()) {
-                materia = new Materia();
-
-                materia.setIdMateria(id);
-                materia.setAño(rs.getInt("año"));
-                materia.setNombre(rs.getString("nombre"));
-                materia.setEstado(true);
-
-            } else {
-                JOptionPane.showMessageDialog(null, "No existe la materia");
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    // si encuentra una materia crea un objeto materia y setea sus atributos
+                    materia = new Materia();
+                    materia.setIdMateria(id);
+                    materia.setAño(rs.getInt("año"));
+                    materia.setNombre(rs.getString("nombre"));
+                    materia.setEstado(true);
+                } else {
+                    JOptionPane.showMessageDialog(null, "No existe la materia");
+                }
             }
-            rs.close();
-            ps.close();
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Error al acceder a la tabla materia" + ex.getMessage());
+            ex.printStackTrace(System.err);
+            JOptionPane.showMessageDialog(null, "Error al acceder a la tabla materia");
         }
         return materia;
     }
@@ -76,8 +73,7 @@ public class MateriaDAO {
     public void modificarMateria(Materia materia) {
         String sql = "UPDATE materia SET año=?,nombre=? WHERE idMateria=?";
 
-        try {
-            PreparedStatement ps = con.prepareStatement(sql);
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, materia.getAño());
             ps.setString(2, materia.getNombre());
 
@@ -90,7 +86,8 @@ public class MateriaDAO {
             }
 
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Error al acceder a la tabla materia" + ex.getMessage());
+            ex.printStackTrace(System.err);
+            JOptionPane.showMessageDialog(null, "Error al acceder a la tabla materia");
         }
 
     }
@@ -98,9 +95,8 @@ public class MateriaDAO {
     public void eliminarMateria(int id) {
         String sql = "UPDATE materia SET estado=0 WHERE idMateria=?";
 
-        try {
-            PreparedStatement ps = con.prepareStatement(sql);
-            ps.setInt(1, id);
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, id);// establece el valor del parametro ID en la consulta sql
 
             int fila = ps.executeUpdate();
 
@@ -111,7 +107,8 @@ public class MateriaDAO {
             }
             ps.close();
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Error al acceder a la tabla materia" + ex.getMessage());
+            ex.printStackTrace(System.err);
+            JOptionPane.showMessageDialog(null, "Error al acceder a la tabla materia");
         }
 
     }
@@ -119,28 +116,22 @@ public class MateriaDAO {
     public ArrayList<Materia> listarMaterias() {
         ArrayList<Materia> materias = new ArrayList<>();
         String sql = "SELECT * FROM materia WHERE estado=1";
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        try {
-            ps = con.prepareStatement(sql);
-            rs = ps.executeQuery();
+        try (PreparedStatement ps = con.prepareStatement(sql);
+                ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
+                // si se encuentra una materia crea un objeto materia y setea sus atributos
                 Materia materia = new Materia();
-
                 materia.setIdMateria(rs.getInt("idMateria"));
                 materia.setAño(rs.getInt("año"));
                 materia.setNombre(rs.getString("nombre"));
                 materia.setEstado(true);
                 materias.add(materia);
             }
-            rs.close();
-            ps.close();
-
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Error al acceder a la tabla materia" + ex.getMessage());
+            ex.printStackTrace(System.err);
+            JOptionPane.showMessageDialog(null, "Error al acceder a la tabla materia");
         }
-
         return materias;
     }
 
