@@ -28,9 +28,7 @@ public class ViewActualizacionDeNotas extends javax.swing.JInternalFrame {
             }
         };
         NumericRangeFilter rangeFilter = new NumericRangeFilter();
-        AbstractDocument document = (AbstractDocument) jTextFieldNota.getDocument();
-        document.setDocumentFilter(rangeFilter);
-
+        ((AbstractDocument) jTextFieldNota.getDocument()).setDocumentFilter(rangeFilter);
     }
 
     private void llenarComboBox() {
@@ -40,7 +38,6 @@ public class ViewActualizacionDeNotas extends javax.swing.JInternalFrame {
 
         for (Alumno aux : materias) {
             jComboBoxAlumno.addItem(aux);
-
         }
     }
 
@@ -68,11 +65,11 @@ public class ViewActualizacionDeNotas extends javax.swing.JInternalFrame {
     }
 
     private void actualizarTabla() {
-        while (mod.getRowCount() > 0) {
+        while (mod.getRowCount() > 0) {//elimina la primera fila del modelo hasta que no queden filas
             mod.removeRow(0);
         }
 
-        jTAlumnos.setModel(mod);
+        jTAlumnos.setModel(mod);//establece el modelo vacio
     }
 
     /**
@@ -257,12 +254,13 @@ public class ViewActualizacionDeNotas extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jComboBoxAlumnoActionPerformed
 
     private void jButtonEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditarActionPerformed
-        if (jTAlumnos.getSelectedRow() == -1) {
+        if (jTAlumnos.getSelectedRow() == -1) {//verifica si no se ha seleccionado ninguna fila en la tabla y muestra una advertencia sino
             JOptionPane.showMessageDialog(null, "No ha seleccionado ningun registro de la tabla", "ERROR AL MODIFICAR REGISTRO", JOptionPane.WARNING_MESSAGE);
         } else {
-            nRow = jTAlumnos.getSelectedRow();
+            nRow = jTAlumnos.getSelectedRow();//obtiene el índice de la fila seleccionada y lo guarda en nRow
+
             jTextFieldCodigo.setText(mod.getValueAt(jTAlumnos.getSelectedRow(), 0).toString());
-            jTextFieldNombre.setText(mod.getValueAt(jTAlumnos.getSelectedRow(), 1).toString());
+            jTextFieldNombre.setText(mod.getValueAt(jTAlumnos.getSelectedRow(), 1).toString());//toma los valores de las columnas y los establece en los fieldtext
             jTextFieldNota.setText(mod.getValueAt(jTAlumnos.getSelectedRow(), 2).toString());
         }
     }//GEN-LAST:event_jButtonEditarActionPerformed
@@ -271,17 +269,17 @@ public class ViewActualizacionDeNotas extends javax.swing.JInternalFrame {
         InscripcionDAO act = new InscripcionDAO();
         boolean aux;
         try {
-            Alumno alumnoSeleccionado = (Alumno) jComboBoxAlumno.getSelectedItem();
+            Alumno alumnoSeleccionado = (Alumno) jComboBoxAlumno.getSelectedItem();//obtiene el alumno seleccionado en el combobox
+            //actualiza la nota usando
             aux = act.actualizarNota(Double.parseDouble(jTextFieldNota.getText()), alumnoSeleccionado.getIdAlumno(), Integer.parseInt(jTextFieldCodigo.getText()));
             if (aux) {
-                mod.setValueAt(jTextFieldCodigo.getText().trim(), nRow, 0);
-                mod.setValueAt(jTextFieldNombre.getText().trim(), nRow, 1);
+                mod.setValueAt(jTextFieldCodigo.getText().trim(), nRow, 0);//trim elimina los espacios vacios al principio y al final del texto
+                mod.setValueAt(jTextFieldNombre.getText().trim(), nRow, 1);//actualiza la tabla con los valores delos textfield
                 mod.setValueAt(jTextFieldNota.getText().trim(), nRow, 2);
             }
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "Debes ingresar datos validos");
         }
-
     }//GEN-LAST:event_jButtonGuardarActionPerformed
 
 
