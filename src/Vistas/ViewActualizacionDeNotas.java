@@ -253,14 +253,23 @@ public class ViewActualizacionDeNotas extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jComboBoxAlumnoActionPerformed
 
     private void jButtonEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditarActionPerformed
-        if (jTAlumnos.getSelectedRow() == -1) {//verifica si no se ha seleccionado ninguna fila en la tabla y muestra una advertencia sino
-            JOptionPane.showMessageDialog(null, "No ha seleccionado ningun registro de la tabla", "ERROR AL MODIFICAR REGISTRO", JOptionPane.WARNING_MESSAGE);
-        } else {
-            nRow = jTAlumnos.getSelectedRow();//obtiene el índice de la fila seleccionada y lo guarda en nRow
+        int sRow = jTAlumnos.getSelectedRow();//obtiene el índice de la fila seleccionada y lo guarda en nRow
 
-            jTextFieldCodigo.setText(mod.getValueAt(jTAlumnos.getSelectedRow(), 0).toString());
-            jTextFieldNombre.setText(mod.getValueAt(jTAlumnos.getSelectedRow(), 1).toString());//toma los valores de las columnas y los establece en los fieldtext
-            jTextFieldNota.setText(mod.getValueAt(jTAlumnos.getSelectedRow(), 2).toString());
+        if (sRow != -1 && sRow < mod.getRowCount()) {//getRowCount=devuelve el número total de filas en el modelo de la tabla
+            // Verifica si las celdas de la fila seleccionada no están vacías
+            if (mod.getValueAt(sRow, 0) != null
+                    && mod.getValueAt(sRow, 1) != null
+                    && mod.getValueAt(sRow, 2) != null) {
+
+                int nnRow = sRow;
+                jTextFieldCodigo.setText(mod.getValueAt(nnRow, 0).toString());
+                jTextFieldNombre.setText(mod.getValueAt(nnRow, 1).toString());
+                jTextFieldNota.setText(mod.getValueAt(nnRow, 2).toString());
+            } else {
+                JOptionPane.showMessageDialog(null, "La fila seleccionada no contiene información completa", "ERROR AL MODIFICAR EL REGISTRO", JOptionPane.WARNING_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "No ha seleccionado ningún registro de la tabla", "ERROR AL MODIFICAR REGISTRO", JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_jButtonEditarActionPerformed
 
@@ -269,12 +278,18 @@ public class ViewActualizacionDeNotas extends javax.swing.JInternalFrame {
         boolean aux;
         try {
             Alumno alumnoSeleccionado = (Alumno) jComboBoxAlumno.getSelectedItem();//obtiene el alumno seleccionado en el combobox
-            //actualiza la nota usando
-            aux = act.actualizarNota(Double.parseDouble(jTextFieldNota.getText()), alumnoSeleccionado.getIdAlumno(), Integer.parseInt(jTextFieldCodigo.getText()));
-            if (aux) {
-                mod.setValueAt(jTextFieldCodigo.getText().trim(), nRow, 0);//trim elimina los espacios vacios al principio y al final del texto
-                mod.setValueAt(jTextFieldNombre.getText().trim(), nRow, 1);//actualiza la tabla con los valores delos textfield
-                mod.setValueAt(jTextFieldNota.getText().trim(), nRow, 2);
+            // Verifica que la tabla tenga datos
+            if (nRow >= 0 && mod.getRowCount() > 0) {
+                //actualiza la nota usando
+                aux = act.actualizarNota(Double.parseDouble(jTextFieldNota.getText()), alumnoSeleccionado.getIdAlumno(), Integer.parseInt(jTextFieldCodigo.getText()));
+
+                if (aux) {
+                    mod.setValueAt(jTextFieldCodigo.getText().trim(), nRow, 0);//trim elimina los espacios vacios al principio y al final del texto
+                    mod.setValueAt(jTextFieldNombre.getText().trim(), nRow, 1);//actualiza la tabla con los valores delos textfield
+                    mod.setValueAt(jTextFieldNota.getText().trim(), nRow, 2);
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "La tabla está vacía o no se ha seleccionado una fila.");
             }
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "Debes ingresar datos validos");
