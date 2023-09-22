@@ -24,9 +24,9 @@ public class ViewConsultDeAlumnosPorMateria extends javax.swing.JInternalFrame {
 
     private void llenarComboBox() {
         MateriaDAO mat = new MateriaDAO();
-        ArrayList<Materia> materias = mat.listarMaterias();
-        jComboBoxMaterias.addItem(null);
-        for (Materia aux : materias) {
+        ArrayList<Materia> materias = mat.listarMaterias();//obtiene la una lista de materias activas de la base de datos
+        jComboBoxMaterias.addItem(null);//agrega un espacio vacio en el primer elemento del combobox
+        for (Materia aux : materias) {//itera a traves de la lista y agrega cada materia al combobox
             jComboBoxMaterias.addItem(aux);
 
         }
@@ -36,33 +36,34 @@ public class ViewConsultDeAlumnosPorMateria extends javax.swing.JInternalFrame {
         InscripcionDAO ins = new InscripcionDAO();
 
         String[] columnas = {"ID", "DNI", "Apellido", "Nombre"};
-
+        // obtiene la materia seleccionada en el combobox
         Materia materiaSeleccionada = (Materia) jComboBoxMaterias.getSelectedItem();
 
         if (materiaSeleccionada != null) {
+            // obtiene la lista de alumnos inscritos en la materia seleccionada
             ArrayList<Alumno> alumnosXMateria = ins.obtenerAlumnosXMateria(materiaSeleccionada.getIdMateria());
 
-            mod.setColumnIdentifiers(columnas);
-            String[] filas = new String[4];
+            mod.setColumnIdentifiers(columnas);//establece las columnas en el modelo de la tabla
+            String[] filas = new String[4];//arreglo para guardar los datos de cada fila
             if (alumnosXMateria.size() > 0) {
                 for (Alumno aux : alumnosXMateria) {
+                    //llena el arreglo con los datos del alumno
                     filas[0] = aux.getIdAlumno() + "";
                     filas[1] = aux.getDni() + "";
                     filas[2] = aux.getApellido() + "";
                     filas[3] = aux.getNombre() + "";
-                    mod.addRow(filas);
+                    mod.addRow(filas);//agrega la fila al modelo de la tabla
                 }
             }
         }
-        tabla.setModel(mod);
+        tabla.setModel(mod);//establece el modelo de datos en la tabla
     }
 
     private void actualizarTabla() {
         while (mod.getRowCount() > 0) {
-            mod.removeRow(0);
+            mod.removeRow(0);   //elimina la primera fila del modelo hasta que no queden filas
         }
-
-        tabla.setModel(mod);
+        tabla.setModel(mod);//establece el modelo vacio
     }
 
     /**
@@ -163,12 +164,10 @@ public class ViewConsultDeAlumnosPorMateria extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void salirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_salirActionPerformed
-        // TODO add your handling code here:
         this.dispose();
     }//GEN-LAST:event_salirActionPerformed
 
     private void jComboBoxMateriasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxMateriasActionPerformed
-        // TODO add your handling code here:
         actualizarTabla();
         llenarTabla();
     }//GEN-LAST:event_jComboBoxMateriasActionPerformed

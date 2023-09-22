@@ -44,7 +44,7 @@ public class ViewFormularioDeInscripcion extends javax.swing.JInternalFrame impl
     private void llenarTablaMateriasNoInscriptas() {
         // verificamos si se ha seleccionado un alumno en el ComboBox
         Alumno alumno = (Alumno) jComboBoxAlumno.getSelectedItem();
-        String[] cabecera = {"id", "nombre", "año"};
+        String[] cabecera = {"id", "nombre", "año"};//define las columnas de la tabla
 
         //si no se ha seleccionado un alumno muestra un mensaje de advertencia y sale del metodo
         if (alumno == null) {
@@ -54,7 +54,7 @@ public class ViewFormularioDeInscripcion extends javax.swing.JInternalFrame impl
 
         // Obtenemos el ID del alumno seleccionado.
         int idAlu = alumno.getIdAlumno();
-        modelo.setColumnIdentifiers(cabecera);
+        modelo.setColumnIdentifiers(cabecera);//establece las columnas de la tabla
 
         // Utilizamos un DAO para obtener la lista de materias en las que el alumno no está inscrito.
         List<Materia> obtenerMateriasNoCursadas = inscripcionDAO.obtenerMateriasNoCursadas(idAlu);
