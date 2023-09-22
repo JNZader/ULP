@@ -162,11 +162,6 @@ public class ViewActualizacionDeNotas extends javax.swing.JInternalFrame {
 
         jTextFieldNota.setText(" ");
         jTextFieldNota.setToolTipText("ingrese nota del 0 al 10");
-        jTextFieldNota.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextFieldNotaActionPerformed(evt);
-            }
-        });
 
         jLabel3.setText("Codigo");
 
@@ -253,18 +248,15 @@ public class ViewActualizacionDeNotas extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jBSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBSalirActionPerformed
-        // TODO add your handling code here:
         this.dispose();
     }//GEN-LAST:event_jBSalirActionPerformed
 
     private void jComboBoxAlumnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxAlumnoActionPerformed
-        // TODO add your handling code here:
         actualizarTabla();
         llenarTabla();
     }//GEN-LAST:event_jComboBoxAlumnoActionPerformed
 
     private void jButtonEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditarActionPerformed
-        // TODO add your handling code here:
         if (jTAlumnos.getSelectedRow() == -1) {
             JOptionPane.showMessageDialog(null, "No ha seleccionado ningun registro de la tabla", "ERROR AL MODIFICAR REGISTRO", JOptionPane.WARNING_MESSAGE);
         } else {
@@ -276,7 +268,6 @@ public class ViewActualizacionDeNotas extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jButtonEditarActionPerformed
 
     private void jButtonGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonGuardarActionPerformed
-        // TODO add your handling code here:
         InscripcionDAO act = new InscripcionDAO();
         boolean aux;
         try {
@@ -292,10 +283,6 @@ public class ViewActualizacionDeNotas extends javax.swing.JInternalFrame {
         }
 
     }//GEN-LAST:event_jButtonGuardarActionPerformed
-
-    private void jTextFieldNotaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldNotaActionPerformed
-
-    }//GEN-LAST:event_jTextFieldNotaActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

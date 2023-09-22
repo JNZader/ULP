@@ -278,17 +278,14 @@ public class ViewGestionMaterias extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jBSalirActionPerformed
 
     private void jTCodigoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTCodigoKeyReleased
-        // TODO add your handling code here:
         habilitarBoton();
     }//GEN-LAST:event_jTCodigoKeyReleased
 
     private void jTnombreKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTnombreKeyReleased
-        // TODO add your handling code here:
         habilitarBoton();
     }//GEN-LAST:event_jTnombreKeyReleased
 
     private void jTanioKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTanioKeyReleased
-        // TODO add your handling code here:
         habilitarBoton();
     }//GEN-LAST:event_jTanioKeyReleased
 

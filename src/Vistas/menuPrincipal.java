@@ -1,19 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Vistas;
 
-/**
- *
- * @author IvanMoreno
- */
 public class menuPrincipal extends javax.swing.JFrame {
 
-    /**
-     * Creates new form menuPrincipal
-     */
     public menuPrincipal() {
         initComponents();
         setLocationRelativeTo(null);
@@ -65,11 +53,6 @@ public class menuPrincipal extends javax.swing.JFrame {
         );
 
         jMFormularioAlumno.setText("Alumno");
-        jMFormularioAlumno.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMFormularioAlumnoActionPerformed(evt);
-            }
-        });
 
         jMenuItem1.setText("Formulario Alumno");
         jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
@@ -82,11 +65,6 @@ public class menuPrincipal extends javax.swing.JFrame {
         jMenuBar1.add(jMFormularioAlumno);
 
         jMenu2.setText("Materia");
-        jMenu2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenu2ActionPerformed(evt);
-            }
-        });
 
         jMFormuMateria.setText("Formulario Materia");
         jMFormuMateria.addActionListener(new java.awt.event.ActionListener() {
@@ -154,13 +132,7 @@ public class menuPrincipal extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jMFormularioAlumnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMFormularioAlumnoActionPerformed
-        // TODO add your handling code here:
-
-    }//GEN-LAST:event_jMFormularioAlumnoActionPerformed
-
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        // TODO add your handling code here:
         escritorio.removeAll();
         escritorio.repaint();
         ViewGestionDeAlumnos ga = new ViewGestionDeAlumnos();
@@ -169,13 +141,7 @@ public class menuPrincipal extends javax.swing.JFrame {
         escritorio.moveToFront(ga);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
-    private void jMenu2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu2ActionPerformed
-        // TODO add your handling code here:
-
-    }//GEN-LAST:event_jMenu2ActionPerformed
-
     private void jMFormuMateriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMFormuMateriaActionPerformed
-        // TODO add your handling code here:
         escritorio.removeAll();
         escritorio.repaint();
         ViewGestionMaterias ma = new ViewGestionMaterias();
@@ -185,7 +151,6 @@ public class menuPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMFormuMateriaActionPerformed
 
     private void jMenuItemManejoInscripcionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemManejoInscripcionesActionPerformed
-        // TODO add your handling code here:
         escritorio.removeAll();
         escritorio.repaint();
         ViewFormularioDeInscripcion insc = new ViewFormularioDeInscripcion();
@@ -195,7 +160,6 @@ public class menuPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItemManejoInscripcionesActionPerformed
 
     private void jMenuItemAlumnosMateriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAlumnosMateriaActionPerformed
-        // TODO add your handling code here:
         escritorio.removeAll();
         escritorio.repaint();
         ViewConsultDeAlumnosPorMateria alum = new ViewConsultDeAlumnosPorMateria();
@@ -205,7 +169,6 @@ public class menuPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItemAlumnosMateriaActionPerformed
 
     private void jMenuItemManipulacionNotasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemManipulacionNotasActionPerformed
-        // TODO add your handling code here:
         escritorio.removeAll();
         escritorio.repaint();
         ViewActualizacionDeNotas not = new ViewActualizacionDeNotas();
@@ -215,8 +178,6 @@ public class menuPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItemManipulacionNotasActionPerformed
 
     private void jMenuSalirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuSalirMouseClicked
-        // TODO add your handling code here:
-        
         System.exit(0);
     }//GEN-LAST:event_jMenuSalirMouseClicked
 
