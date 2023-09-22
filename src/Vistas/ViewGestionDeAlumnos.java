@@ -272,14 +272,21 @@ public class ViewGestionDeAlumnos extends javax.swing.JInternalFrame {
 
     private void jBGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBGuardarActionPerformed
         try {//recopila los datos de los textfield, radio button y jdatechosser y los guarda en diferentes variables
-            int doc = Integer.parseInt(jTDoc.getText());
-            String ap = jTapellido.getText();
-            String nombre = jTnombre.getText();
-            boolean estado = jREstado.getVerifyInputWhenFocusTarget();
-            LocalDate fecha = jDFecha.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();// obtiene la fecha de nacimiento del alumno de jDFecha y la convierte a un objeto LocalDate
-            Alumno alumno = new Alumno(doc, ap, nombre, fecha, estado);// crea un nuevo objeto Alumno con la información recopilada
-            aluData.guardarAlumno(alumno);//llama a guardarAlumno para guardar el alumno en la base de datos
-
+            if (jTDoc.getText().isEmpty()
+                    || jTapellido.getText().isEmpty()
+                    || jTnombre.getText().isEmpty()
+                    || !jREstado.isSelected()
+                    || jDFecha.getDate() == null) {
+                JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos.");
+            } else {
+                int doc = Integer.parseInt(jTDoc.getText());
+                String ap = jTapellido.getText();
+                String nombre = jTnombre.getText();
+                boolean estado = jREstado.getVerifyInputWhenFocusTarget();
+                LocalDate fecha = jDFecha.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();// obtiene la fecha de nacimiento del alumno de jDFecha y la convierte a un objeto LocalDate
+                Alumno alumno = new Alumno(doc, ap, nombre, fecha, estado);// crea un nuevo objeto Alumno con la información recopilada
+                aluData.guardarAlumno(alumno);//llama a guardarAlumno para guardar el alumno en la base de datos
+            }
         } catch (NumberFormatException e) {
             e.printStackTrace(System.out);
             JOptionPane.showMessageDialog(null, "Complete la informacion con datos validos",

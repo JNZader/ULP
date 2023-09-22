@@ -68,7 +68,6 @@ public class ViewActualizacionDeNotas extends javax.swing.JInternalFrame {
         while (mod.getRowCount() > 0) {//elimina la primera fila del modelo hasta que no queden filas
             mod.removeRow(0);
         }
-
         jTAlumnos.setModel(mod);//establece el modelo vacio
     }
 
