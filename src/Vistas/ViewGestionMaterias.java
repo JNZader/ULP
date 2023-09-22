@@ -3,8 +3,10 @@ package Vistas;
 import Conexion.MateriaDAO;
 import Entidades.Materia;
 import java.awt.Color;
+import java.awt.Toolkit;
 import javax.swing.JOptionPane;
 import javax.swing.text.AbstractDocument;
+import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.DocumentFilter;
@@ -22,10 +24,12 @@ public class ViewGestionMaterias extends javax.swing.JInternalFrame {
         matData = new MateriaDAO();
         filtroNumeros = new FiltraEntrada(FiltraEntrada.SOLO_NUMEROS);
         filtroLetras = new FiltraEntrada(FiltraEntrada.SOLO_LETRAS);
+        NumericRangeFilter2 rangeFilter = new NumericRangeFilter2();
 
         ((AbstractDocument) jTCodigo.getDocument()).setDocumentFilter(filtroNumeros);
-        ((AbstractDocument) jTanio.getDocument()).setDocumentFilter(filtroNumeros);
         ((AbstractDocument) jTnombre.getDocument()).setDocumentFilter(filtroLetras);
+
+        ((AbstractDocument) jTanio.getDocument()).setDocumentFilter(rangeFilter);
     }
 
     public void habilitarBoton() {
@@ -395,6 +399,29 @@ class FiltraEntrada extends DocumentFilter {
                 }
             }
             return valido;
+        }
+    }
+}
+
+class NumericRangeFilter2 extends DocumentFilter {
+
+    @Override
+    public void replace(DocumentFilter.FilterBypass fb, int i, int i1, String string, AttributeSet as) throws BadLocationException {
+        String currentText = fb.getDocument().getText(0, fb.getDocument().getLength());//obtiene el texto actual del jtf
+
+        String nextText = currentText.substring(0, i) + string + currentText.substring(i + i1);//concatena el texto a insertar con el texto acutal
+
+        try {
+            int num = Integer.parseInt(nextText);//intenta convertir el texto en numero
+
+            if (num >= 1 && num <= 6) {//verifica si el numero esta en el rango de 1 a 6
+                super.replace(fb, i, i1, string, as);
+            } else {
+                //fuera de rango
+                Toolkit.getDefaultToolkit().beep();//sonido de error
+            }
+        } catch (NumberFormatException e) {
+            Toolkit.getDefaultToolkit().beep(); //El texto no es un número válido...Emite un sonido de error.
         }
     }
 }
