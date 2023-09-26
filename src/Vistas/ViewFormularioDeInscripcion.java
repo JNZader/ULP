@@ -10,7 +10,6 @@ import java.awt.Color;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
-import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
@@ -23,7 +22,7 @@ public class ViewFormularioDeInscripcion extends javax.swing.JInternalFrame impl
     public ViewFormularioDeInscripcion() {
         initComponents();
         this.setResizable(false);
-        getContentPane().setBackground(new Color(75, 141, 88));
+        getContentPane().setBackground(new Color(22,151,141));
 
         ListSelectionModel selectionModel = jTable2.getSelectionModel();
         selectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);

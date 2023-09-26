@@ -19,7 +19,7 @@ public class ViewGestionMaterias extends javax.swing.JInternalFrame {
 
     public ViewGestionMaterias() {
         initComponents();
-        getContentPane().setBackground(new Color(75, 141, 88));
+        getContentPane().setBackground(new Color(22,151,141));
         this.setResizable(false);
 
         jBNuevo.setEnabled(false);
