@@ -41,6 +41,7 @@ public class ViewActualizacionDeNotas extends javax.swing.JInternalFrame {
     private void llenarComboBox() {
         AlumnoDAO alum = new AlumnoDAO();
         ArrayList<Alumno> materias = alum.listarAlumnos();
+        
         jComboBoxAlumno.addItem(null);//para que no llene la tabla al abrir la ventana
 
         for (Alumno aux : materias) {

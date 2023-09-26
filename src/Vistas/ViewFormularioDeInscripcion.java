@@ -65,7 +65,7 @@ public class ViewFormularioDeInscripcion extends javax.swing.JInternalFrame impl
 //        modelo.setColumnIdentifiers(cabecera);//establece las columnas de la tabla
 
         // Utilizamos un DAO para obtener la lista de materias en las que el alumno no está inscrito.
-        List<Materia> obtenerMateriasNoCursadas = inscripcionDAO.obtenerMateriasNoCursadas(idAlu);
+        ArrayList<Materia> obtenerMateriasNoCursadas = inscripcionDAO.obtenerMateriasNoCursadas(idAlu);
 
         // Verificamos si la lista de materias no cursadas no está vacía y no es nula.
         if (!obtenerMateriasNoCursadas.isEmpty() && obtenerMateriasNoCursadas != null) {
@@ -100,7 +100,7 @@ public class ViewFormularioDeInscripcion extends javax.swing.JInternalFrame impl
         int idAlu = alumno.getIdAlumno();//obtiene el id del alumno seleccionado
 //        modelo.setColumnIdentifiers(cabecera);//establece las columnas de la tabla en el modelo
         //usando el id del alumno obtiene las materias cursadas
-        List<Materia> obtenerMateriaCursadas = inscripcionDAO.obtenerMateriasCursadas(idAlu);
+        ArrayList<Materia> obtenerMateriaCursadas = inscripcionDAO.obtenerMateriasCursadas(idAlu);
         //itera a traves de la lista de materias cursadas y agrega cada una como una fila en la tabla
         for (Materia materia : obtenerMateriaCursadas) {
             modelo.addRow(new Object[]{materia.getIdMateria(), materia.getNombre(), materia.getAño()});
