@@ -1,11 +1,12 @@
 package Vistas;
 
+import java.awt.Dimension;
+
 public class menuPrincipal extends javax.swing.JFrame {
 
     public menuPrincipal() {
         initComponents();
         setLocationRelativeTo(null);
-
     }
 
     /**
@@ -138,7 +139,11 @@ public class menuPrincipal extends javax.swing.JFrame {
         ViewGestionDeAlumnos ga = new ViewGestionDeAlumnos();
         ga.setVisible(true);
         escritorio.add(ga);
+        Dimension desktopSize = escritorio.getSize();
+        Dimension FrameSize = ga.getSize();
+        ga.setLocation((desktopSize.width - FrameSize.width) / 2, (desktopSize.height - FrameSize.height) / 2);
         escritorio.moveToFront(ga);
+
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jMFormuMateriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMFormuMateriaActionPerformed
@@ -147,6 +152,9 @@ public class menuPrincipal extends javax.swing.JFrame {
         ViewGestionMaterias ma = new ViewGestionMaterias();
         ma.setVisible(true);
         escritorio.add(ma);
+        Dimension desktopSize = escritorio.getSize();
+        Dimension FrameSize = ma.getSize();
+        ma.setLocation((desktopSize.width - FrameSize.width) / 2, (desktopSize.height - FrameSize.height) / 2);
         escritorio.moveToFront(ma);
     }//GEN-LAST:event_jMFormuMateriaActionPerformed
 
@@ -156,6 +164,9 @@ public class menuPrincipal extends javax.swing.JFrame {
         ViewFormularioDeInscripcion insc = new ViewFormularioDeInscripcion();
         insc.setVisible(true);
         escritorio.add(insc);
+        Dimension desktopSize = escritorio.getSize();
+        Dimension FrameSize = insc.getSize();
+        insc.setLocation((desktopSize.width - FrameSize.width) / 2, (desktopSize.height - FrameSize.height) / 2);
         escritorio.moveToFront(insc);
     }//GEN-LAST:event_jMenuItemManejoInscripcionesActionPerformed
 
@@ -165,6 +176,9 @@ public class menuPrincipal extends javax.swing.JFrame {
         ViewConsultDeAlumnosPorMateria alum = new ViewConsultDeAlumnosPorMateria();
         alum.setVisible(true);
         escritorio.add(alum);
+        Dimension desktopSize = escritorio.getSize();
+        Dimension FrameSize = alum.getSize();
+        alum.setLocation((desktopSize.width - FrameSize.width) / 2, (desktopSize.height - FrameSize.height) / 2);
         escritorio.moveToFront(alum);
     }//GEN-LAST:event_jMenuItemAlumnosMateriaActionPerformed
 
@@ -174,6 +188,9 @@ public class menuPrincipal extends javax.swing.JFrame {
         ViewActualizacionDeNotas not = new ViewActualizacionDeNotas();
         not.setVisible(true);
         escritorio.add(not);
+        Dimension desktopSize = escritorio.getSize();
+        Dimension FrameSize = not.getSize();
+        not.setLocation((desktopSize.width - FrameSize.width) / 2, (desktopSize.height - FrameSize.height) / 2);
         escritorio.moveToFront(not);
     }//GEN-LAST:event_jMenuItemManipulacionNotasActionPerformed
 

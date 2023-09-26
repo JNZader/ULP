@@ -33,7 +33,7 @@ public class Alumno {
 
     @Override
     public String toString() {
-        return dni + " " + nombre + " " + apellido;
+        return dni + ", " + nombre + " " + apellido;
     }
 
     public int getIdAlumno() {

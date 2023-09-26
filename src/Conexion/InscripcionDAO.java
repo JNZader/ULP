@@ -149,7 +149,7 @@ public class InscripcionDAO {
             ps.setInt(1, idMateria);
             try (ResultSet rs = ps.executeQuery()) {
 
-                while (rs.next()) {
+                while (rs.next()) { //Agrega alumnos al arraylist mientras haya resultados
                     int idAlumno = rs.getInt("idAlumno");
                     int dni = rs.getInt("dni");
                     String apellido = rs.getString("apellido");
