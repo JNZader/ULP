@@ -136,6 +136,9 @@ public class ViewActualizacionDeNotas extends javax.swing.JInternalFrame {
                 return canEdit [columnIndex];
             }
         });
+        jTAlumnos.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jTAlumnos.getTableHeader().setResizingAllowed(false);
+        jTAlumnos.getTableHeader().setReorderingAllowed(false);
         jTAlumnos.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 jTAlumnosMouseReleased(evt);

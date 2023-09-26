@@ -175,6 +175,8 @@ public class ViewFormularioDeInscripcion extends javax.swing.JInternalFrame impl
             }
         });
         jTable2.setName(""); // NOI18N
+        jTable2.getTableHeader().setResizingAllowed(false);
+        jTable2.getTableHeader().setReorderingAllowed(false);
         jScrollPane2.setViewportView(jTable2);
 
         jButtonInscribir.setText("Inscribir");

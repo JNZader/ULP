@@ -118,6 +118,8 @@ public class ViewConsultDeAlumnosPorMateria extends javax.swing.JInternalFrame {
                 return canEdit [columnIndex];
             }
         });
+        tabla.getTableHeader().setResizingAllowed(false);
+        tabla.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(tabla);
 
         salir.setText("Salir");
