@@ -23,6 +23,7 @@ public class ViewActualizacionDeNotas extends javax.swing.JInternalFrame {
     public ViewActualizacionDeNotas() {
         initComponents();
         getContentPane().setBackground(new Color(75, 141, 88));
+        this.setResizable(false);
 
         ListSelectionModel selectionModel = jTAlumnos.getSelectionModel();
         selectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);

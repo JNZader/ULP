@@ -21,9 +21,10 @@ public class ViewGestionDeAlumnos extends javax.swing.JInternalFrame {
     public ViewGestionDeAlumnos() {
         initComponents();
         getContentPane().setBackground(new Color(75, 141, 88));
-        
+        this.setResizable(false);
+
         jBNuevo.setEnabled(false);
-        
+
         aluData = new AlumnoDAO();
 
         filtroNumeros = new FiltraEntrada(FiltraEntrada.SOLO_NUMEROS);

@@ -16,7 +16,8 @@ public class ViewConsultDeAlumnosPorMateria extends javax.swing.JInternalFrame {
     public ViewConsultDeAlumnosPorMateria() {
         initComponents();
         getContentPane().setBackground(new Color(75, 141, 88));
-        
+        this.setResizable(false);
+
         ListSelectionModel selectionModel = tabla.getSelectionModel();
         selectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 

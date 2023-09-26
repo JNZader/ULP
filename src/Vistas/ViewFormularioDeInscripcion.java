@@ -22,6 +22,8 @@ public class ViewFormularioDeInscripcion extends javax.swing.JInternalFrame impl
 
     public ViewFormularioDeInscripcion() {
         initComponents();
+        this.setResizable(false);
+        getContentPane().setBackground(new Color(75, 141, 88));
 
         ListSelectionModel selectionModel = jTable2.getSelectionModel();
         selectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -30,7 +32,6 @@ public class ViewFormularioDeInscripcion extends javax.swing.JInternalFrame impl
         jButtonInscribir.setEnabled(false);
 
         llenarComboBox();
-        getContentPane().setBackground(new Color(75, 141, 88));
         inscripcionDAO = new InscripcionDAO();
 
         jRadioButtonMateriasInscriptas.setEnabled(false);
