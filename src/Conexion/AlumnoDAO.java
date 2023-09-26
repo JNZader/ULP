@@ -17,6 +17,11 @@ public class AlumnoDAO {
     // Método para guardar un alumno en la base de datos.
     public void guardarAlumno(Alumno alumno) {
         String sql = "INSERT INTO alumno (dni,apellido,nombre,fechaNacimiento,estado) VALUES(?,?,?,?,?)";
+        int dniAumno = alumno.getDni();
+        if (buscarAlumnoPorDni(dniAumno) != null) {
+            JOptionPane.showMessageDialog(null, "No se puede añadir el Alumno porque ya hay uno registrado con ese DNI");
+            return;
+        }
 
         try (PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             ps.setInt(1, alumno.getDni());
@@ -62,8 +67,6 @@ public class AlumnoDAO {
                     alumno.setEstado(true);
                 } else {
                     JOptionPane.showMessageDialog(null, "No existe el alumno");
-                    rs.close();
-                    ps.close();
                 }
             }
         } catch (SQLException ex) {

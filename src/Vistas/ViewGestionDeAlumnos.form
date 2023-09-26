@@ -42,15 +42,13 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
                           <Component id="jTDoc" pref="163" max="32767" attributes="0"/>
-                          <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                              <Component id="jTnombre" alignment="0" max="32767" attributes="0"/>
-                              <Component id="jBGuardar" min="-2" max="-2" attributes="0"/>
-                              <Component id="jREstado" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="jDFecha" alignment="0" pref="163" max="32767" attributes="0"/>
-                              <Component id="jTapellido" alignment="0" max="32767" attributes="0"/>
-                          </Group>
+                          <Component id="jTnombre" alignment="0" max="32767" attributes="0"/>
+                          <Component id="jBGuardar" alignment="1" min="-2" max="-2" attributes="0"/>
+                          <Component id="jREstado" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="jDFecha" alignment="0" pref="163" max="32767" attributes="0"/>
+                          <Component id="jTapellido" alignment="0" max="32767" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="36" max="32767" attributes="0"/>
+                      <EmptySpace pref="112" max="32767" attributes="0"/>
                       <Component id="jBbuscar" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" attributes="0">
