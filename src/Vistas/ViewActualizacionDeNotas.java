@@ -19,10 +19,11 @@ public class ViewActualizacionDeNotas extends javax.swing.JInternalFrame {
     DefaultTableModel mod;
     private ArrayList<Inscripcion> inscripciones;
     private int nRow;
+    NumericRangeFilter rangeFilter;
 
     public ViewActualizacionDeNotas() {
         initComponents();
-        getContentPane().setBackground(new Color(22,151,141));
+        getContentPane().setBackground(new Color(22, 151, 141));
         this.setResizable(false);
 
         ListSelectionModel selectionModel = jTAlumnos.getSelectionModel();
@@ -34,14 +35,14 @@ public class ViewActualizacionDeNotas extends javax.swing.JInternalFrame {
 
         mod = (DefaultTableModel) jTAlumnos.getModel();
 
-        NumericRangeFilter rangeFilter = new NumericRangeFilter();
+        rangeFilter = new NumericRangeFilter();
         ((AbstractDocument) jTextFieldNota.getDocument()).setDocumentFilter(rangeFilter);
     }
 
     private void llenarComboBox() {
         AlumnoDAO alum = new AlumnoDAO();
         ArrayList<Alumno> materias = alum.listarAlumnos();
-        
+
         jComboBoxAlumno.addItem(null);//para que no llene la tabla al abrir la ventana
 
         for (Alumno aux : materias) {
@@ -61,9 +62,9 @@ public class ViewActualizacionDeNotas extends javax.swing.JInternalFrame {
             String[] filas = new String[3];
             if (inscripciones != null && !inscripciones.isEmpty()) {//para que si se selecciona el objeto null no intente llenar la tabla
                 for (Inscripcion inscripcion : inscripciones) {
-                    filas[0] = String.valueOf(inscripcion.getMateria().getIdMateria());
+                    filas[0] = inscripcion.getMateria().getIdMateria() + "";
                     filas[1] = inscripcion.getMateria().getNombre();
-                    filas[2] = String.valueOf(inscripcion.getNota());
+                    filas[2] = inscripcion.getNota() + "";
 
                     mod.addRow(filas);
                 }
@@ -73,10 +74,12 @@ public class ViewActualizacionDeNotas extends javax.swing.JInternalFrame {
     }
 
     private void actualizarTabla() {
-        while (mod.getRowCount() > 0) {//elimina la primera fila del modelo hasta que no queden filas
-            mod.removeRow(0);
-        }
-        jTAlumnos.setModel(mod);//establece el modelo vacio
+//        while (mod.getRowCount() > 0) {//elimina la primera fila del modelo hasta que no queden filas
+//            mod.removeRow(0);
+//        }
+//        jTAlumnos.setModel(mod);//establece el modelo vacio
+        mod.setRowCount(0);
+
     }
 
     /**
@@ -105,13 +108,17 @@ public class ViewActualizacionDeNotas extends javax.swing.JInternalFrame {
         jSeparator1 = new javax.swing.JSeparator();
 
         setBackground(new java.awt.Color(0, 102, 0));
+        setTitle("Carga de notas - ULP - G73");
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Carga de notas");
 
-        jLabel2.setText("Seleccione un alumno");
+        jLabel2.setText("<html><center>Seleccione un alumno<html>");
 
+        jComboBoxAlumno.setMaximumSize(new java.awt.Dimension(255, 25));
+        jComboBoxAlumno.setMinimumSize(new java.awt.Dimension(255, 25));
+        jComboBoxAlumno.setPreferredSize(new java.awt.Dimension(255, 25));
         jComboBoxAlumno.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBoxAlumnoActionPerformed(evt);
@@ -190,8 +197,10 @@ public class ViewActualizacionDeNotas extends javax.swing.JInternalFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jSeparator1)
+            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
-                .addGap(53, 53, 53)
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jButtonEditar)
@@ -204,21 +213,21 @@ public class ViewActualizacionDeNotas extends javax.swing.JInternalFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jTextFieldCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel3)
-                            .addComponent(jLabel2))
+                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(28, 28, 28)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jComboBoxAlumno, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                            .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jTextFieldNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel4))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel5)
-                                    .addComponent(jTextFieldNota, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))))))
-                .addContainerGap(63, Short.MAX_VALUE))
-            .addComponent(jSeparator1)
-            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jTextFieldNota, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jComboBoxAlumno, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE)))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -228,10 +237,12 @@ public class ViewActualizacionDeNotas extends javax.swing.JInternalFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(jComboBoxAlumno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jComboBoxAlumno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 29, Short.MAX_VALUE)
+                        .addGap(8, 8, 8)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(jLabel4)
@@ -248,7 +259,7 @@ public class ViewActualizacionDeNotas extends javax.swing.JInternalFrame {
                     .addComponent(jButtonGuardar)
                     .addComponent(jBSalir)
                     .addComponent(jButtonEditar))
-                .addGap(32, 32, 32))
+                .addGap(25, 25, 25))
         );
 
         pack();
@@ -317,7 +328,9 @@ public class ViewActualizacionDeNotas extends javax.swing.JInternalFrame {
         jButtonEditar.setEnabled(true);
         jTextFieldCodigo.setText("");
         jTextFieldNombre.setText("");
-        jTextFieldNota.setText("0");
+        ((AbstractDocument) jTextFieldNota.getDocument()).setDocumentFilter(null);
+        jTextFieldNota.setText("");
+        ((AbstractDocument) jTextFieldNota.getDocument()).setDocumentFilter(rangeFilter);
         actualizarTabla();
         llenarTabla();
     }//GEN-LAST:event_jButtonGuardarActionPerformed

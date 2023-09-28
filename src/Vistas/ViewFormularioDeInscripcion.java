@@ -130,6 +130,8 @@ public class ViewFormularioDeInscripcion extends javax.swing.JInternalFrame impl
         jRadioButtonMateriasInscriptas = new javax.swing.JRadioButton();
         jSeparator1 = new javax.swing.JSeparator();
 
+        setTitle("Formulario de inscripcion - ULP - G73");
+
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Formulario de Inscripcion");

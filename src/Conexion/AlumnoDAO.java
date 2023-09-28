@@ -18,7 +18,7 @@ public class AlumnoDAO {
     public void guardarAlumno(Alumno alumno) {
         String sql = "INSERT INTO alumno (dni,apellido,nombre,fechaNacimiento,estado) VALUES(?,?,?,?,?)";
         int dniAumno = alumno.getDni();
-        if (buscarAlumnoPorDni(dniAumno) != null) {
+        if (buscarAlumnoPorDni(dniAumno,0) != null) {
             JOptionPane.showMessageDialog(null, "No se puede añadir el Alumno porque ya hay uno registrado con ese DNI");
             return;
         }
@@ -77,7 +77,7 @@ public class AlumnoDAO {
     }
     // Método para buscar un alumno por su DNI.
 
-    public Alumno buscarAlumnoPorDni(int dni) {
+    public Alumno buscarAlumnoPorDni(int dni, int jop) {
         String sql = "SELECT dni,apellido,nombre,fechaNacimiento FROM alumno WHERE dni=? AND estado=1";
         Alumno alumno = null;
 
@@ -95,7 +95,9 @@ public class AlumnoDAO {
                     alumno.setFechaNacimiento(rs.getDate("fechaNacimiento").toLocalDate());
                     alumno.setEstado(true);
                 } else {
-                    JOptionPane.showMessageDialog(null, "No existe el alumno");
+                    if(jop==1){//agregamos parametro para elegir si muestro o no el JOptionPane
+                        JOptionPane.showMessageDialog(null, "No existe el alumno");
+                    }
                 }
             }
         } catch (SQLException ex) {

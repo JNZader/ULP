@@ -168,7 +168,7 @@ public class InscripcionDAO {
 
 // Método para obtener una lista de materias cursadas por un alumno específico
     public ArrayList<Materia> obtenerMateriasCursadas(int idAlumno) {
-        String SQL_SELECT_MATERIASCURSADAS = "SELECT * FROM inscripcion, materia WHERE inscripcion.idMateria = materia.idMateria AND inscripcion.idAlumno = ?";
+        String SQL_SELECT_MATERIASCURSADAS = "SELECT materia.*FROM materia INNER JOIN inscripcion ON materia.idMateria = inscripcion.idMateria WHERE inscripcion.idAlumno = ? AND materia.estado = 1;";
         ArrayList<Materia> materias = new ArrayList<>();
 
         try (PreparedStatement ps = con.prepareStatement(SQL_SELECT_MATERIASCURSADAS)) {
@@ -181,13 +181,16 @@ public class InscripcionDAO {
         } catch (SQLException ex) {
             ex.printStackTrace(System.err);
             JOptionPane.showMessageDialog(null, "Error al obtener Materias cursadas");
+        }catch(NullPointerException e){
+            e.printStackTrace(System.err);
+            JOptionPane.showMessageDialog(null, "Error, no cursa ninguna materia");            
         }
         return materias;
     }
     // Método para obtener una lista de inscripciones por ID de alumno
 
     public ArrayList<Inscripcion> obtenerInscripcionesPorAlumno(int idAlumno) {
-        String SQL_SELECT_INSCRIPCIONESPORALUMNO = "SELECT * FROM inscripcion WHERE idAlumno = ?";
+        String SQL_SELECT_INSCRIPCIONESPORALUMNO = "SELECT * FROM inscripcion INNER JOIN materia ON materia.idMateria = inscripcion.idMateria WHERE inscripcion.idAlumno = ? AND materia.estado = 1;";
         Inscripcion insc = null;
         ArrayList<Inscripcion> inscripciones = new ArrayList<>();
 
@@ -210,6 +213,9 @@ public class InscripcionDAO {
         } catch (SQLException ex) {
             ex.printStackTrace(System.err);
             JOptionPane.showMessageDialog(null, "Error al obtener Materias cursadas");
+        }catch(NullPointerException e){
+            e.printStackTrace(System.err);
+            JOptionPane.showMessageDialog(null, "Error, no cursa ninguna materia");            
         }
         return inscripciones;
     }

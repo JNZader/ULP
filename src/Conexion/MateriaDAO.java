@@ -21,7 +21,7 @@ public class MateriaDAO {
     public void guardarMateria(Materia materia) {
         //Se agrego la sentencia where not exists para que no intente guardar dos materias con el mismo nombre
         String sql = "INSERT INTO materia (año, nombre, estado) SELECT ?, ?, ? WHERE NOT EXISTS (SELECT 2 FROM materia WHERE nombre = ?)";
-        if(BuscarMateriaxNombre(materia.getNombre())){
+        if (BuscarMateriaxNombre(materia.getNombre())) {
             JOptionPane.showMessageDialog(null, "Imposible guardar la materia por nombre duplicado");
             return;
         }
@@ -78,21 +78,19 @@ public class MateriaDAO {
     public boolean BuscarMateriaxNombre(String nombre) {
         Materia materia = null;
         String sql = "SELECT * FROM materia WHERE nombre=?";
-        boolean boo=false;
+        boolean boo = false;
         try (PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setString(1, nombre);// establece el valor del parametro ID en la consulta sql
 
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    boo=true;
+                    boo = true;
                     // si encuentra una materia crea un objeto materia y setea sus atributos
                     materia = new Materia();
                     materia.setIdMateria(rs.getInt("idMateria"));
                     materia.setAño(rs.getInt("año"));
                     materia.setNombre(nombre);
                     materia.setEstado(rs.getBoolean("estado"));
-                } else {
-                    JOptionPane.showMessageDialog(null, "No existe la materia");
                 }
             }
         } catch (SQLException ex) {
@@ -101,21 +99,21 @@ public class MateriaDAO {
         }
         return boo;
     }
-    
-    
+
     public void modificarMateria(Materia materia) {
         String sql = "UPDATE materia SET año=?,nombre=? WHERE idMateria=?";
 
         try (PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, materia.getAño());
             ps.setString(2, materia.getNombre());
-
+            ps.setInt(3, materia.getIdMateria());
+            
             int fila = ps.executeUpdate();
 
             if (fila == 1) {
                 JOptionPane.showMessageDialog(null, "Modificado exitosamente");
             } else {
-                JOptionPane.showMessageDialog(null, "La materia no existe");
+                JOptionPane.showMessageDialog(null, "La materia no se pudo modificar por nombre duplicado");
             }
 
         } catch (SQLException ex) {

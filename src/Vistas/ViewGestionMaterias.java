@@ -16,10 +16,12 @@ public class ViewGestionMaterias extends javax.swing.JInternalFrame {
     MateriaDAO matData;
     DocumentFilter filtroNumeros;
     DocumentFilter filtroLetras;
+    NumericRangeFilter2 rangeFilter;
+    Materia materiaEncontrada;
 
     public ViewGestionMaterias() {
         initComponents();
-        getContentPane().setBackground(new Color(22,151,141));
+        getContentPane().setBackground(new Color(22, 151, 141));
         this.setResizable(false);
 
         jBNuevo.setEnabled(false);
@@ -28,7 +30,7 @@ public class ViewGestionMaterias extends javax.swing.JInternalFrame {
         filtroNumeros = new FiltraEntrada(FiltraEntrada.SOLO_NUMEROS);
         filtroLetras = new FiltraEntrada(FiltraEntrada.SOLO_LETRAS);
 
-        NumericRangeFilter2 rangeFilter = new NumericRangeFilter2();
+        rangeFilter = new NumericRangeFilter2();
 
         ((AbstractDocument) jTCodigo.getDocument()).setDocumentFilter(filtroNumeros);
         ((AbstractDocument) jTnombre.getDocument()).setDocumentFilter(filtroLetras);
@@ -47,7 +49,9 @@ public class ViewGestionMaterias extends javax.swing.JInternalFrame {
     public void limpiarForm() {
         jTCodigo.setText("");
         jTnombre.setText("");
+        ((AbstractDocument) jTanio.getDocument()).setDocumentFilter(null);
         jTanio.setText("");
+        ((AbstractDocument) jTanio.getDocument()).setDocumentFilter(rangeFilter);
         jREstado.setSelected(false);
     }
 
@@ -104,7 +108,7 @@ public class ViewGestionMaterias extends javax.swing.JInternalFrame {
             }
         });
 
-        jTanio.setToolTipText("Ingrese el nombre de la materia");
+        jTanio.setToolTipText("Ingrese el año");
         jTanio.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTanioKeyReleased(evt);
@@ -230,6 +234,11 @@ public class ViewGestionMaterias extends javax.swing.JInternalFrame {
                     jTnombre.setText(matEncontrada.getNombre());
                     jTanio.setText(matEncontrada.getAño() + "");
                     jREstado.setSelected(matEncontrada.isEstado());
+
+                    materiaEncontrada = matEncontrada;
+
+                    jBGuardar.setText("Modificar");
+                    jBGuardar.setEnabled(true);
                 }
             } else {
                 JOptionPane.showMessageDialog(this, "Debes completar el campo codigo");
@@ -237,26 +246,46 @@ public class ViewGestionMaterias extends javax.swing.JInternalFrame {
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "Debes ingresar datos validos");
         }
+        if (!jTanio.getText().isEmpty() || !jTCodigo.getText().isEmpty()) {
+            jBNuevo.setEnabled(true);
+        }
     }//GEN-LAST:event_jBbuscarActionPerformed
 
     private void jBNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBNuevoActionPerformed
         // limpia los campos de texto y desmarca el boton de estado(mas que boton nuevo seria boton limpiar...)
         limpiarForm();
+        jBNuevo.setEnabled(false);
+        jBGuardar.setText("Guardar");
+        jBGuardar.setEnabled(true);
     }//GEN-LAST:event_jBNuevoActionPerformed
 
     private void jBGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBGuardarActionPerformed
         try {
-            //obtiene los datos de los textfield y radiobutton
-            String nombre = jTnombre.getText();
-            int anio = Integer.parseInt(jTanio.getText());
-            boolean estado = jREstado.isSelected();
 
-            Materia mat = new Materia(anio, nombre, estado); //crea un nuevo objeto Materia con los datos obtenidos
-            matData.guardarMateria(mat);//llama al metodo guardarMateria para guardar la materia en la base de datos
+            if (!jTanio.getText().isEmpty() && !jTnombre.getText().isEmpty()) { //obtiene los datos de los textfield y radiobutton
+                String nombre = jTnombre.getText();
+                int anio = Integer.parseInt(jTanio.getText());
+                boolean estado = jREstado.isSelected();
+
+                if (materiaEncontrada != null) {
+                    materiaEncontrada.setAño(anio);
+                    materiaEncontrada.setEstado(estado);
+                    materiaEncontrada.setNombre(nombre);
+                    matData.modificarMateria(materiaEncontrada);
+                    jBGuardar.setText("Guardar");
+                    jBGuardar.setEnabled(true);
+                } else {
+                    Materia mat = new Materia(anio, nombre, estado); //crea un nuevo objeto Materia con los datos obtenidos
+                    matData.guardarMateria(mat);//llama al metodo guardarMateria para guardar la materia en la base de datos
+                    limpiarForm();
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Complete todos los datos antes de guardar la materia");
+            }
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "Debes ingresar datos validos");
         }
-        limpiarForm();
+
     }//GEN-LAST:event_jBGuardarActionPerformed
 
     private void jBEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBEliminarActionPerformed

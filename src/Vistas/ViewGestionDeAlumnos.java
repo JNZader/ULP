@@ -3,11 +3,13 @@ package Vistas;
 import Conexion.AlumnoDAO;
 import Entidades.Alumno;
 import java.awt.Color;
+import java.awt.Toolkit;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import javax.swing.JOptionPane;
 import javax.swing.text.AbstractDocument;
+import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.DocumentFilter;
@@ -17,20 +19,21 @@ public class ViewGestionDeAlumnos extends javax.swing.JInternalFrame {
     AlumnoDAO aluData;
     DocumentFilter filtroNumeros;
     DocumentFilter filtroLetras;
+    NumericRangeFilter3 rangeFilter;
 
     public ViewGestionDeAlumnos() {
         initComponents();
-        getContentPane().setBackground(new Color(22,151,141));
+        getContentPane().setBackground(new Color(22, 151, 141));
         this.setResizable(false);
 
         jBNuevo.setEnabled(false);
 
         aluData = new AlumnoDAO();
-
+        rangeFilter = new NumericRangeFilter3();
         filtroNumeros = new FiltraEntrada(FiltraEntrada.SOLO_NUMEROS);
         filtroLetras = new FiltraEntrada(FiltraEntrada.SOLO_LETRAS);
 
-        ((AbstractDocument) jTDoc.getDocument()).setDocumentFilter(filtroNumeros);
+        ((AbstractDocument) jTDoc.getDocument()).setDocumentFilter(rangeFilter);
         ((AbstractDocument) jTapellido.getDocument()).setDocumentFilter(filtroLetras);
         ((AbstractDocument) jTnombre.getDocument()).setDocumentFilter(filtroLetras);
     }
@@ -237,7 +240,7 @@ public class ViewGestionDeAlumnos extends javax.swing.JInternalFrame {
         try {
             if (!(jTDoc.getText().isEmpty())) {//comprueba que jTDoc no está vacío
                 int doc = Integer.parseInt(jTDoc.getText());
-                Alumno alEcontrado = aluData.buscarAlumnoPorDni(doc);// llama al método 'buscarAlumnoPorDni' del objeto 'aluData' para buscar un alumno por su documento (dni)
+                Alumno alEcontrado = aluData.buscarAlumnoPorDni(doc,1);// llama al método 'buscarAlumnoPorDni' del objeto 'aluData' para buscar un alumno por su documento (dni)
 
                 if (alEcontrado != null) {// si se encuentra un alumno con el documento especificado
                     //actualiza los textfield y el radiobutton con los datos obtenidos
@@ -257,12 +260,14 @@ public class ViewGestionDeAlumnos extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jBbuscarActionPerformed
     private void jBNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBNuevoActionPerformed
         // limpia los campos de texto y desmarca el boton de estado(mas que boton nuevo seria boton limpiar...)
+        ((AbstractDocument) jTDoc.getDocument()).setDocumentFilter(null);
         jTDoc.setText("");
+        ((AbstractDocument) jTDoc.getDocument()).setDocumentFilter(rangeFilter);
         jTnombre.setText("");
         jTapellido.setText("");
         jREstado.setSelected(false);
         jDFecha.setDate(null);
-
+        jBNuevo.setEnabled(false);
     }//GEN-LAST:event_jBNuevoActionPerformed
 
     private void jBGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBGuardarActionPerformed
@@ -279,7 +284,7 @@ public class ViewGestionDeAlumnos extends javax.swing.JInternalFrame {
                 String nombre = jTnombre.getText();
                 boolean estado = jREstado.getVerifyInputWhenFocusTarget();
                 LocalDate fecha = jDFecha.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();// obtiene la fecha de nacimiento del alumno de jDFecha y la convierte a un objeto LocalDate
-                Alumno alumno = new Alumno(doc, ap, nombre, fecha, estado);// crea un nuevo objeto Alumno con la información recopilada
+                Alumno alumno = new Alumno(doc, nombre, ap, fecha, estado);// crea un nuevo objeto Alumno con la información recopilada
                 aluData.guardarAlumno(alumno);//llama a guardarAlumno para guardar el alumno en la base de datos
             }
         } catch (NumberFormatException e) {
@@ -295,13 +300,15 @@ public class ViewGestionDeAlumnos extends javax.swing.JInternalFrame {
         if (!(jTDoc.getText().isEmpty())) {// si jTDoc no está vacío
             int doc = Integer.parseInt(jTDoc.getText());// intenta convertir el valor como un entero
 
-            alu = aluData.buscarAlumnoPorDni(doc);
+            alu = aluData.buscarAlumnoPorDni(doc,1);
         }
         if (alu != null) {// Si encontro un alumno usa el metodo eliminar de aluData para eliminarlo de la base de datos
 
             aluData.eliminarAlumno(alu.getIdAlumno());
             // Limpia los campos de texto y demas componentes
+            ((AbstractDocument) jTDoc.getDocument()).setDocumentFilter(null);
             jTDoc.setText("");
+            ((AbstractDocument) jTDoc.getDocument()).setDocumentFilter(rangeFilter);
             jTnombre.setText("");
             jTapellido.setText("");
             jREstado.setSelected(false);
@@ -433,6 +440,29 @@ class FiltraEntrada extends DocumentFilter {
                 }
             }
             return valido;
+        }
+    }
+}
+
+class NumericRangeFilter3 extends DocumentFilter {
+
+    @Override
+    public void replace(DocumentFilter.FilterBypass fb, int i, int i1, String string, AttributeSet as) throws BadLocationException {
+        String currentText = fb.getDocument().getText(0, fb.getDocument().getLength());//obtiene el texto actual del jtf
+
+        String nextText = currentText.substring(0, i) + string + currentText.substring(i + i1);//concatena el texto a insertar con el texto acutal
+
+        try {
+            int num = Integer.parseInt(nextText);//intenta convertir el texto en numero
+
+            if (num >= 1 && num <= 100000000) {//verifica si el numero esta en el rango de 1 a 100.000.000
+                super.replace(fb, i, i1, string, as);
+            } else {
+                //fuera de rango
+                Toolkit.getDefaultToolkit().beep();//sonido de error
+            }
+        } catch (NumberFormatException e) {
+            Toolkit.getDefaultToolkit().beep(); //El texto no es un número válido...Emite un sonido de error.
         }
     }
 }
