@@ -6,8 +6,6 @@
       <Color blue="8d" green="97" red="16" type="rgb"/>
     </Property>
     <Property name="closable" type="boolean" value="true"/>
-    <Property name="iconifiable" type="boolean" value="true"/>
-    <Property name="maximizable" type="boolean" value="true"/>
     <Property name="title" type="java.lang.String" value="Gestion de Alumnos - ULP - G73"/>
   </Properties>
   <SyntheticProperties>

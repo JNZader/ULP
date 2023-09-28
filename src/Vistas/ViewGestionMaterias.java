@@ -25,6 +25,7 @@ public class ViewGestionMaterias extends javax.swing.JInternalFrame {
         this.setResizable(false);
 
         jBNuevo.setEnabled(false);
+        jBEliminar.setEnabled(false);
         matData = new MateriaDAO();
 
         filtroNumeros = new FiltraEntrada(FiltraEntrada.SOLO_NUMEROS);
@@ -53,6 +54,7 @@ public class ViewGestionMaterias extends javax.swing.JInternalFrame {
         jTanio.setText("");
         ((AbstractDocument) jTanio.getDocument()).setDocumentFilter(rangeFilter);
         jREstado.setSelected(false);
+        jBEliminar.setEnabled(false);
     }
 
     /**
@@ -80,6 +82,7 @@ public class ViewGestionMaterias extends javax.swing.JInternalFrame {
         jBSalir = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
 
+        setClosable(true);
         setTitle("Gestion de Materia - ULP - G73");
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
@@ -94,10 +97,13 @@ public class ViewGestionMaterias extends javax.swing.JInternalFrame {
 
         jLabel5.setText("Estado");
 
-        jTCodigo.setToolTipText("Si desea buscar, ingrese el ID de la materia");
+        jTCodigo.setToolTipText("Ingrese un numero de 4 maximo digitos ");
         jTCodigo.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTCodigoKeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTCodigoKeyTyped(evt);
             }
         });
 
@@ -239,6 +245,7 @@ public class ViewGestionMaterias extends javax.swing.JInternalFrame {
 
                     jBGuardar.setText("Modificar");
                     jBGuardar.setEnabled(true);
+                    jBEliminar.setEnabled(true);
                 }
             } else {
                 JOptionPane.showMessageDialog(this, "Debes completar el campo codigo");
@@ -257,6 +264,7 @@ public class ViewGestionMaterias extends javax.swing.JInternalFrame {
         jBNuevo.setEnabled(false);
         jBGuardar.setText("Guardar");
         jBGuardar.setEnabled(true);
+        materiaEncontrada=null;
     }//GEN-LAST:event_jBNuevoActionPerformed
 
     private void jBGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBGuardarActionPerformed
@@ -273,7 +281,9 @@ public class ViewGestionMaterias extends javax.swing.JInternalFrame {
                     materiaEncontrada.setNombre(nombre);
                     matData.modificarMateria(materiaEncontrada);
                     jBGuardar.setText("Guardar");
-                    jBGuardar.setEnabled(true);
+                    jBGuardar.setEnabled(false);
+                    limpiarForm();
+                    materiaEncontrada=null;
                 } else {
                     Materia mat = new Materia(anio, nombre, estado); //crea un nuevo objeto Materia con los datos obtenidos
                     matData.guardarMateria(mat);//llama al metodo guardarMateria para guardar la materia en la base de datos
@@ -299,6 +309,7 @@ public class ViewGestionMaterias extends javax.swing.JInternalFrame {
                 matData.eliminarMateria(mat.getIdMateria());// elimina la materia utilizando su id
                 // limpia los campos de texto y desmarca el boton de estado
                 limpiarForm();
+                jBGuardar.setEnabled(false);
             }
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "Debes ingresar datos validos");
@@ -321,6 +332,12 @@ public class ViewGestionMaterias extends javax.swing.JInternalFrame {
     private void jTanioKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTanioKeyReleased
         habilitarBoton();
     }//GEN-LAST:event_jTanioKeyReleased
+
+    private void jTCodigoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTCodigoKeyTyped
+        if (jTCodigo.getText().length() > 3) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_jTCodigoKeyTyped
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

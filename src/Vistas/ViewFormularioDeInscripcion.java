@@ -12,6 +12,8 @@ import java.awt.event.ItemListener;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 public class ViewFormularioDeInscripcion extends javax.swing.JInternalFrame implements ItemListener {
@@ -22,7 +24,7 @@ public class ViewFormularioDeInscripcion extends javax.swing.JInternalFrame impl
     public ViewFormularioDeInscripcion() {
         initComponents();
         this.setResizable(false);
-        getContentPane().setBackground(new Color(22,151,141));
+        getContentPane().setBackground(new Color(22, 151, 141));
 
         ListSelectionModel selectionModel = jTable2.getSelectionModel();
         selectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -39,6 +41,14 @@ public class ViewFormularioDeInscripcion extends javax.swing.JInternalFrame impl
         jComboBoxAlumno.addItemListener(this);
 
         modelo = (DefaultTableModel) jTable2.getModel();
+        DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
+        rightRenderer.setHorizontalAlignment(SwingConstants.LEFT);
+
+        // Establece el renderer de la columna 2 (índice 1) para alinear a la derecha
+        jTable2.getColumnModel().getColumn(0).setCellRenderer(rightRenderer);
+
+        // Refresca la tabla para aplicar los cambios
+        modelo.fireTableDataChanged();
     }
 
     private void actualizarTabla() {
@@ -130,6 +140,7 @@ public class ViewFormularioDeInscripcion extends javax.swing.JInternalFrame impl
         jRadioButtonMateriasInscriptas = new javax.swing.JRadioButton();
         jSeparator1 = new javax.swing.JSeparator();
 
+        setClosable(true);
         setTitle("Formulario de inscripcion - ULP - G73");
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N

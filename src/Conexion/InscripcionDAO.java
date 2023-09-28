@@ -142,7 +142,7 @@ public class InscripcionDAO {
 
 // Método para obtener una lista de alumnos inscritos en una materia específica
     public ArrayList<Alumno> obtenerAlumnosXMateria(int idMateria) {
-        String SQL_SELECT_ALUMNOXMATERIA = "SELECT a.* FROM alumno a INNER JOIN inscripcion i ON a.idAlumno = i.idAlumno WHERE i.idMateria = ?";
+        String SQL_SELECT_ALUMNOXMATERIA = "SELECT a.* FROM alumno a INNER JOIN inscripcion i ON a.idAlumno = i.idAlumno WHERE i.idMateria = ? AND a.estado=1";
         ArrayList<Alumno> alumnosXMateria = new ArrayList<>();
 
         try (PreparedStatement ps = con.prepareStatement(SQL_SELECT_ALUMNOXMATERIA)) {

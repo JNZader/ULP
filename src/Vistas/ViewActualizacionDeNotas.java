@@ -108,6 +108,7 @@ public class ViewActualizacionDeNotas extends javax.swing.JInternalFrame {
         jSeparator1 = new javax.swing.JSeparator();
 
         setBackground(new java.awt.Color(0, 102, 0));
+        setClosable(true);
         setTitle("Carga de notas - ULP - G73");
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N

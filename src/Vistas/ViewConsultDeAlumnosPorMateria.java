@@ -86,6 +86,7 @@ public class ViewConsultDeAlumnosPorMateria extends javax.swing.JInternalFrame {
         jSeparator1 = new javax.swing.JSeparator();
 
         setBackground(new java.awt.Color(0, 102, 0));
+        setClosable(true);
         setTitle("Listado de alumnos por materia - ULP - G73");
 
         titulo.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N

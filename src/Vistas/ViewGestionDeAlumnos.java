@@ -75,8 +75,6 @@ public class ViewGestionDeAlumnos extends javax.swing.JInternalFrame {
 
         setBackground(new java.awt.Color(22, 151, 141));
         setClosable(true);
-        setIconifiable(true);
-        setMaximizable(true);
         setTitle("Gestion de Alumnos - ULP - G73");
 
         jTDoc.setToolTipText("Ingrese el documento del alumno");
@@ -300,8 +298,8 @@ public class ViewGestionDeAlumnos extends javax.swing.JInternalFrame {
         if (!(jTDoc.getText().isEmpty())) {// si jTDoc no está vacío
             int doc = Integer.parseInt(jTDoc.getText());// intenta convertir el valor como un entero
 
-            alu = aluData.buscarAlumnoPorDni(doc,1);
-        }
+            alu = aluData.buscarAlumnoPorDni(doc,1);           
+}
         if (alu != null) {// Si encontro un alumno usa el metodo eliminar de aluData para eliminarlo de la base de datos
 
             aluData.eliminarAlumno(alu.getIdAlumno());

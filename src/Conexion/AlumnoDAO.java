@@ -78,7 +78,7 @@ public class AlumnoDAO {
     // Método para buscar un alumno por su DNI.
 
     public Alumno buscarAlumnoPorDni(int dni, int jop) {
-        String sql = "SELECT dni,apellido,nombre,fechaNacimiento FROM alumno WHERE dni=? AND estado=1";
+        String sql = "SELECT idAlumno,apellido,nombre,fechaNacimiento FROM alumno WHERE dni=? AND estado=1";
         Alumno alumno = null;
 
         try (PreparedStatement ps = con.prepareStatement(sql)) {
@@ -87,7 +87,7 @@ public class AlumnoDAO {
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     alumno = new Alumno();
-                    alumno.setIdAlumno(rs.getInt(1));
+                    alumno.setIdAlumno(rs.getInt("idAlumno"));
                     alumno.setDni(dni);
                     alumno.setApellido(rs.getString("apellido"));
                     alumno.setNombre(rs.getString("nombre"));
@@ -161,7 +161,7 @@ public class AlumnoDAO {
 
     // metodo para eliminar lógicamente un alumno
     public void eliminarAlumno(int id) {
-        String sql = "UPDATE alumno SET estado = 0 WHERE idAlumno=?";
+        String sql = "UPDATE alumno SET estado = 0 WHERE idAlumno = ?";
         try (PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, id);
 
