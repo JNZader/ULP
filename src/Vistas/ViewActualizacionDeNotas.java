@@ -179,6 +179,11 @@ public class ViewActualizacionDeNotas extends javax.swing.JInternalFrame {
 
         jTextFieldNota.setText(" ");
         jTextFieldNota.setToolTipText("ingrese nota del 0 al 10");
+        jTextFieldNota.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextFieldNotaKeyTyped(evt);
+            }
+        });
 
         jLabel3.setText("Codigo");
 
@@ -345,6 +350,12 @@ public class ViewActualizacionDeNotas extends javax.swing.JInternalFrame {
             jButtonEditar.setEnabled(false);
         }
     }//GEN-LAST:event_jTAlumnosMouseReleased
+
+    private void jTextFieldNotaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldNotaKeyTyped
+        if(jTextFieldNota.getText().length()>3){
+            evt.consume();
+        }
+    }//GEN-LAST:event_jTextFieldNotaKeyTyped
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
